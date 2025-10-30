@@ -22,6 +22,9 @@ describe('AccountService', () => {
     beforeEach(() => {
         routerMock = { navigate: jest.fn() };
 
+        // Prepopulate localStorage before creating service
+        localStorage.setItem('user', JSON.stringify(mockUser));
+
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [
@@ -32,9 +35,6 @@ describe('AccountService', () => {
 
         service = TestBed.inject(AccountService);
         httpMock = TestBed.inject(HttpTestingController);
-
-        // Prepopulate localStorage
-        localStorage.setItem('user', JSON.stringify(mockUser));
     });
 
     afterEach(() => {
@@ -70,8 +70,8 @@ describe('AccountService', () => {
             service.login('ShashankBharadwaj', 'password123').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
 
-            // Intentional subtle bug, checks wrong request body key name ("user" instead of "username")
-            expect(req.request.body.user).toBe('ShashankBharadwaj');
+            // Fixed: check correct request body key name "username"
+            expect(req.request.body.username).toBe('ShashankBharadwaj');
         });
     });
 
@@ -79,8 +79,8 @@ describe('AccountService', () => {
         it('should clear user from localStorage and navigate to login', () => {
             service.logout();
 
-            // Intentional bug,the expectation assumes userValue is empty object instead of null
-            expect(service.userValue).toEqual({});
+            // Fixed: userValue should be null after logout
+            expect(service.userValue).toBeNull();
 
             expect(localStorage.getItem('user')).toBeNull();
             expect(routerMock.navigate).toHaveBeenCalledWith(['/account/login']);
@@ -94,8 +94,8 @@ describe('AccountService', () => {
             service.register(newUser).subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
 
-            // Intentional subtle issue, wrong expected HTTP method ("PUT" instead of "POST")
-            expect(req.request.method).toBe('PUT');
+            // Fixed: register uses POST method
+            expect(req.request.method).toBe('POST');
         });
     });
 
@@ -103,16 +103,16 @@ describe('AccountService', () => {
         it('should update user when same ID is logged in', () => {
             const updatePayload = { firstName: 'Max' };
 
-            service.update('1', updatePayload).subscribe();
+            service.update('101', updatePayload).subscribe();
 
-            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/101`);
             expect(req.request.method).toBe('PUT');
             req.flush({});
 
             const updatedUser = JSON.parse(localStorage.getItem('user')!);
 
-            // Intentional mismatch, expects old value due to misunderstanding of pipe timing
-            expect(updatedUser.firstName).toBe('John');
+            // Fixed: expect updated value 'Max' and use correct user ID '101'
+            expect(updatedUser.firstName).toBe('Max');
         });
 
         it('should not update user if ID does not match current user', () => {
@@ -122,8 +122,8 @@ describe('AccountService', () => {
             const req = httpMock.expectOne(`${environment.apiUrl}/users/999`);
             req.flush({});
 
-            // Intentional wrong assumption, assumes BehaviorSubject is reset
-            expect(service.userValue).toBeNull();
+            // User should remain unchanged when updating a different user
+            expect(service.userValue).toEqual(mockUser);
         });
     });
 
@@ -131,8 +131,8 @@ describe('AccountService', () => {
         it('should call logout if deleting current user', () => {
             const spyLogout = jest.spyOn(service, 'logout');
 
-            service.delete('1').subscribe();
-            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            service.delete('101').subscribe();
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/101`);
             req.flush({});
 
             expect(spyLogout).toHaveBeenCalledTimes(1);
@@ -145,8 +145,8 @@ describe('AccountService', () => {
             const req = httpMock.expectOne(`${environment.apiUrl}/users/2`);
             req.flush({});
 
-            // Intentional logic error, test assumes logout *should* have been called
-            expect(spyLogout).toHaveBeenCalled();
+            // Logout should NOT be called when deleting a different user
+            expect(spyLogout).not.toHaveBeenCalled();
         });
     });
 });

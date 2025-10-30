@@ -33,9 +33,11 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      // Intentional logical flaw, assuming sync emission check for async stream
-      expect(spy).toHaveBeenCalled();
-      done();
+      // Wait for async emission to complete, then verify spy was NOT called
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 0);
     });
   });
 
@@ -78,8 +80,8 @@ describe('AlertService', () => {
     it('should emit error alert with message and type', (done) => {
       service.onAlert().subscribe((a) => {
         expect(a.type).toBe(AlertType.Error);
-        // Intentional oversight, test checks for wrong message casing
-        expect(a.message).toBe('operation failed');
+        // Fixed: match the actual message casing sent by the service
+        expect(a.message).toBe('Operation Failed');
         done();
       });
 
@@ -91,11 +93,13 @@ describe('AlertService', () => {
       service.onAlert().subscribe(spy);
 
       service.info('Information!');
-      service.warn('Warning!'); // should not trigger this subscriber ideally
+      service.warn('Warning!'); // Both use default-alert id, so both will trigger
 
-      // Intentional timing bug, immediate check before emission resolves
-      expect(spy).toHaveBeenCalledTimes(2);
-      done();
+      // Wait for async emissions to complete before checking
+      setTimeout(() => {
+        expect(spy).toHaveBeenCalledTimes(2);
+        done();
+      }, 0);
     });
   });
 
@@ -116,9 +120,11 @@ describe('AlertService', () => {
 
       service.clear('wrong-id');
 
-      // Subtle but realistic, expects emission even though filter blocks it
-      expect(spy).toHaveBeenCalled();
-      done();
+      // The filter blocks emission when IDs don't match
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 0);
     });
   });
 
@@ -133,15 +139,17 @@ describe('AlertService', () => {
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
       service.alert(alert);
 
-      // Intentional subtle mismatch, assumes only first subscriber gets emission
-      expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
+      // Both subscribers should receive the emission since they're subscribed to the same ID
+      setTimeout(() => {
+        expect(firstSpy).toHaveBeenCalled();
+        expect(secondSpy).toHaveBeenCalled();
+        done();
+      }, 0);
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
-      // Intentional logical error, clear() never throws
+      expect(() => service.clear('some-id')).not.toThrow();
+      // clear() never throws, it just emits an alert
     });
   });
 });
