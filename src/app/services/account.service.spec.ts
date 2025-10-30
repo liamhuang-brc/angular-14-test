@@ -33,7 +33,6 @@ describe('AccountService', () => {
         service = TestBed.inject(AccountService);
         httpMock = TestBed.inject(HttpTestingController);
 
-        // Prepopulate localStorage
         localStorage.setItem('user', JSON.stringify(mockUser));
     });
 
@@ -70,7 +69,6 @@ describe('AccountService', () => {
             service.login('ShashankBharadwaj', 'password123').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
 
-            // Intentional subtle bug, checks wrong request body key name ("user" instead of "username")
             expect(req.request.body.user).toBe('ShashankBharadwaj');
         });
     });
@@ -79,7 +77,6 @@ describe('AccountService', () => {
         it('should clear user from localStorage and navigate to login', () => {
             service.logout();
 
-            // Intentional bug,the expectation assumes userValue is empty object instead of null
             expect(service.userValue).toEqual({});
 
             expect(localStorage.getItem('user')).toBeNull();
@@ -94,7 +91,6 @@ describe('AccountService', () => {
             service.register(newUser).subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
 
-            // Intentional subtle issue, wrong expected HTTP method ("PUT" instead of "POST")
             expect(req.request.method).toBe('PUT');
         });
     });
@@ -111,7 +107,6 @@ describe('AccountService', () => {
 
             const updatedUser = JSON.parse(localStorage.getItem('user')!);
 
-            // Intentional mismatch, expects old value due to misunderstanding of pipe timing
             expect(updatedUser.firstName).toBe('John');
         });
 
@@ -122,7 +117,6 @@ describe('AccountService', () => {
             const req = httpMock.expectOne(`${environment.apiUrl}/users/999`);
             req.flush({});
 
-            // Intentional wrong assumption, assumes BehaviorSubject is reset
             expect(service.userValue).toBeNull();
         });
     });
@@ -145,7 +139,6 @@ describe('AccountService', () => {
             const req = httpMock.expectOne(`${environment.apiUrl}/users/2`);
             req.flush({});
 
-            // Intentional logic error, test assumes logout *should* have been called
             expect(spyLogout).toHaveBeenCalled();
         });
     });

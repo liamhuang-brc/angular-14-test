@@ -50,7 +50,6 @@ describe('HomeComponent', () => {
             fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            // Intentional subtle issue, expectation doesn't match template's actual format
             expect(heading.textContent.trim()).toBe('Hi John');
         });
     });
@@ -68,10 +67,8 @@ describe('HomeComponent', () => {
             fixture.detectChanges();
             const paragraphs = fixture.debugElement.queryAll(By.css('p'));
 
-            // Intentional logical mistake, expects 3 <p> tags but actual template has only 2
             expect(paragraphs.length).toBe(3);
 
-            // Intentional minor detail mismatch, extra exclamation mark in expected text
             expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
         });
     });
@@ -85,8 +82,6 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            // Intentional logical miss, template uses safe navigation `user?.firstName`
-            // so it won’t render “undefined”, but test expects it.
             expect(heading.textContent).toContain('undefined');
         });
     });
@@ -98,8 +93,6 @@ describe('HomeComponent', () => {
             fixture.detectChanges();
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
-            // Intentional timing mistake, HomeComponent reads userValue only once in constructor,
-            // so this expectation fails due to misunderstanding lifecycle.
             expect(heading.textContent).toContain('Jane');
         });
     });

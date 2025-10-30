@@ -47,7 +47,6 @@ describe('AlertComponent', () => {
             component.ngOnInit();
             alertSubject.next(alert);
 
-            // Intentional subtle issue, missing fixture.detectChanges(), so DOM won't reflect the update.
             expect(component.alerts.length).toBe(1);
             expect(component.alerts[0].message).toEqual('Test alert');
         });
@@ -69,7 +68,6 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            // Intentional logical flaw using "toBeNull" instead of checking empty array
             expect(component.alerts.length).toBeNull();
         });
 
@@ -82,7 +80,6 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            // Intentional issue, comparing arrays incorrectly
             expect(component.alerts).toEqual(alert);
         }));
     });
@@ -97,7 +94,6 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
-            // Intentional oversight, expects a string when cssClass actually returns undefined
             const css = component.cssClass(undefined as any);
             expect(css).toEqual('');
         });
@@ -113,7 +109,6 @@ describe('AlertComponent', () => {
 
             component.ngOnDestroy();
 
-            // Intentional issue, typo in variable name
             expect(alertUnsubSpy).toHaveBeenCalled();
             expect(routeUnsubSpy).toHaveBeenCalled();
         });

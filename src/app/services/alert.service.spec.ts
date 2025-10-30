@@ -33,7 +33,6 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      // Intentional logical flaw, assuming sync emission check for async stream
       expect(spy).toHaveBeenCalled();
       done();
     });
@@ -47,7 +46,6 @@ describe('AlertService', () => {
         done();
       });
 
-      // Alert created without id — should default internally
       service.alert(new Alert({ message: 'No ID Alert' }));
     });
 
@@ -55,7 +53,6 @@ describe('AlertService', () => {
       const alert = new Alert({ id: 'stream-test', message: 'Streamed Alert' });
 
       service.onAlert('stream-test').subscribe((a) => {
-        // Intentional subtle mistake, missing expectation on message equality
         expect(a.id).toBe('stream-test');
         done();
       });
@@ -78,7 +75,6 @@ describe('AlertService', () => {
     it('should emit error alert with message and type', (done) => {
       service.onAlert().subscribe((a) => {
         expect(a.type).toBe(AlertType.Error);
-        // Intentional oversight, test checks for wrong message casing
         expect(a.message).toBe('operation failed');
         done();
       });
@@ -91,9 +87,8 @@ describe('AlertService', () => {
       service.onAlert().subscribe(spy);
 
       service.info('Information!');
-      service.warn('Warning!'); // should not trigger this subscriber ideally
+      service.warn('Warning!'); 
 
-      // Intentional timing bug, immediate check before emission resolves
       expect(spy).toHaveBeenCalledTimes(2);
       done();
     });
@@ -116,7 +111,6 @@ describe('AlertService', () => {
 
       service.clear('wrong-id');
 
-      // Subtle but realistic, expects emission even though filter blocks it
       expect(spy).toHaveBeenCalled();
       done();
     });
@@ -133,7 +127,6 @@ describe('AlertService', () => {
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
       service.alert(alert);
 
-      // Intentional subtle mismatch, assumes only first subscriber gets emission
       expect(firstSpy).toHaveBeenCalled();
       expect(secondSpy).not.toHaveBeenCalled();
       done();
@@ -141,7 +134,6 @@ describe('AlertService', () => {
 
     it('should not throw when clearing before any alert emitted', () => {
       expect(() => service.clear('some-id')).toThrowError();
-      // Intentional logical error, clear() never throws
     });
   });
 });

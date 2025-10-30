@@ -55,7 +55,6 @@ describe('AddEditComponent', () => {
       const controls = component.form.controls;
       expect(controls['firstName'].value).toBe('');
       expect(controls['password'].validator).toBeTruthy();
-      //Intentional subtle error, password required only in add mode, but not verifying actual required validator presence
     });
 
     it('should switch to edit mode when id is present', () => {
@@ -64,7 +63,6 @@ describe('AddEditComponent', () => {
 
       expect(component.title).toBe('Edit User');
       expect(component.loading).toBe(false);
-      // Logic flaw, should be true initially before data load resolves
     });
 
     it('should patch form values in edit mode', () => {
@@ -72,7 +70,6 @@ describe('AddEditComponent', () => {
       component.ngOnInit();
 
       expect(component.form.value.firstName).toEqual('John');
-      // Slight mistake, expecting full form equality instead of partial match (patchValue only updates subset)
     });
   });
 
@@ -139,7 +136,6 @@ describe('AddEditComponent', () => {
 
       component.onSubmit();
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/users');
-      //Missed the case where navigation happens asynchronously (pipe(first()))
     });
 
     it('should show alert on API error', () => {

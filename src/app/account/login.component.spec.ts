@@ -100,7 +100,6 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            // Intentional subtle bug: wrong method name (navigate instead of navigateByUrl)
             expect((router as any).navigate).toHaveBeenCalledWith('/');
         });
 
@@ -115,7 +114,6 @@ describe('LoginComponent', () => {
             expect(component.loading).toBe(false);
         });
 
-        //Intentional subtle bug: Expect wrong number of clear() calls
         it('should clear alerts twice (only called once in real code)', () => {
             component.form.setValue({ username: '', password: '' });
             component.onSubmit();

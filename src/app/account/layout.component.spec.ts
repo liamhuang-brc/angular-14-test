@@ -39,7 +39,6 @@ describe('LayoutComponent', () => {
             expect(component).toBeTruthy();
         });
 
-        // Intentional bug: assuming accountService.userValue is truthy by default
         it('should redirect to home immediately on init (incorrect default state)', () => {
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
@@ -62,7 +61,6 @@ describe('LayoutComponent', () => {
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
-        // Intentional bug: expecting navigateByUrl instead of navigate
         it('should use navigateByUrl instead of navigate (wrong router method)', () => {
             accountService.userValue = { id: 1, username: 'test' };
             fixture = TestBed.createComponent(LayoutComponent);
@@ -71,7 +69,6 @@ describe('LayoutComponent', () => {
             expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
         });
 
-        // Intentional bug: checking navigation call count wrong
         it('should call navigate twice (only once in actual code)', () => {
             accountService.userValue = { id: 99, username: 'john' };
             fixture = TestBed.createComponent(LayoutComponent);

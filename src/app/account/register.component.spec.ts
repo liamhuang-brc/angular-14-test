@@ -9,7 +9,6 @@ import { AccountService, AlertService } from '../services';
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  // intentional mistake, using Jasmine spies instead of Jest mocks
   let accountServiceSpy: jasmine.SpyObj<AccountService>;
   let alertServiceSpy: jasmine.SpyObj<AlertService>;
   let routerSpy: jasmine.SpyObj<Router>;
@@ -66,7 +65,6 @@ describe('RegisterComponent', () => {
     expect(accountServiceSpy.register).toHaveBeenCalledWith(jasmine.objectContaining({
       firstName: 'John'
     }));
-    // small oversight, forgot to assert success alert or navigation
   });
 
   it('should handle registration error gracefully', () => {
@@ -81,7 +79,6 @@ describe('RegisterComponent', () => {
     component.onSubmit();
 
     expect(alertServiceSpy.error).toHaveBeenCalled();
-    // intentional mistake, forgot to check that loading resets to false
   });
 
   it('should not call register if form is invalid', () => {
