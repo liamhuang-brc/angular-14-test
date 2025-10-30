@@ -14,6 +14,7 @@ describe('AlertComponent', () => {
     let routerEvents$: Subject<any>;
 
     beforeEach(async () => {
+        jest.useFakeTimers();
         routerEvents$ = new Subject();
 
         alertServiceMock = {
@@ -69,8 +70,8 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            // Intentional logical flaw using "toBeNull" instead of checking empty array
-            expect(component.alerts.length).toBeNull();
+            // Fixed: Check that alerts array is empty
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -82,8 +83,8 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            // Intentional issue, comparing arrays incorrectly
-            expect(component.alerts).toEqual(alert);
+            // Fixed: Check that alerts array is empty
+            expect(component.alerts).toEqual([]);
         }));
     });
 
@@ -97,9 +98,9 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
-            // Intentional oversight, expects a string when cssClass actually returns undefined
+            // Fixed: cssClass returns undefined when alert is undefined
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
         });
     });
 

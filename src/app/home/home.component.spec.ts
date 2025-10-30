@@ -43,7 +43,7 @@ describe('HomeComponent', () => {
 
         it('should assign user from AccountService', () => {
             fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
+            expect(component.user?.firstName).toEqual('Shashank');
         });
 
         it('should display user first name in the greeting', () => {
@@ -51,7 +51,7 @@ describe('HomeComponent', () => {
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
             // Intentional subtle issue, expectation doesn't match template's actual format
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toContain('Shashank');
         });
     });
 
@@ -69,10 +69,10 @@ describe('HomeComponent', () => {
             const paragraphs = fixture.debugElement.queryAll(By.css('p'));
 
             // Intentional logical mistake, expects 3 <p> tags but actual template has only 2
-            expect(paragraphs.length).toBe(3);
+            expect(paragraphs.length).toBe(2);
 
             // Intentional minor detail mismatch, extra exclamation mark in expected text
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 15!");
         });
     });
 
@@ -87,7 +87,7 @@ describe('HomeComponent', () => {
 
             // Intentional logical miss, template uses safe navigation `user?.firstName`
             // so it won’t render “undefined”, but test expects it.
-            expect(heading.textContent).toContain('undefined');
+            expect(heading.textContent).not.toContain('undefined');
         });
     });
 
