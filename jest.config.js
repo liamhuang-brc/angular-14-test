@@ -2,10 +2,6 @@ module.exports = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testEnvironment: 'jsdom',
-  globals: {},
-  transform: {
-    '^.+\\.(ts|js|html)$': 'ts-jest',
-  },
   testMatch: ['**/__tests__/**/*.spec.ts', '**/*.spec.ts'],
   moduleFileExtensions: ['ts', 'html', 'js', 'json'],
   coverageDirectory: '<rootDir>/coverage/',
@@ -16,4 +12,14 @@ module.exports = {
     '!src/polyfills.ts',
     '!src/environments/**/*.ts',
   ],
+  transform: {
+    '^.+\\.(ts|mjs|js|html)$': [
+      'jest-preset-angular',
+      {
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
+      },
+    ],
+  },
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
 };
