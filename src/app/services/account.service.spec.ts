@@ -1,0 +1,152 @@
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { Router } from '@angular/router';
+
+import { AccountService } from './account.service';
+import { environment } from '../../environments/environment';
+import { User } from '../models';
+
+describe('AccountService', () => {
+    let service: AccountService;
+    let httpMock: HttpTestingController;
+    let routerMock: any;
+
+    const mockUser: User = {
+        id: '101',
+        username: 'ShashankBharadwaj',
+        firstName: 'Shashank',
+        lastName: 'Bharadwaj',
+        token: 'checkThisT0KenOut&!etMeInHehehe'
+    };
+
+    beforeEach(() => {
+        routerMock = { navigate: jest.fn() };
+
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: [
+                AccountService,
+                { provide: Router, useValue: routerMock }
+            ]
+        });
+
+        service = TestBed.inject(AccountService);
+        httpMock = TestBed.inject(HttpTestingController);
+
+        // Prepopulate localStorage
+        localStorage.setItem('user', JSON.stringify(mockUser));
+    });
+
+    afterEach(() => {
+        httpMock.verify();
+        localStorage.clear();
+    });
+
+    describe('Initialization', () => {
+        it('should initialize with user from localStorage', () => {
+            const currentUser = service.userValue;
+            expect(currentUser?.username).toBe('ShashankBharadwaj');
+        });
+    });
+
+    describe('login()', () => {
+        it('should store user and emit new user value after successful login', () => {
+            const loginResponse = { ...mockUser, token: 'new-token' };
+
+            service.login('ShashankBharadwaj', 'password123').subscribe(user => {
+                expect(user.token).toBe('new-token');
+            });
+
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
+            expect(req.request.method).toBe('POST');
+            req.flush(loginResponse);
+
+            const stored = JSON.parse(localStorage.getItem('user') || '{}');
+            expect(stored.token).toBe('new-token');
+            expect(service.userValue?.token).toBe('new-token');
+        });
+
+        it('should call API with username and password', () => {
+            service.login('ShashankBharadwaj', 'password123').subscribe();
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
+
+            // Intentional subtle bug, checks wrong request body key name ("user" instead of "username")
+            expect(req.request.body.user).toBe('ShashankBharadwaj');
+        });
+    });
+
+    describe('logout()', () => {
+        it('should clear user from localStorage and navigate to login', () => {
+            service.logout();
+
+            // Intentional bug,the expectation assumes userValue is empty object instead of null
+            expect(service.userValue).toEqual({});
+
+            expect(localStorage.getItem('user')).toBeNull();
+            expect(routerMock.navigate).toHaveBeenCalledWith(['/account/login']);
+        });
+    });
+
+    describe('register()', () => {
+        it('should call POST /users/register API', () => {
+            const newUser: User = { id: '2', username: 'liam', firstName: 'Liam', lastName: 'Huang', token: '' };
+
+            service.register(newUser).subscribe();
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
+
+            // Intentional subtle issue, wrong expected HTTP method ("PUT" instead of "POST")
+            expect(req.request.method).toBe('PUT');
+        });
+    });
+
+    describe('update()', () => {
+        it('should update user when same ID is logged in', () => {
+            const updatePayload = { firstName: 'Max' };
+
+            service.update('1', updatePayload).subscribe();
+
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            expect(req.request.method).toBe('PUT');
+            req.flush({});
+
+            const updatedUser = JSON.parse(localStorage.getItem('user')!);
+
+            // Intentional mismatch, expects old value due to misunderstanding of pipe timing
+            expect(updatedUser.firstName).toBe('John');
+        });
+
+        it('should not update user if ID does not match current user', () => {
+            const updatePayload = { lastName: 'Changed' };
+            service.update('999', updatePayload).subscribe();
+
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/999`);
+            req.flush({});
+
+            // Intentional wrong assumption, assumes BehaviorSubject is reset
+            expect(service.userValue).toBeNull();
+        });
+    });
+
+    describe('delete()', () => {
+        it('should call logout if deleting current user', () => {
+            const spyLogout = jest.spyOn(service, 'logout');
+
+            service.delete('1').subscribe();
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            req.flush({});
+
+            expect(spyLogout).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not call logout if deleting another user', () => {
+            const spyLogout = jest.spyOn(service, 'logout');
+
+            service.delete('2').subscribe();
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/2`);
+            req.flush({});
+
+            // Intentional logic error, test assumes logout *should* have been called
+            expect(spyLogout).toHaveBeenCalled();
+        });
+    });
+});
