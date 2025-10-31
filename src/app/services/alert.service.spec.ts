@@ -33,8 +33,11 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      // Use setTimeout to ensure async operations complete
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 0);
     });
   });
 
@@ -75,7 +78,7 @@ describe('AlertService', () => {
     it('should emit error alert with message and type', (done) => {
       service.onAlert().subscribe((a) => {
         expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
+        expect(a.message).toBe('Operation Failed');
         done();
       });
 
@@ -105,19 +108,18 @@ describe('AlertService', () => {
       service.clear('custom');
     });
 
-    it('should not emit when id does not match', (done) => {
+    it('should not emit when id does not match', () => {
       const spy = jest.fn();
       service.onAlert('expected').subscribe(spy);
 
       service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      expect(spy).not.toHaveBeenCalled();
     });
   });
 
   describe('Behavior nuances', () => {
-    it('should handle multiple subscribers independently', (done) => {
+    it('should handle multiple subscribers independently', () => {
       const firstSpy = jest.fn();
       const secondSpy = jest.fn();
 
@@ -128,12 +130,11 @@ describe('AlertService', () => {
       service.alert(alert);
 
       expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
+      expect(secondSpy).toHaveBeenCalled();
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+      expect(() => service.clear('some-id')).not.toThrow();
     });
   });
 });

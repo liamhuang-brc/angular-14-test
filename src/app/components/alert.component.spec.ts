@@ -12,6 +12,11 @@ describe('AlertComponent', () => {
     let alertServiceMock: any;
     let routerMock: any;
     let routerEvents$: Subject<any>;
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+
 
     beforeEach(async () => {
         routerEvents$ = new Subject();
@@ -62,16 +67,22 @@ describe('AlertComponent', () => {
 
     describe('removeAlert', () => {
         it('should remove the alert immediately if fade is false', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
             component.alerts = [alert];
             component.fade = false;
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
             component.fade = true;
@@ -80,12 +91,15 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toEqual(0);
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const alert: Alert = { message: 'Done', type: AlertType.Success };
             const css = component.cssClass(alert);
 
@@ -94,6 +108,9 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const css = component.cssClass(undefined as any);
             expect(css).toEqual('');
         });
@@ -101,8 +118,13 @@ describe('AlertComponent', () => {
 
     describe('ngOnDestroy', () => {
         it('should unsubscribe from alert and route subscriptions', () => {
-            alertServiceMock.onAlert.mockReturnValue(of({ message: 'x' }));
+            const alertSubject = new Subject<Alert>();
+            alertServiceMock.onAlert.mockReturnValue(alertSubject.asObservable());
             component.ngOnInit();
+
+            // Ensure subscriptions are defined before spying
+            expect(component.alertSubscription).toBeDefined();
+            expect(component.routeSubscription).toBeDefined();
 
             const alertUnsubSpy = jest.spyOn(component.alertSubscription, 'unsubscribe');
             const routeUnsubSpy = jest.spyOn(component.routeSubscription, 'unsubscribe');
@@ -112,5 +134,18 @@ describe('AlertComponent', () => {
             expect(alertUnsubSpy).toHaveBeenCalled();
             expect(routeUnsubSpy).toHaveBeenCalled();
         });
+    });
+
+    afterEach(() => {
+        // Clean up any pending timers and subscriptions
+        jest.runOnlyPendingTimers();
+        jest.useRealTimers();
+        if (component && component.alertSubscription && component.routeSubscription) {
+            component.ngOnDestroy();
+        }
+        if (routerEvents$ && !routerEvents$.closed) {
+            routerEvents$.complete();
+        }
+        fixture?.destroy();
     });
 });
