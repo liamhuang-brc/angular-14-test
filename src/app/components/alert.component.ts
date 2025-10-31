@@ -13,6 +13,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     alerts: Alert[] = [];
     alertSubscription!: Subscription;
     routeSubscription!: Subscription;
+    private timeouts: Set<any> = new Set();
 
     constructor(private router: Router, private alertService: AlertService) { }
 
@@ -35,7 +36,11 @@ export class AlertComponent implements OnInit, OnDestroy {
 
                 // auto close alert if required
                 if (alert.autoClose) {
-                    setTimeout(() => this.removeAlert(alert), 3000);
+                    const timeoutId = setTimeout(() => {
+                        this.removeAlert(alert);
+                        this.timeouts.delete(timeoutId);
+                    }, 3000);
+                    this.timeouts.add(timeoutId);
                 }
            });
 
@@ -51,6 +56,10 @@ export class AlertComponent implements OnInit, OnDestroy {
         // unsubscribe to avoid memory leaks
         this.alertSubscription.unsubscribe();
         this.routeSubscription.unsubscribe();
+        
+        // clear all pending timeouts
+        this.timeouts.forEach(timeoutId => clearTimeout(timeoutId));
+        this.timeouts.clear();
     }
 
     removeAlert(alert: Alert) {
@@ -62,9 +71,11 @@ export class AlertComponent implements OnInit, OnDestroy {
             alert.fade = true;
 
             // remove alert after faded out
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 this.alerts = this.alerts.filter(x => x !== alert);
+                this.timeouts.delete(timeoutId);
             }, 250);
+            this.timeouts.add(timeoutId);
         } else {
             // remove alert
             this.alerts = this.alerts.filter(x => x !== alert);

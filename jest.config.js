@@ -5,17 +5,20 @@ module.exports = {
   testEnvironment: 'jsdom',
 
   transform: {
-    '^.+\\.(ts|js|html)$': [
-      'ts-jest',
+    '^.+\\.(ts|mjs|js|html)$': [
+      'jest-preset-angular',
       {
         tsconfig: 'tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
         isolatedModules: true,
       },
     ],
   },
+  
+
 
   transformIgnorePatterns: [
-    'node_modules/(?!(@angular|rxjs|jest-preset-angular)/)',
+    'node_modules/(?!.*\\.mjs$|@angular|rxjs|jest-preset-angular)',
   ],
 
   moduleFileExtensions: ['ts', 'js', 'html'],
