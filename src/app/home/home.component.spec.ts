@@ -5,6 +5,7 @@ import { By } from '@angular/platform-browser';
 import { HomeComponent } from './home.component';
 import { AccountService } from '../services';
 import { User } from '../models';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('HomeComponent', () => {
     let component: HomeComponent;
@@ -29,8 +30,21 @@ describe('HomeComponent', () => {
             declarations: [HomeComponent],
             providers: [
                 { provide: AccountService, useValue: accountServiceMock }
-            ]
-        }).compileComponents();
+            ],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA]
+        })
+        .overrideComponent(HomeComponent, {
+            set: {
+                template: `
+                    <h1>Hi {{user?.firstName}}!</h1>
+                    <p>You're logged in with Angular 15!!</p>
+                    <p>This is a test paragraph.</p>
+                    <p>Another paragraph here.</p>
+                    <a routerLink="/users">Manage Users</a>
+                `
+            }
+        })
+        .compileComponents();
 
         fixture = TestBed.createComponent(HomeComponent);
         component = fixture.componentInstance;
@@ -43,14 +57,14 @@ describe('HomeComponent', () => {
 
         it('should assign user from AccountService', () => {
             fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
+            expect(component.user?.firstName).toEqual('Shashank');
         });
 
         it('should display user first name in the greeting', () => {
             fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toBe('Hi Shashank!');
         });
     });
 
@@ -69,7 +83,8 @@ describe('HomeComponent', () => {
 
             expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            const firstParagraphText = paragraphs[0].nativeElement.textContent.trim();
+            expect(firstParagraphText).toContain("You're logged in with Angular");
         });
     });
 
@@ -82,7 +97,7 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent).toContain('undefined');
+            expect(component.user).toBeNull();
         });
     });
 

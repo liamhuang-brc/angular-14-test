@@ -38,6 +38,10 @@ describe('AlertComponent', () => {
         component = fixture.componentInstance;
     });
 
+    afterEach(() => {
+        fixture.destroy();
+    });
+
     describe('ngOnInit', () => {
         it('should subscribe to alerts and add them to the alerts array', () => {
             const alert = { message: 'Test alert', type: AlertType.Success };
@@ -62,16 +66,22 @@ describe('AlertComponent', () => {
 
     describe('removeAlert', () => {
         it('should remove the alert immediately if fade is false', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
             component.alerts = [alert];
             component.fade = false;
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
             component.fade = true;
@@ -80,12 +90,15 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts).toEqual([]);
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const alert: Alert = { message: 'Done', type: AlertType.Success };
             const css = component.cssClass(alert);
 
@@ -94,8 +107,11 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
         });
     });
 
