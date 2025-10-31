@@ -17,7 +17,7 @@ describe('AlertComponent', () => {
         routerEvents$ = new Subject();
 
         alertServiceMock = {
-            onAlert: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
             clear: jest.fn(),
         };
 
@@ -68,7 +68,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +80,7 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
@@ -95,7 +95,7 @@ describe('AlertComponent', () => {
 
         it('should not break when alert is undefined', () => {
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBe('');
         });
     });
 
@@ -103,6 +103,10 @@ describe('AlertComponent', () => {
         it('should unsubscribe from alert and route subscriptions', () => {
             alertServiceMock.onAlert.mockReturnValue(of({ message: 'x' }));
             component.ngOnInit();
+
+            // Ensure subscriptions are created
+            expect(component.alertSubscription).toBeDefined();
+            expect(component.routeSubscription).toBeDefined();
 
             const alertUnsubSpy = jest.spyOn(component.alertSubscription, 'unsubscribe');
             const routeUnsubSpy = jest.spyOn(component.routeSubscription, 'unsubscribe');
@@ -112,5 +116,26 @@ describe('AlertComponent', () => {
             expect(alertUnsubSpy).toHaveBeenCalled();
             expect(routeUnsubSpy).toHaveBeenCalled();
         });
+    });
+
+    afterEach(() => {
+        // Clean up component to prevent cleanup errors
+        if (component) {
+            try {
+                // Only call ngOnDestroy if subscriptions exist (ngOnInit was called)
+                if (component.alertSubscription || component.routeSubscription) {
+                    component.ngOnDestroy();
+                }
+            } catch (e) {
+                // Ignore cleanup errors in tests
+            }
+        }
+        if (fixture) {
+            fixture.destroy();
+        }
+        // Complete the router events subject to prevent memory leaks
+        if (!routerEvents$.closed) {
+            routerEvents$.complete();
+        }
     });
 });
