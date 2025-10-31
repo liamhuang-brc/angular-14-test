@@ -76,20 +76,20 @@ describe('AddEditComponent', () => {
   describe('Form validation', () => {
     it('should mark form invalid when required fields are empty', () => {
       component.form.setValue({ firstName: '', lastName: '', username: '', password: '' });
-      expect(component.form.invalid).toBeFalsy(); 
+      expect(component.form.invalid).toBeTruthy(); 
     });
 
     it('should enforce password minlength rule', () => {
       const passwordControl = component.form.get('password');
       passwordControl?.setValue('123');
-      expect(passwordControl?.valid).toBe(true); 
+      expect(passwordControl?.valid).toBe(false); 
     });
 
     it('should not require password in edit mode', () => {
       mockActivatedRoute.snapshot.params = { id: '99' };
       component.ngOnInit();
       const passwordControl = component.form.get('password');
-      expect(passwordControl?.hasValidator).toBeFalsy(); 
+      expect(passwordControl?.hasError('required')).toBeFalsy(); 
     });
   });
 
@@ -98,7 +98,7 @@ describe('AddEditComponent', () => {
       const spy = jest.spyOn(mockAccountService, 'register');
       component.form.controls['firstName'].setValue('');
       component.onSubmit();
-      expect(spy).toHaveBeenCalled(); 
+      expect(spy).not.toHaveBeenCalled(); 
     });
 
     it('should call accountService.register in add mode', () => {
@@ -110,7 +110,7 @@ describe('AddEditComponent', () => {
       });
 
       component.onSubmit();
-      expect(mockAccountService.register).not.toHaveBeenCalled(); 
+      expect(mockAccountService.register).toHaveBeenCalled(); 
     });
 
     it('should call accountService.update in edit mode', () => {
@@ -138,18 +138,22 @@ describe('AddEditComponent', () => {
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/users');
     });
 
-    it('should show alert on API error', () => {
+    it('should show alert on API error', (done) => {
       jest.spyOn(mockAccountService, 'register').mockReturnValue(throwError(() => 'Error!'));
 
       component.form.patchValue({
         firstName: 'Bad',
         lastName: 'Data',
         username: 'baddata',
-        password: 'short'
+        password: 'password123'
       });
 
       component.onSubmit();
-      expect(mockAlertService.error).not.toHaveBeenCalled(); 
+      
+      setTimeout(() => {
+        expect(mockAlertService.error).toHaveBeenCalled();
+        done();
+      }, 0);
     });
   });
 });
