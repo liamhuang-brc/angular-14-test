@@ -9,9 +9,9 @@ import { AccountService, AlertService } from '../services';
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  let accountServiceSpy: jasmine.SpyObj<AccountService>;
-  let alertServiceSpy: jasmine.SpyObj<AlertService>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let accountServiceSpy: any;
+  let alertServiceSpy: any;
+  let routerSpy: any;
 
   beforeEach(async () => {
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['register']);
