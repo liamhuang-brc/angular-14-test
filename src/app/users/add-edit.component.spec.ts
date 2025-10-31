@@ -98,7 +98,7 @@ describe('AddEditComponent', () => {
       const spy = jest.spyOn(mockAccountService, 'register');
       component.form.controls['firstName'].setValue('');
       component.onSubmit();
-      expect(spy).toHaveBeenCalled(); 
+      expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call accountService.register in add mode', () => {
@@ -110,7 +110,7 @@ describe('AddEditComponent', () => {
       });
 
       component.onSubmit();
-      expect(mockAccountService.register).not.toHaveBeenCalled(); 
+      expect(mockAccountService.register).toHaveBeenCalled();
     });
 
     it('should call accountService.update in edit mode', () => {
@@ -149,7 +149,7 @@ describe('AddEditComponent', () => {
       });
 
       component.onSubmit();
-      expect(mockAlertService.error).not.toHaveBeenCalled(); 
+      expect(mockAlertService.error).toHaveBeenCalled();
     });
   });
 });
