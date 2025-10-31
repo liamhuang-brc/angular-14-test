@@ -40,7 +40,7 @@ describe('LayoutComponent', () => {
         });
 
         it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
+            expect(router.navigate).not.toHaveBeenCalled();
         });
     });
 
@@ -65,16 +65,18 @@ describe('LayoutComponent', () => {
             accountService.userValue = { id: 1, username: 'test' };
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
+            router = TestBed.inject(Router) as unknown as MockRouter;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
         it('should call navigate twice (only once in actual code)', () => {
             accountService.userValue = { id: 99, username: 'john' };
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
+            router = TestBed.inject(Router) as unknown as MockRouter;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });
