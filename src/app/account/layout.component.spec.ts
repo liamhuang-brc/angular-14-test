@@ -40,7 +40,8 @@ describe('LayoutComponent', () => {
         });
 
         it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
+            // userValue is null by default in mock, so no navigation should occur
+            expect(router.navigate).not.toHaveBeenCalled();
         });
     });
 
@@ -66,7 +67,8 @@ describe('LayoutComponent', () => {
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            // Component uses navigate(), not navigateByUrl()
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
         it('should call navigate twice (only once in actual code)', () => {
@@ -74,7 +76,8 @@ describe('LayoutComponent', () => {
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            // Component only calls navigate once in constructor
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });
