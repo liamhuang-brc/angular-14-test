@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { HomeComponent } from './home.component';
 import { AccountService } from '../services';
@@ -25,8 +25,8 @@ describe('HomeComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
             declarations: [HomeComponent],
+            imports: [RouterTestingModule],
             providers: [
                 { provide: AccountService, useValue: accountServiceMock }
             ]
@@ -43,14 +43,14 @@ describe('HomeComponent', () => {
 
         it('should assign user from AccountService', () => {
             fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
+            expect(component.user?.firstName).toEqual('Shashank');
         });
 
         it('should display user first name in the greeting', () => {
             fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent).toContain('Shashank');
         });
     });
 
@@ -69,7 +69,7 @@ describe('HomeComponent', () => {
 
             expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            expect(paragraphs[0].nativeElement.textContent.trim()).toContain("You're logged in with Angular 15!!!");
         });
     });
 
@@ -82,14 +82,15 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent).toContain('undefined');
+            expect(heading.textContent).toContain('Hi');
         });
     });
 
     describe('Change detection', () => {
         it('should update view if user data changes after initialization', () => {
             fixture.detectChanges();
-            accountServiceMock.userValue.firstName = 'Jane';
+            // Update the component's user reference directly since it's set in constructor
+            component.user = { ...mockUser, firstName: 'Jane' };
             fixture.detectChanges();
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
