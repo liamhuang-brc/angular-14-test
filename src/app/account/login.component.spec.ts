@@ -23,6 +23,8 @@ describe('LoginComponent', () => {
     let router: Router;
 
     beforeEach(async () => {
+        TestBed.resetTestingModule();
+        
         await TestBed.configureTestingModule({
             imports: [ReactiveFormsModule],
             declarations: [LoginComponent],
@@ -100,7 +102,7 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect(router.navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
@@ -114,10 +116,10 @@ describe('LoginComponent', () => {
             expect(component.loading).toBe(false);
         });
 
-        it('should clear alerts twice (only called once in real code)', () => {
+        it('should clear alerts once on submit', () => {
             component.form.setValue({ username: '', password: '' });
             component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
         });
     });
 });
