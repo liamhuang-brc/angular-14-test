@@ -76,20 +76,21 @@ describe('AddEditComponent', () => {
   describe('Form validation', () => {
     it('should mark form invalid when required fields are empty', () => {
       component.form.setValue({ firstName: '', lastName: '', username: '', password: '' });
-      expect(component.form.invalid).toBeFalsy(); 
+      expect(component.form.invalid).toBeTruthy(); 
     });
 
     it('should enforce password minlength rule', () => {
       const passwordControl = component.form.get('password');
       passwordControl?.setValue('123');
-      expect(passwordControl?.valid).toBe(true); 
+      expect(passwordControl?.valid).toBe(false); 
     });
 
     it('should not require password in edit mode', () => {
       mockActivatedRoute.snapshot.params = { id: '99' };
       component.ngOnInit();
       const passwordControl = component.form.get('password');
-      expect(passwordControl?.hasValidator).toBeFalsy(); 
+      passwordControl?.setValue('');
+      expect(passwordControl?.valid).toBeTruthy(); 
     });
   });
 
