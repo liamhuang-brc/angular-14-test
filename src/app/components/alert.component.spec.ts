@@ -31,7 +31,8 @@ describe('AlertComponent', () => {
             providers: [
                 { provide: AlertService, useValue: alertServiceMock },
                 { provide: Router, useValue: routerMock }
-            ]
+            ],
+            teardown: { destroyAfterEach: true }
         }).compileComponents();
 
         fixture = TestBed.createComponent(AlertComponent);
@@ -49,6 +50,7 @@ describe('AlertComponent', () => {
 
             expect(component.alerts.length).toBe(1);
             expect(component.alerts[0].message).toEqual('Test alert');
+            fixture.destroy();
         });
 
         it('should clear alerts on navigation', () => {
@@ -57,6 +59,7 @@ describe('AlertComponent', () => {
 
             routerEvents$.next(new NavigationStart(1, '/home'));
             expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
+            fixture.destroy();
         });
     });
 
@@ -68,7 +71,8 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
+            fixture.destroy();
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +84,8 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts).toEqual([]);
+            fixture.destroy();
         }));
     });
 
@@ -91,11 +96,13 @@ describe('AlertComponent', () => {
 
             expect(css).toContain('alert-success');
             expect(css).toContain('alert');
+            fixture.destroy();
         });
 
         it('should not break when alert is undefined', () => {
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
+            fixture.destroy();
         });
     });
 

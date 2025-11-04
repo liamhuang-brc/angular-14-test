@@ -16,7 +16,8 @@ export class AccountService {
         private router: Router,
         private http: HttpClient
     ) {
-        this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
+        const storedUser = localStorage.getItem('user');
+        this.userSubject = new BehaviorSubject(storedUser ? JSON.parse(storedUser) : null);
         this.user = this.userSubject.asObservable();
     }
 
