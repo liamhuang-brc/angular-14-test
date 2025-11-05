@@ -5,6 +5,8 @@ import { of, Subject } from 'rxjs';
 import { AlertComponent } from './alert.component';
 import { AlertService } from '../services';
 import { Alert, AlertType } from '../models';
+import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AlertComponent', () => {
     let component: AlertComponent;
@@ -28,10 +30,12 @@ describe('AlertComponent', () => {
 
         await TestBed.configureTestingModule({
             declarations: [AlertComponent],
+            imports: [CommonModule],
             providers: [
                 { provide: AlertService, useValue: alertServiceMock },
                 { provide: Router, useValue: routerMock }
-            ]
+            ],
+            schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
 
         fixture = TestBed.createComponent(AlertComponent);
@@ -68,7 +72,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +84,7 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
@@ -95,7 +99,7 @@ describe('AlertComponent', () => {
 
         it('should not break when alert is undefined', () => {
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
         });
     });
 

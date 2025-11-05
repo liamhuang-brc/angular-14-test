@@ -5,6 +5,7 @@ import { of, throwError } from 'rxjs';
 
 import { LoginComponent } from './login.component';
 import { AccountService, AlertService } from '../services';
+import { CommonModule } from '@angular/common';
 
 class MockAccountService {
     login = jest.fn();
@@ -24,8 +25,7 @@ describe('LoginComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ReactiveFormsModule],
-            declarations: [LoginComponent],
+            imports: [LoginComponent],
             providers: [
                 FormBuilder,
                 { provide: AccountService, useClass: MockAccountService },
@@ -58,8 +58,8 @@ describe('LoginComponent', () => {
 
         it('should initialize the form with username and password fields', () => {
             const form = component.form;
-            expect(form.contains('username')).toBe(true);
-            expect(form.contains('password')).toBe(true);
+            expect(form.get('username')).toBeTruthy();
+            expect(form.get('password')).toBeTruthy();
         });
     });
 
@@ -100,7 +100,7 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
@@ -114,10 +114,10 @@ describe('LoginComponent', () => {
             expect(component.loading).toBe(false);
         });
 
-        it('should clear alerts twice (only called once in real code)', () => {
+        it('should clear alerts once when form is invalid', () => {
             component.form.setValue({ username: '', password: '' });
             component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
         });
     });
 });
