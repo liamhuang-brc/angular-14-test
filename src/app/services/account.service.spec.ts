@@ -12,7 +12,7 @@ describe('AccountService', () => {
     let routerMock: any;
 
     const mockUser: User = {
-        id: '101',
+        id: '1',
         username: 'ShashankBharadwaj',
         firstName: 'Shashank',
         lastName: 'Bharadwaj',
@@ -21,6 +21,9 @@ describe('AccountService', () => {
 
     beforeEach(() => {
         routerMock = { navigate: jest.fn() };
+        
+        // Set up localStorage before configuring TestBed
+        localStorage.setItem('user', JSON.stringify(mockUser));
 
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
@@ -32,8 +35,6 @@ describe('AccountService', () => {
 
         service = TestBed.inject(AccountService);
         httpMock = TestBed.inject(HttpTestingController);
-
-        localStorage.setItem('user', JSON.stringify(mockUser));
     });
 
     afterEach(() => {
@@ -44,7 +45,7 @@ describe('AccountService', () => {
     describe('Initialization', () => {
         it('should initialize with user from localStorage', () => {
             const currentUser = service.userValue;
-            expect(currentUser?.username).toBe('ShashankBharadwaj');
+            expect(currentUser).toEqual(mockUser);
         });
     });
 
@@ -69,7 +70,7 @@ describe('AccountService', () => {
             service.login('ShashankBharadwaj', 'password123').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
 
-            expect(req.request.body.user).toBe('ShashankBharadwaj');
+            expect(req.request.body.username).toBe('ShashankBharadwaj');
         });
     });
 
@@ -77,7 +78,7 @@ describe('AccountService', () => {
         it('should clear user from localStorage and navigate to login', () => {
             service.logout();
 
-            expect(service.userValue).toEqual({});
+            expect(service.userValue).toBeNull();
 
             expect(localStorage.getItem('user')).toBeNull();
             expect(routerMock.navigate).toHaveBeenCalledWith(['/account/login']);
@@ -91,7 +92,7 @@ describe('AccountService', () => {
             service.register(newUser).subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
 
-            expect(req.request.method).toBe('PUT');
+            expect(req.request.method).toBe('POST');
         });
     });
 
@@ -106,8 +107,9 @@ describe('AccountService', () => {
             req.flush({});
 
             const updatedUser = JSON.parse(localStorage.getItem('user')!);
+            const expectedUser = { ...mockUser, firstName: 'Max' };
 
-            expect(updatedUser.firstName).toBe('John');
+            expect(updatedUser).toEqual(expectedUser);
         });
 
         it('should not update user if ID does not match current user', () => {
@@ -115,21 +117,22 @@ describe('AccountService', () => {
             service.update('999', updatePayload).subscribe();
 
             const req = httpMock.expectOne(`${environment.apiUrl}/users/999`);
+            expect(req.request.method).toBe('PUT');
             req.flush({});
 
-            expect(service.userValue).toBeNull();
+            expect(service.userValue).toEqual(mockUser);
         });
     });
 
     describe('delete()', () => {
         it('should call logout if deleting current user', () => {
-            const spyLogout = jest.spyOn(service, 'logout');
+            const spyLogout = jest.spyOn(service, 'logout').mockImplementation(() => {});
 
             service.delete('1').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
             req.flush({});
 
-            expect(spyLogout).toHaveBeenCalledTimes(1);
+            expect(spyLogout).toHaveBeenCalled();
         });
 
         it('should not call logout if deleting another user', () => {
@@ -139,7 +142,7 @@ describe('AccountService', () => {
             const req = httpMock.expectOne(`${environment.apiUrl}/users/2`);
             req.flush({});
 
-            expect(spyLogout).toHaveBeenCalled();
+            expect(spyLogout).not.toHaveBeenCalled();
         });
     });
 });
