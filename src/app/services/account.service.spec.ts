@@ -12,7 +12,7 @@ describe('AccountService', () => {
     let routerMock: any;
 
     const mockUser: User = {
-        id: '101',
+        id: '1',
         username: 'ShashankBharadwaj',
         firstName: 'Shashank',
         lastName: 'Bharadwaj',
@@ -20,6 +20,10 @@ describe('AccountService', () => {
     };
 
     beforeEach(() => {
+        // Clear localStorage before setting up each test
+        localStorage.clear();
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        
         routerMock = { navigate: jest.fn() };
 
         TestBed.configureTestingModule({
@@ -32,13 +36,12 @@ describe('AccountService', () => {
 
         service = TestBed.inject(AccountService);
         httpMock = TestBed.inject(HttpTestingController);
-
-        localStorage.setItem('user', JSON.stringify(mockUser));
     });
 
     afterEach(() => {
         httpMock.verify();
         localStorage.clear();
+        TestBed.resetTestingModule();
     });
 
     describe('Initialization', () => {
@@ -69,7 +72,7 @@ describe('AccountService', () => {
             service.login('ShashankBharadwaj', 'password123').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
 
-            expect(req.request.body.user).toBe('ShashankBharadwaj');
+            expect(req.request.body.username).toBe('ShashankBharadwaj');
         });
     });
 
@@ -77,7 +80,7 @@ describe('AccountService', () => {
         it('should clear user from localStorage and navigate to login', () => {
             service.logout();
 
-            expect(service.userValue).toEqual({});
+            expect(service.userValue).toBeNull();
 
             expect(localStorage.getItem('user')).toBeNull();
             expect(routerMock.navigate).toHaveBeenCalledWith(['/account/login']);
@@ -91,12 +94,28 @@ describe('AccountService', () => {
             service.register(newUser).subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
 
-            expect(req.request.method).toBe('PUT');
+            expect(req.request.method).toBe('POST');
         });
     });
 
     describe('update()', () => {
         it('should update user when same ID is logged in', () => {
+            // Set up service with a user that has ID '1'
+            const currentUser = { ...mockUser, id: '1' };
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            
+            // Create a new service instance to pick up the updated localStorage
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                imports: [HttpClientTestingModule],
+                providers: [
+                    AccountService,
+                    { provide: Router, useValue: routerMock }
+                ]
+            });
+            service = TestBed.inject(AccountService);
+            httpMock = TestBed.inject(HttpTestingController);
+            
             const updatePayload = { firstName: 'Max' };
 
             service.update('1', updatePayload).subscribe();
@@ -107,22 +126,39 @@ describe('AccountService', () => {
 
             const updatedUser = JSON.parse(localStorage.getItem('user')!);
 
-            expect(updatedUser.firstName).toBe('John');
+            expect(updatedUser.firstName).toBe('Max');
         });
 
         it('should not update user if ID does not match current user', () => {
+            const originalUser = service.userValue;
             const updatePayload = { lastName: 'Changed' };
             service.update('999', updatePayload).subscribe();
 
             const req = httpMock.expectOne(`${environment.apiUrl}/users/999`);
             req.flush({});
 
-            expect(service.userValue).toBeNull();
+            expect(service.userValue).toEqual(originalUser);
         });
     });
 
     describe('delete()', () => {
         it('should call logout if deleting current user', () => {
+            // Set up service with a user that has ID '1'
+            const currentUser = { ...mockUser, id: '1' };
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            
+            // Create a new service instance to pick up the updated localStorage
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                imports: [HttpClientTestingModule],
+                providers: [
+                    AccountService,
+                    { provide: Router, useValue: routerMock }
+                ]
+            });
+            service = TestBed.inject(AccountService);
+            httpMock = TestBed.inject(HttpTestingController);
+            
             const spyLogout = jest.spyOn(service, 'logout');
 
             service.delete('1').subscribe();
@@ -139,7 +175,7 @@ describe('AccountService', () => {
             const req = httpMock.expectOne(`${environment.apiUrl}/users/2`);
             req.flush({});
 
-            expect(spyLogout).toHaveBeenCalled();
+            expect(spyLogout).not.toHaveBeenCalled();
         });
     });
 });
