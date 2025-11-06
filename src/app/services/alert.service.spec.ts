@@ -1,3 +1,4 @@
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { AlertService } from './alert.service';
 import { Alert, AlertType } from '../models';
 
@@ -5,7 +6,10 @@ describe('AlertService', () => {
   let service: AlertService;
 
   beforeEach(() => {
-    service = new AlertService();
+    TestBed.configureTestingModule({
+      providers: [AlertService]
+    });
+    service = TestBed.inject(AlertService);
   });
 
   describe('onAlert()', () => {
@@ -33,8 +37,11 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      // Use setTimeout to check that spy was not called after async operations
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 10);
     });
   });
 
@@ -72,52 +79,58 @@ describe('AlertService', () => {
       service.success('Operation completed');
     });
 
-    it('should emit error alert with message and type', (done) => {
+    it('should emit error alert with message and type', fakeAsync(() => {
+      let result: Alert | undefined;
       service.onAlert().subscribe((a) => {
-        expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
-        done();
+        result = a;
       });
 
       service.error('Operation Failed');
-    });
+      tick();
 
-    it('should emit info alert', (done) => {
+      expect(result?.type).toBe(AlertType.Error);
+      expect(result?.message).toBe('Operation Failed');
+    }));
+
+    it('should emit info alert', fakeAsync(() => {
       const spy = jest.fn();
       service.onAlert().subscribe(spy);
 
       service.info('Information!');
-      service.warn('Warning!'); 
+      service.warn('Warning!');
+      tick();
 
       expect(spy).toHaveBeenCalledTimes(2);
-      done();
-    });
+    }));
   });
 
   describe('clear()', () => {
-    it('should emit empty alert with given id', (done) => {
+    it('should emit empty alert with given id', fakeAsync(() => {
+      let result: Alert | undefined;
       service.onAlert('custom').subscribe((a) => {
-        expect(a.message).toBeUndefined();
-        expect(a.id).toBe('custom');
-        done();
+        result = a;
       });
 
       service.clear('custom');
-    });
+      tick();
 
-    it('should not emit when id does not match', (done) => {
+      expect(result?.message).toBeUndefined();
+      expect(result?.id).toBe('custom');
+    }));
+
+    it('should not emit when id does not match', fakeAsync(() => {
       const spy = jest.fn();
       service.onAlert('expected').subscribe(spy);
 
       service.clear('wrong-id');
+      tick(10);
 
-      expect(spy).toHaveBeenCalled();
-      done();
-    });
+      expect(spy).not.toHaveBeenCalled();
+    }));
   });
 
   describe('Behavior nuances', () => {
-    it('should handle multiple subscribers independently', (done) => {
+    it('should handle multiple subscribers independently', fakeAsync(() => {
       const firstSpy = jest.fn();
       const secondSpy = jest.fn();
 
@@ -126,14 +139,14 @@ describe('AlertService', () => {
 
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
       service.alert(alert);
+      tick(10);
 
       expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
-    });
+      expect(secondSpy).toHaveBeenCalled(); // Both subscribers should receive the alert
+    }));
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+      expect(() => service.clear('some-id')).not.toThrow();
     });
   });
 });
