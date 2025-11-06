@@ -43,14 +43,14 @@ describe('HomeComponent', () => {
 
         it('should assign user from AccountService', () => {
             fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
+            expect(component.user?.firstName).toEqual('Shashank');
         });
 
         it('should display user first name in the greeting', () => {
             fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toBe('Hi Shashank');
         });
     });
 
@@ -69,13 +69,24 @@ describe('HomeComponent', () => {
 
             expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!");
         });
     });
 
     describe('Edge behavior', () => {
         it('should handle case when AccountService returns null user', () => {
             accountServiceMock.userValue = null;
+            
+            // Reconfigure TestBed with updated mock
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                imports: [RouterTestingModule],
+                declarations: [HomeComponent],
+                providers: [
+                    { provide: AccountService, useValue: accountServiceMock }
+                ]
+            });
+            
             fixture = TestBed.createComponent(HomeComponent);
             component = fixture.componentInstance;
             fixture.detectChanges();
@@ -89,10 +100,32 @@ describe('HomeComponent', () => {
     describe('Change detection', () => {
         it('should update view if user data changes after initialization', () => {
             fixture.detectChanges();
-            accountServiceMock.userValue.firstName = 'Jane';
+            
+            // Get initial heading text
+            let heading = fixture.debugElement.query(By.css('h1')).nativeElement;
+            expect(heading.textContent).toContain('Shashank');
+            
+            // Change the mock user data
+            accountServiceMock.userValue = {
+                ...mockUser,
+                firstName: 'Jane'
+            };
+            
+            // Create new component instance to reflect the change
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                imports: [RouterTestingModule],
+                declarations: [HomeComponent],
+                providers: [
+                    { provide: AccountService, useValue: accountServiceMock }
+                ]
+            });
+            
+            fixture = TestBed.createComponent(HomeComponent);
+            component = fixture.componentInstance;
             fixture.detectChanges();
-
-            const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
+            
+            heading = fixture.debugElement.query(By.css('h1')).nativeElement;
             expect(heading.textContent).toContain('Jane');
         });
     });

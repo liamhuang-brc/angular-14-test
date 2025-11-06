@@ -1,7 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
+import { NgZone } from '@angular/core';
 
 import { LoginComponent } from './login.component';
 import { AccountService, AlertService } from '../services';
@@ -48,7 +49,10 @@ describe('LoginComponent', () => {
         alertService = TestBed.inject(AlertService) as unknown as MockAlertService;
         router = TestBed.inject(Router);
 
-        fixture.detectChanges();
+        // Ensure component is initialized within Angular zone
+        TestBed.inject(NgZone).run(() => {
+            fixture.detectChanges();
+        });
     });
 
     describe('Initialization', () => {
@@ -87,12 +91,13 @@ describe('LoginComponent', () => {
             expect(accountService.login).not.toHaveBeenCalled();
         });
 
-        it('should call accountService.login when form is valid', () => {
+        it('should call accountService.login when form is valid', fakeAsync(() => {
             component.form.setValue({ username: 'test', password: '1234' });
             accountService.login = jest.fn().mockReturnValue(of(true));
             component.onSubmit();
+            tick();
             expect(accountService.login).toHaveBeenCalledWith('test', '1234');
-        });
+        }));
 
         it('should navigate to / on successful login', () => {
             component.form.setValue({ username: 'test', password: '1234' });
@@ -100,7 +105,7 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
@@ -117,7 +122,7 @@ describe('LoginComponent', () => {
         it('should clear alerts twice (only called once in real code)', () => {
             component.form.setValue({ username: '', password: '' });
             component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
         });
     });
 });

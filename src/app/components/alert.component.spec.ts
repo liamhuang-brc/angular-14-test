@@ -38,6 +38,16 @@ describe('AlertComponent', () => {
         component = fixture.componentInstance;
     });
 
+    afterEach(() => {
+        // Clean up subscriptions and subjects to prevent memory leaks
+        if (routerEvents$ && !routerEvents$.closed) {
+            routerEvents$.complete();
+        }
+        if (fixture) {
+            fixture.destroy();
+        }
+    });
+
     describe('ngOnInit', () => {
         it('should subscribe to alerts and add them to the alerts array', () => {
             const alert = { message: 'Test alert', type: AlertType.Success };
@@ -68,7 +78,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +90,7 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
@@ -100,9 +110,10 @@ describe('AlertComponent', () => {
     });
 
     describe('ngOnDestroy', () => {
-        it('should unsubscribe from alert and route subscriptions', () => {
+        it('should unsubscribe from alert and route subscriptions', fakeAsync(() => {
             alertServiceMock.onAlert.mockReturnValue(of({ message: 'x' }));
             component.ngOnInit();
+            tick(); // Allow subscriptions to be established
 
             const alertUnsubSpy = jest.spyOn(component.alertSubscription, 'unsubscribe');
             const routeUnsubSpy = jest.spyOn(component.routeSubscription, 'unsubscribe');
@@ -111,6 +122,6 @@ describe('AlertComponent', () => {
 
             expect(alertUnsubSpy).toHaveBeenCalled();
             expect(routeUnsubSpy).toHaveBeenCalled();
-        });
+        }));
     });
 });

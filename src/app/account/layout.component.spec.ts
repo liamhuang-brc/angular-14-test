@@ -39,7 +39,23 @@ describe('LayoutComponent', () => {
             expect(component).toBeTruthy();
         });
 
-        it('should redirect to home immediately on init (incorrect default state)', () => {
+        it('should redirect to home immediately on init when user is logged in', () => {
+            accountService.userValue = { id: 1, username: 'admin' };
+            
+            // Reconfigure TestBed with updated service
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                declarations: [LayoutComponent],
+                providers: [
+                    { provide: Router, useClass: MockRouter },
+                    { provide: AccountService, useValue: accountService },
+                ],
+            });
+            
+            fixture = TestBed.createComponent(LayoutComponent);
+            component = fixture.componentInstance;
+            router = TestBed.inject(Router) as unknown as MockRouter;
+            
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
     });
@@ -47,34 +63,82 @@ describe('LayoutComponent', () => {
     describe('Redirection logic', () => {
         it('should NOT navigate if userValue is null', () => {
             accountService.userValue = null;
+            
+            // Reconfigure TestBed with updated service
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                declarations: [LayoutComponent],
+                providers: [
+                    { provide: Router, useClass: MockRouter },
+                    { provide: AccountService, useValue: accountService },
+                ],
+            });
+            
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
+            router = TestBed.inject(Router) as unknown as MockRouter;
 
             expect(router.navigate).not.toHaveBeenCalled();
         });
 
         it('should navigate to home if userValue exists', () => {
             accountService.userValue = { id: 1, username: 'admin' };
+            
+            // Reconfigure TestBed with updated service
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                declarations: [LayoutComponent],
+                providers: [
+                    { provide: Router, useClass: MockRouter },
+                    { provide: AccountService, useValue: accountService },
+                ],
+            });
+            
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
+            router = TestBed.inject(Router) as unknown as MockRouter;
 
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
-        it('should use navigateByUrl instead of navigate (wrong router method)', () => {
+        it('should use navigate method correctly', () => {
             accountService.userValue = { id: 1, username: 'test' };
+            
+            // Reconfigure TestBed with updated service
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                declarations: [LayoutComponent],
+                providers: [
+                    { provide: Router, useClass: MockRouter },
+                    { provide: AccountService, useValue: accountService },
+                ],
+            });
+            
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
+            router = TestBed.inject(Router) as unknown as MockRouter;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
-        it('should call navigate twice (only once in actual code)', () => {
+        it('should call navigate once when user is logged in', () => {
             accountService.userValue = { id: 99, username: 'john' };
+            
+            // Reconfigure TestBed with updated service
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                declarations: [LayoutComponent],
+                providers: [
+                    { provide: Router, useClass: MockRouter },
+                    { provide: AccountService, useValue: accountService },
+                ],
+            });
+            
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
+            router = TestBed.inject(Router) as unknown as MockRouter;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });
