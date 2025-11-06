@@ -14,7 +14,7 @@ describe('HomeComponent', () => {
     const mockUser: User = {
         id: '101',
         username: 'ShashankBharadwaj',
-        firstName: 'Shashank',
+        firstName: 'John',
         lastName: 'Bharadwaj',
         token: 'checkThisT0KenOut&!etMeInHehehe'
     };
@@ -34,6 +34,7 @@ describe('HomeComponent', () => {
 
         fixture = TestBed.createComponent(HomeComponent);
         component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     describe('Initialization', () => {
@@ -42,21 +43,18 @@ describe('HomeComponent', () => {
         });
 
         it('should assign user from AccountService', () => {
-            fixture.detectChanges();
             expect(component.user?.firstName).toEqual('John');
         });
 
         it('should display user first name in the greeting', () => {
-            fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toBe('Hi John!');
         });
     });
 
     describe('Template rendering', () => {
         it('should contain a link to manage users', () => {
-            fixture.detectChanges();
             const anchor = fixture.debugElement.query(By.css('a')).nativeElement;
 
             expect(anchor.getAttribute('routerLink')).toBe('/users');
@@ -64,12 +62,11 @@ describe('HomeComponent', () => {
         });
 
         it('should render paragraph content correctly', () => {
-            fixture.detectChanges();
             const paragraphs = fixture.debugElement.queryAll(By.css('p'));
 
             expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 15!!!");
         });
     });
 
@@ -82,13 +79,12 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent).toContain('undefined');
+            expect(heading.textContent).toContain('Hi ');
         });
     });
 
     describe('Change detection', () => {
         it('should update view if user data changes after initialization', () => {
-            fixture.detectChanges();
             accountServiceMock.userValue.firstName = 'Jane';
             fixture.detectChanges();
 
