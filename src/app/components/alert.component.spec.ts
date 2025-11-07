@@ -33,9 +33,13 @@ describe('AlertComponent', () => {
                 { provide: Router, useValue: routerMock }
             ]
         }).compileComponents();
+                fixture = TestBed.createComponent(AlertComponent);
 
-        fixture = TestBed.createComponent(AlertComponent);
-        component = fixture.componentInstance;
+           component = fixture.componentInstance;
+    });
+
+    afterEach(() => {
+        fixture.destroy();
     });
 
     describe('ngOnInit', () => {
@@ -50,53 +54,74 @@ describe('AlertComponent', () => {
             expect(component.alerts.length).toBe(1);
             expect(component.alerts[0].message).toEqual('Test alert');
         });
-
         it('should clear alerts on navigation', () => {
-            alertServiceMock.onAlert.mockReturnValue(of());
+
+   alertServiceMock.onAlert.mockReturnValue(of());
             component.ngOnInit();
 
-            routerEvents$.next(new NavigationStart(1, '/home'));
-            expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
+
+     routerEvents$.next(new NavigationStart(1, '/home'));
+
+   expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
+
+
+   component.ngOnDestroy();
         });
     });
 
     describe('removeAlert', () => {
-        it('should remove the alert immediately if fade is false', () => {
-            const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
-            component.alerts = [alert];
-            component.fade = false;
+                it('should remove the alert immediately if fade is false', () =>
+           {
+                    const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
 
-            component.removeAlert(alert);
+               component.alerts = [alert];
+                    component.fade = false;
 
-            expect(component.alerts.length).toBeNull();
-        });
+
+           component.removeAlert(alert);
+
+                    expect(component.alerts.length).toBe(0);
+
+           });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
             component.fade = true;
-
             component.removeAlert(alert);
-            expect(alert.fade).toBe(true);
+
+   expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+
+   expect(component.alerts.length).toBe(0);
         }));
     });
 
     describe('cssClass', () => {
-        it('should return correct classes for success alert', () => {
-            const alert: Alert = { message: 'Done', type: AlertType.Success };
-            const css = component.cssClass(alert);
+                it('should return correct classes for success alert', () => {
 
-            expect(css).toContain('alert-success');
-            expect(css).toContain('alert');
-        });
+                   alertServiceMock.onAlert.mockReturnValue(of());
+                    component.ngOnInit();
 
-        it('should not break when alert is undefined', () => {
-            const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
-        });
+                   const alert: Alert = { message: 'Done', type: AlertType.Success };
+                    const
+           css = component.cssClass(alert);
+
+                    expect(css).toContain('alert-success');
+
+                expect(css).toContain('alert');
+                });
+                                                it('should not break when alert is undefined', ()
+                           => {
+                                            alertServiceMock.onAlert.mockReturnValue(of());
+
+                           component.ngOnInit();
+                                            const css = component.cssClass(undefined as any);
+
+                                                     expect(css).toBeUndefined();
+
+                                                 });
     });
 
     describe('ngOnDestroy', () => {

@@ -30,11 +30,13 @@ describe('AlertService', () => {
 
       const spy = jest.fn();
       service.onAlert('expected-id').subscribe(spy);
-
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+
+   expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 100);
     });
   });
 
@@ -71,15 +73,17 @@ describe('AlertService', () => {
 
       service.success('Operation completed');
     });
-
     it('should emit error alert with message and type', (done) => {
-      service.onAlert().subscribe((a) => {
+
+   service.onAlert().subscribe((a) => {
         expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
+
+   expect(a.message).toBe('Operation Failed');
         done();
       });
 
-      service.error('Operation Failed');
+
+   service.error('Operation Failed');
     });
 
     it('should emit info alert', (done) => {
@@ -104,15 +108,19 @@ describe('AlertService', () => {
 
       service.clear('custom');
     });
-
     it('should not emit when id does not match', (done) => {
-      const spy = jest.fn();
+      const
+   spy = jest.fn();
       service.onAlert('expected').subscribe(spy);
 
-      service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
-      done();
+   service.clear('wrong-id');
+
+      setTimeout(() => {
+
+   expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 100);
     });
   });
 
@@ -125,15 +133,16 @@ describe('AlertService', () => {
       service.onAlert('multi').subscribe(secondSpy);
 
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
-      service.alert(alert);
+            service.alert(alert);
 
-      expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
-    });
+            expect(firstSpy).toHaveBeenCalled();
 
-    it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+               expect(secondSpy).toHaveBeenCalled();
+            done();
     });
+        it('should not throw when clearing before any alert emitted', () => {
+
+             expect(() => service.clear('some-id')).not.toThrow();
+        });
   });
 });
