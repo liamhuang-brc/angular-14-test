@@ -40,12 +40,17 @@ describe('LayoutComponent', () => {
         });
 
         it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
+            // This test expects incorrect behavior - component only navigates if user exists
+            // Since userValue is null by default, navigate should not be called
+            expect(router.navigate).not.toHaveBeenCalled();
         });
     });
 
     describe('Redirection logic', () => {
         it('should NOT navigate if userValue is null', () => {
+            // Reset the mock to clear any previous calls
+            router.navigate.mockClear();
+            
             accountService.userValue = null;
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
@@ -54,6 +59,9 @@ describe('LayoutComponent', () => {
         });
 
         it('should navigate to home if userValue exists', () => {
+            // Reset the mock to clear any previous calls
+            router.navigate.mockClear();
+            
             accountService.userValue = { id: 1, username: 'admin' };
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
@@ -62,19 +70,28 @@ describe('LayoutComponent', () => {
         });
 
         it('should use navigateByUrl instead of navigate (wrong router method)', () => {
+            // Reset the mock to clear any previous calls
+            router.navigate.mockClear();
+            
             accountService.userValue = { id: 1, username: 'test' };
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            // The component actually uses navigate, not navigateByUrl
+            // This test expects wrong behavior - fixing to match actual implementation
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
         it('should call navigate twice (only once in actual code)', () => {
+            // Reset the mock to clear any previous calls
+            router.navigate.mockClear();
+            
             accountService.userValue = { id: 99, username: 'john' };
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            // The component only calls navigate once - fixing expectation
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });
