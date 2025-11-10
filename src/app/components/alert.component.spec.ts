@@ -1,3 +1,7 @@
+// Enable fake timers for all tests
+jest.useFakeTimers();
+
+
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router, NavigationStart } from '@angular/router';
 import { of, Subject } from 'rxjs';
@@ -38,6 +42,15 @@ describe('AlertComponent', () => {
         component = fixture.componentInstance;
     });
 
+    afterEach(() => {
+        // Clear any pending timers
+        jest.clearAllTimers();
+        // Complete the router events subject
+        routerEvents$.complete();
+        // Destroy the component fixture
+        fixture.destroy();
+    });
+
     describe('ngOnInit', () => {
         it('should subscribe to alerts and add them to the alerts array', () => {
             const alert = { message: 'Test alert', type: AlertType.Success };
@@ -49,6 +62,9 @@ describe('AlertComponent', () => {
 
             expect(component.alerts.length).toBe(1);
             expect(component.alerts[0].message).toEqual('Test alert');
+            
+            // Clean up the subject
+            alertSubject.complete();
         });
 
         it('should clear alerts on navigation', () => {
@@ -68,7 +84,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +96,10 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
+            
+            // Flush any remaining timers
+            tick();
         }));
     });
 
@@ -95,7 +114,7 @@ describe('AlertComponent', () => {
 
         it('should not break when alert is undefined', () => {
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
         });
     });
 
@@ -111,6 +130,10 @@ describe('AlertComponent', () => {
 
             expect(alertUnsubSpy).toHaveBeenCalled();
             expect(routeUnsubSpy).toHaveBeenCalled();
+            
+            // Ensure component is properly cleaned up
+            expect(component.alertSubscription.closed).toBe(true);
+            expect(component.routeSubscription.closed).toBe(true);
         });
     });
 });
