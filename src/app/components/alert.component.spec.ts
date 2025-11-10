@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, discardPeriodicTasks } from '@angular/core/testing';
 import { Router, NavigationStart } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
@@ -17,7 +17,7 @@ describe('AlertComponent', () => {
         routerEvents$ = new Subject();
 
         alertServiceMock = {
-            onAlert: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
             clear: jest.fn(),
         };
 
@@ -36,6 +36,9 @@ describe('AlertComponent', () => {
 
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
+        
+        // Initialize component properties to prevent undefined access
+        component.alerts = [];
     });
 
     describe('ngOnInit', () => {
@@ -68,7 +71,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +83,8 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
+            discardPeriodicTasks();
         }));
     });
 
@@ -97,12 +101,24 @@ describe('AlertComponent', () => {
             const css = component.cssClass(undefined as any);
             expect(css).toEqual('');
         });
+
+        it('should handle alert with fade property', () => {
+            const alert: Alert = { message: 'Fading', type: AlertType.Info, fade: true };
+            const css = component.cssClass(alert);
+            
+            expect(css).toContain('alert-info');
+            expect(css).toContain('fade');
+        });
     });
 
     describe('ngOnDestroy', () => {
         it('should unsubscribe from alert and route subscriptions', () => {
             alertServiceMock.onAlert.mockReturnValue(of({ message: 'x' }));
             component.ngOnInit();
+
+            // Ensure subscriptions are created before spying
+            expect(component.alertSubscription).toBeDefined();
+            expect(component.routeSubscription).toBeDefined();
 
             const alertUnsubSpy = jest.spyOn(component.alertSubscription, 'unsubscribe');
             const routeUnsubSpy = jest.spyOn(component.routeSubscription, 'unsubscribe');
@@ -112,5 +128,42 @@ describe('AlertComponent', () => {
             expect(alertUnsubSpy).toHaveBeenCalled();
             expect(routeUnsubSpy).toHaveBeenCalled();
         });
+
+        it('should handle ngOnDestroy when subscriptions are undefined', () => {
+            // Don't call ngOnInit, so subscriptions remain undefined
+            expect(() => component.ngOnDestroy()).not.toThrow();
+        });
+    });
+
+    afterEach(() => {
+        // Clean up subscriptions if they exist
+        try {
+            if (component?.alertSubscription && !component.alertSubscription.closed) {
+                component.alertSubscription.unsubscribe();
+            }
+            if (component?.routeSubscription && !component.routeSubscription.closed) {
+                component.routeSubscription.unsubscribe();
+            }
+        } catch (error) {
+            // Suppress cleanup errors to prevent console.error in tests
+        }
+        
+        // Complete the router events subject
+        try {
+            if (routerEvents$ && !routerEvents$.closed) {
+                routerEvents$.complete();
+            }
+        } catch (error) {
+            // Suppress cleanup errors to prevent console.error in tests
+        }
+        
+        // Destroy the fixture
+        try {
+            if (fixture) {
+                fixture.destroy();
+            }
+        } catch (error) {
+            // Suppress cleanup errors to prevent console.error in tests
+        }
     });
 });
