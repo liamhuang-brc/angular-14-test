@@ -33,8 +33,11 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      // Use setTimeout to ensure the observable has time to process
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 0);
     });
   });
 
@@ -75,7 +78,7 @@ describe('AlertService', () => {
     it('should emit error alert with message and type', (done) => {
       service.onAlert().subscribe((a) => {
         expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
+        expect(a.message).toBe('Operation Failed');
         done();
       });
 
@@ -83,14 +86,21 @@ describe('AlertService', () => {
     });
 
     it('should emit info alert', (done) => {
-      const spy = jest.fn();
-      service.onAlert().subscribe(spy);
+      let callCount = 0;
+      service.onAlert().subscribe((alert) => {
+        callCount++;
+        if (callCount === 1) {
+          expect(alert.type).toBe(AlertType.Info);
+          expect(alert.message).toBe('Information!');
+        } else if (callCount === 2) {
+          expect(alert.type).toBe(AlertType.Warning);
+          expect(alert.message).toBe('Warning!');
+          done();
+        }
+      });
 
       service.info('Information!');
-      service.warn('Warning!'); 
-
-      expect(spy).toHaveBeenCalledTimes(2);
-      done();
+      service.warn('Warning!');
     });
   });
 
@@ -111,8 +121,10 @@ describe('AlertService', () => {
 
       service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 10);
     });
   });
 
@@ -127,13 +139,17 @@ describe('AlertService', () => {
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
       service.alert(alert);
 
-      expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        expect(firstSpy).toHaveBeenCalledWith(expect.objectContaining({ id: 'multi', message: 'Broadcast' }));
+        expect(secondSpy).toHaveBeenCalledWith(expect.objectContaining({ id: 'multi', message: 'Broadcast' }));
+        done();
+      }, 10);
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+      expect(() => {
+        service.clear('some-id');
+      }).not.toThrow();
     });
   });
 });

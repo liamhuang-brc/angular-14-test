@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { Router, NavigationStart } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
@@ -17,7 +17,7 @@ describe('AlertComponent', () => {
         routerEvents$ = new Subject();
 
         alertServiceMock = {
-            onAlert: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
             clear: jest.fn(),
         };
 
@@ -36,6 +36,11 @@ describe('AlertComponent', () => {
 
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
+    });
+
+    afterEach(() => {
+        // Clean up any pending timers to prevent cleanup errors
+        jest.clearAllTimers();
     });
 
     describe('ngOnInit', () => {
@@ -68,7 +73,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,29 +85,33 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
+            flush(); // Ensure all pending timers are flushed
         }));
     });
 
     describe('cssClass', () => {
-        it('should return correct classes for success alert', () => {
+        it('should return correct classes for success alert', fakeAsync(() => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
             const css = component.cssClass(alert);
 
             expect(css).toContain('alert-success');
             expect(css).toContain('alert');
-        });
+            flush(); // Ensure any pending timers are handled
+        }));
 
-        it('should not break when alert is undefined', () => {
+        it('should not break when alert is undefined', fakeAsync(() => {
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
-        });
+            expect(css).toBeUndefined();
+            flush(); // Ensure any pending timers are handled
+        }));
     });
 
     describe('ngOnDestroy', () => {
         it('should unsubscribe from alert and route subscriptions', () => {
             alertServiceMock.onAlert.mockReturnValue(of({ message: 'x' }));
             component.ngOnInit();
+            fixture.detectChanges();
 
             const alertUnsubSpy = jest.spyOn(component.alertSubscription, 'unsubscribe');
             const routeUnsubSpy = jest.spyOn(component.routeSubscription, 'unsubscribe');

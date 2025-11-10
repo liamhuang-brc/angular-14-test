@@ -39,8 +39,8 @@ describe('LayoutComponent', () => {
             expect(component).toBeTruthy();
         });
 
-        it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
+        it('should not redirect when user is not logged in', () => {
+            expect(router.navigate).not.toHaveBeenCalled();
         });
     });
 
@@ -61,20 +61,20 @@ describe('LayoutComponent', () => {
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
-        it('should use navigateByUrl instead of navigate (wrong router method)', () => {
+        it('should use navigate method correctly', () => {
             accountService.userValue = { id: 1, username: 'test' };
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
-        it('should call navigate twice (only once in actual code)', () => {
+        it('should call navigate only once', () => {
             accountService.userValue = { id: 99, username: 'john' };
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });
