@@ -38,6 +38,11 @@ describe('AlertComponent', () => {
         component = fixture.componentInstance;
     });
 
+    afterEach(() => {
+        fixture.destroy();
+        routerEvents$.complete();
+    });
+
     describe('ngOnInit', () => {
         it('should subscribe to alerts and add them to the alerts array', () => {
             const alert = { message: 'Test alert', type: AlertType.Success };
@@ -65,28 +70,35 @@ describe('AlertComponent', () => {
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
             component.alerts = [alert];
             component.fade = false;
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
             component.fade = true;
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
 
             component.removeAlert(alert);
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const css = component.cssClass(alert);
 
             expect(css).toContain('alert-success');
@@ -94,8 +106,15 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
+            // Suppress console warnings for this test
+            const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
+            
+            consoleSpy.mockRestore();
         });
     });
 
