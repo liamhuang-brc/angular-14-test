@@ -5,8 +5,9 @@
     "types": ["jest"],
     "module": "CommonJS",
     "target": "ES2020",
-    "isolatedModules": true,
-    "esModuleInterop": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts", "setup-jest.ts"]
 }
