@@ -38,10 +38,18 @@ describe('LayoutComponent', () => {
         it('should create the layout component', () => {
             expect(component).toBeTruthy();
         });
+                it('should redirect to home if user is logged in', () => {
 
-        it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
-        });
+                router.navigate = jest.fn();
+                    accountService.userValue = { id: 1, username:
+           'testuser' };
+                    fixture = TestBed.createComponent(LayoutComponent);
+
+           component = fixture.componentInstance;
+
+
+           expect(router.navigate).toHaveBeenCalledWith(['/']);
+                });
     });
 
     describe('Redirection logic', () => {
@@ -60,21 +68,27 @@ describe('LayoutComponent', () => {
 
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
+        it('should use navigate method', () => {
 
-        it('should use navigateByUrl instead of navigate (wrong router method)', () => {
-            accountService.userValue = { id: 1, username: 'test' };
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+   accountService.userValue = { id: 1, username: 'test' };
+            fixture =
+   TestBed.createComponent(LayoutComponent);
+            component =
+   fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
-        });
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
 
-        it('should call navigate twice (only once in actual code)', () => {
+           });
+        it('should call navigate once when user is logged in', () => {
+
             accountService.userValue = { id: 99, username: 'john' };
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+            fixture =
+   TestBed.createComponent(LayoutComponent);
+            component =
+   fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
+
         });
     });
 });

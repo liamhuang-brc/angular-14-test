@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, flush } from
+   '@angular/core/testing';
 import { Router, NavigationStart } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
@@ -25,9 +26,9 @@ describe('AlertComponent', () => {
             events: routerEvents$.asObservable(),
             navigate: jest.fn()
         };
-
         await TestBed.configureTestingModule({
-            declarations: [AlertComponent],
+            declarations:
+   [AlertComponent],
             providers: [
                 { provide: AlertService, useValue: alertServiceMock },
                 { provide: Router, useValue: routerMock }
@@ -50,26 +51,34 @@ describe('AlertComponent', () => {
             expect(component.alerts.length).toBe(1);
             expect(component.alerts[0].message).toEqual('Test alert');
         });
+        it('should clear alerts on navigation', fakeAsync(() => {
 
-        it('should clear alerts on navigation', () => {
-            alertServiceMock.onAlert.mockReturnValue(of());
+       alertServiceMock.onAlert.mockReturnValue(of());
             component.ngOnInit();
 
-            routerEvents$.next(new NavigationStart(1, '/home'));
-            expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
-        });
+
+         routerEvents$.next(new NavigationStart(1, '/home'));
+
+   expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
+            flush();
+
+        }));
     });
 
     describe('removeAlert', () => {
-        it('should remove the alert immediately if fade is false', () => {
-            const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
-            component.alerts = [alert];
-            component.fade = false;
+                        it('should remove the alert immediately if fade is false', () =>
+                   {
+                    const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
 
-            component.removeAlert(alert);
+               component.alerts = [alert];
+                    component.fade = false;
 
-            expect(component.alerts.length).toBeNull();
-        });
+
+           component.removeAlert(alert);
+
+                    expect(component.alerts.length).toBe(0);
+
+           });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
@@ -80,23 +89,35 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
     describe('cssClass', () => {
-        it('should return correct classes for success alert', () => {
-            const alert: Alert = { message: 'Done', type: AlertType.Success };
-            const css = component.cssClass(alert);
+                        it('should return correct classes for success alert', fakeAsync(()
+                   => {
+                                const alert: Alert = { message: 'Done', type: AlertType.Success
+                        };
 
-            expect(css).toContain('alert-success');
-            expect(css).toContain('alert');
-        });
+                                const css = component.cssClass(alert);
 
-        it('should not break when alert is undefined', () => {
-            const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
-        });
+
+                       expect(css).toContain('alert-success');
+                                expect(css).toContain('alert');
+
+
+                           flush(); // Ensure all pending timers are cleared
+                            }));
+                                                                it('should not break when alert is    undefined', () => {
+
+                                                                      const css =
+                                   component.cssClass(undefined as any);
+
+
+
+                                   expect(css).toEqual('');
+
+                                                            });
     });
 
     describe('ngOnDestroy', () => {
