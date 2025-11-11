@@ -61,26 +61,33 @@ describe('AlertComponent', () => {
     });
 
     describe('removeAlert', () => {
-        it('should remove the alert immediately if fade is false', () => {
-            const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
-            component.alerts = [alert];
-            component.fade = false;
+                        it('should remove the alert immediately if fade is false', () =>
+                   {
+                    const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
 
-            component.removeAlert(alert);
+               component.alerts = [alert];
+                    component.fade = false;
 
-            expect(component.alerts.length).toBeNull();
+
+           component.removeAlert(alert);
+
+                    expect(component.alerts.length).toBe(0);
+
+   fixture.detectChanges();
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
             component.fade = true;
-
             component.removeAlert(alert);
-            expect(alert.fade).toBe(true);
+
+   expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+
+   expect(component.alerts.length).toBe(0);
+            fixture.detectChanges();
         }));
     });
 

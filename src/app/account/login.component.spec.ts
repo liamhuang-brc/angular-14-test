@@ -99,8 +99,8 @@ describe('LoginComponent', () => {
             accountService.login = jest.fn().mockReturnValue(of(true));
 
             component.onSubmit();
-
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect((router as
+   any).navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
@@ -113,11 +113,13 @@ describe('LoginComponent', () => {
             expect(alertService.error).toHaveBeenCalledWith(mockError);
             expect(component.loading).toBe(false);
         });
-
-        it('should clear alerts twice (only called once in real code)', () => {
+        it('should clear alerts twice (only called once in real code)', ()
+   => {
             component.form.setValue({ username: '', password: '' });
-            component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
-        });
+
+   component.onSubmit();
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
+
+    });
     });
 });
