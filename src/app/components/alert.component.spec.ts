@@ -12,13 +12,14 @@ describe('AlertComponent', () => {
     let alertServiceMock: any;
     let routerMock: any;
     let routerEvents$: Subject<any>;
-
     beforeEach(async () => {
         routerEvents$ = new Subject();
 
+
         alertServiceMock = {
-            onAlert: jest.fn(),
-            clear: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
+
+   clear: jest.fn(),
         };
 
         routerMock = {
@@ -50,26 +51,33 @@ describe('AlertComponent', () => {
             expect(component.alerts.length).toBe(1);
             expect(component.alerts[0].message).toEqual('Test alert');
         });
-
         it('should clear alerts on navigation', () => {
-            alertServiceMock.onAlert.mockReturnValue(of());
+
+   alertServiceMock.onAlert.mockReturnValue(of());
             component.ngOnInit();
 
+   fixture.detectChanges();
+
             routerEvents$.next(new NavigationStart(1, '/home'));
-            expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
+
+             expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
         });
     });
 
     describe('removeAlert', () => {
-        it('should remove the alert immediately if fade is false', () => {
-            const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
-            component.alerts = [alert];
-            component.fade = false;
+                        it('should remove the alert immediately if fade is false', () =>
+                   {
+                    const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
 
-            component.removeAlert(alert);
+               component.alerts = [alert];
+                    component.fade = false;
 
-            expect(component.alerts.length).toBeNull();
-        });
+
+           component.removeAlert(alert);
+
+                    expect(component.alerts.length).toBe(0);
+
+           });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
@@ -80,23 +88,31 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
     describe('cssClass', () => {
-        it('should return correct classes for success alert', () => {
-            const alert: Alert = { message: 'Done', type: AlertType.Success };
-            const css = component.cssClass(alert);
+                it('should return correct classes for success alert', () => {
 
-            expect(css).toContain('alert-success');
-            expect(css).toContain('alert');
-        });
+                   const alert: Alert = { message: 'Done', type: AlertType.Success };
 
-        it('should not break when alert is undefined', () => {
-            const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
-        });
+           fixture.detectChanges();
+                    const css = component.cssClass(alert);
+
+
+           expect(css).toContain('alert-success');
+                    expect(css).toContain('alert');
+
+           });
+                it('should not break when alert is undefined', () => {
+
+            fixture.detectChanges();
+                    const css = component.cssClass(undefined as any);
+
+
+                   expect(css).toEqual('');
+                });
     });
 
     describe('ngOnDestroy', () => {
