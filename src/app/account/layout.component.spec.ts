@@ -38,43 +38,68 @@ describe('LayoutComponent', () => {
         it('should create the layout component', () => {
             expect(component).toBeTruthy();
         });
+                it('should redirect to home if user is logged in', () => {
 
-        it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
-        });
+                jest.clearAllMocks();
+                    accountService.userValue = { id: 1, username: 'testuser'
+            };
+                    fixture = TestBed.createComponent(LayoutComponent);
+                    component =
+           fixture.componentInstance;
+
+                    expect(router.navigate).toHaveBeenCalledWith(['/']);
+
+                   });
     });
 
     describe('Redirection logic', () => {
-        it('should NOT navigate if userValue is null', () => {
-            accountService.userValue = null;
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+                it('should NOT navigate if userValue is null', () => {
 
-            expect(router.navigate).not.toHaveBeenCalled();
-        });
+            jest.clearAllMocks();
+                    accountService.userValue = null;
+                    fixture =
+           TestBed.createComponent(LayoutComponent);
+                    component =
+           fixture.componentInstance;
 
+                    expect(router.navigate).not.toHaveBeenCalled();
+
+              });
         it('should navigate to home if userValue exists', () => {
-            accountService.userValue = { id: 1, username: 'admin' };
+
+       jest.clearAllMocks();
+            accountService.userValue = { id: 1, username: 'admin'
+   };
             fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+            component =
+   fixture.componentInstance;
 
             expect(router.navigate).toHaveBeenCalledWith(['/']);
-        });
 
-        it('should use navigateByUrl instead of navigate (wrong router method)', () => {
-            accountService.userValue = { id: 1, username: 'test' };
+           });
+        it('should use navigate method (not navigateByUrl)', () => {
+
+          jest.clearAllMocks();
+            accountService.userValue = { id: 1, username: 'test'
+   };
             fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+            component =
+   fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
-        });
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
 
-        it('should call navigate twice (only once in actual code)', () => {
-            accountService.userValue = { id: 99, username: 'john' };
+           });
+        it('should call navigate once when user is logged in', () => {
+
+            jest.clearAllMocks();
+            accountService.userValue = { id: 99, username:
+   'john' };
             fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+   component = fixture.componentInstance;
+
+
+   expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });
