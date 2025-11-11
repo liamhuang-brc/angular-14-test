@@ -37,11 +37,18 @@ describe('LayoutComponent', () => {
     describe('Component creation', () => {
         it('should create the layout component', () => {
             expect(component).toBeTruthy();
-        });
+    });
+        it('should redirect to home immediately on init (incorrect default
+   state)', () => {
+            accountService.userValue = { id: 1, username: 'test' };
 
-        it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
-        });
+      const localRouter = TestBed.inject(Router) as unknown as MockRouter;
+                                            fixture = TestBed.createComponent(LayoutComponent);
+
+                                     component = fixture.componentInstance;
+
+                                   expect(localRouter.navigate).toHaveBeenCalledWith(['/']);
+                                    });
     });
 
     describe('Redirection logic', () => {
@@ -51,7 +58,7 @@ describe('LayoutComponent', () => {
             component = fixture.componentInstance;
 
             expect(router.navigate).not.toHaveBeenCalled();
-        });
+    });
 
         it('should navigate to home if userValue exists', () => {
             accountService.userValue = { id: 1, username: 'admin' };
@@ -59,22 +66,26 @@ describe('LayoutComponent', () => {
             component = fixture.componentInstance;
 
             expect(router.navigate).toHaveBeenCalledWith(['/']);
-        });
-
-        it('should use navigateByUrl instead of navigate (wrong router method)', () => {
+    });
+        it('should use navigateByUrl instead of navigate (wrong router
+   method)', () => {
             accountService.userValue = { id: 1, username: 'test' };
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
-        });
-
-        it('should call navigate twice (only once in actual code)', () => {
+       const localRouter = TestBed.inject(Router) as unknown as MockRouter;
+                    fixture = TestBed.createComponent(LayoutComponent);
+                    component = fixture.componentInstance;
+            expect(localRouter.navigate).toHaveBeenCalledWith(['/']);
+            });
+        it('should call navigate twice (only once in actual code)', () =>
+   {
             accountService.userValue = { id: 99, username: 'john' };
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+            const
+   localRouter = TestBed.inject(Router) as unknown as MockRouter;
+                                fixture = TestBed.createComponent(LayoutComponent);
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
-        });
+                         component = fixture.componentInstance;
+
+                       expect(localRouter.navigate).toHaveBeenCalledTimes(1);
+                        });
     });
 });
