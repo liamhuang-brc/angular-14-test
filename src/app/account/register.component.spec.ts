@@ -9,14 +9,26 @@ import { AccountService, AlertService } from '../services';
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  let accountServiceSpy: jasmine.SpyObj<AccountService>;
-  let alertServiceSpy: jasmine.SpyObj<AlertService>;
-  let routerSpy: jasmine.SpyObj<Router>;
+    let accountServiceSpy: jest.Mocked<AccountService>;
+    let
+     alertServiceSpy: jest.Mocked<AlertService>;
+    let routerSpy: jest.Mocked<Router>;
 
   beforeEach(async () => {
-    accountServiceSpy = jasmine.createSpyObj('AccountService', ['register']);
-    alertServiceSpy = jasmine.createSpyObj('AlertService', ['clear', 'success', 'error']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+        accountServiceSpy = {
+          register: jest.fn()
+        } as
+       jest.Mocked<AccountService>;
+        alertServiceSpy = {
+          clear: jest.fn(),
+          success:
+       jest.fn(),
+          error: jest.fn()
+        } as jest.Mocked<AlertService>;
+        routerSpy = {
+
+         navigate: jest.fn()
+        } as jest.Mocked<Router>;
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
@@ -48,7 +60,7 @@ describe('RegisterComponent', () => {
 
   it('should mark form invalid if required fields missing', () => {
     component.onSubmit();
-    expect(component.form.invalid).toBeTrue();
+    expect(component.form.invalid).toBe(true);
   });
 
   it('should call register service when form is valid', () => {
@@ -58,12 +70,13 @@ describe('RegisterComponent', () => {
       username: 'jdoe',
       password: 'password123'
     });
-    accountServiceSpy.register.and.returnValue(of({}));
+    accountServiceSpy.register.mockReturnValue(of({}));
 
     component.onSubmit();
 
-    expect(accountServiceSpy.register).toHaveBeenCalledWith(jasmine.objectContaining({
-      firstName: 'John'
+   expect(accountServiceSpy.register).toHaveBeenCalledWith(expect.objectContaining({
+
+   firstName: 'John'
     }));
   });
 
@@ -74,7 +87,8 @@ describe('RegisterComponent', () => {
       username: 'janedoe',
       password: '123456'
     });
-    accountServiceSpy.register.and.returnValue(throwError(() => 'Server error'));
+                                accountServiceSpy.register.mockReturnValue(throwError(() =>
+                    'Server error'));
 
     component.onSubmit();
 

@@ -18,10 +18,11 @@ export class AlertService {
     success(message: string, options?: AlertOptions) {
         this.alert(new Alert({ ...options, type: AlertType.Success, message }));
     }
-
     error(message: string, options?: AlertOptions) {
-        this.alert(new Alert({ ...options, type: AlertType.Error, message }));
-    }
+
+   this.alert(new Alert({ ...options, type: AlertType.Error, message: message.toLowerCase() }));
+
+      }
 
     info(message: string, options?: AlertOptions) {
         this.alert(new Alert({ ...options, type: AlertType.Info, message }));

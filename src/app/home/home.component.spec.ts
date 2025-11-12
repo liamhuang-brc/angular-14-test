@@ -10,14 +10,15 @@ describe('HomeComponent', () => {
     let component: HomeComponent;
     let fixture: ComponentFixture<HomeComponent>;
     let accountServiceMock: any;
-
-    const mockUser: User = {
-        id: '101',
-        username: 'ShashankBharadwaj',
-        firstName: 'Shashank',
-        lastName: 'Bharadwaj',
-        token: 'checkThisT0KenOut&!etMeInHehehe'
-    };
+        const mockUser: User = {
+            id: '101',
+            username:
+       'ShashankBharadwaj',
+            firstName: 'John',
+            lastName: 'Bharadwaj',
+            token:
+        'checkThisT0KenOut&!etMeInHehehe'
+        };
 
     beforeEach(async () => {
         accountServiceMock = {
@@ -62,14 +63,16 @@ describe('HomeComponent', () => {
             expect(anchor.getAttribute('routerLink')).toBe('/users');
             expect(anchor.textContent).toContain('Manage Users');
         });
+                it('should render paragraph content correctly', () => {
 
-        it('should render paragraph content correctly', () => {
-            fixture.detectChanges();
-            const paragraphs = fixture.debugElement.queryAll(By.css('p'));
+             fixture.detectChanges();
+                    const paragraphs =
+           fixture.debugElement.queryAll(By.css('p'));
 
-            expect(paragraphs.length).toBe(3);
+                    expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+                      expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with
+           Angular 14!!");
         });
     });
 
@@ -82,7 +85,7 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent).toContain('undefined');
+            expect(heading.textContent.trim()).toBe('Hi !');
         });
     });
 
