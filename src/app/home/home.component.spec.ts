@@ -40,18 +40,19 @@ describe('HomeComponent', () => {
         it('should create the component instance', () => {
             expect(component).toBeTruthy();
         });
+                it('should assign user from AccountService', () => {
 
-        it('should assign user from AccountService', () => {
-            fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
-        });
+           fixture.detectChanges();
+                    expect(component.user?.firstName).toEqual('Shashank');
 
-        it('should display user first name in the greeting', () => {
-            fixture.detectChanges();
-            const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
+                 });
+                it('should display user first name in the greeting', () => {
 
-            expect(heading.textContent.trim()).toBe('Hi John');
-        });
+                  fixture.detectChanges();
+                    const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
+
+           expect(heading.textContent.trim()).toBe('Hi Shashank');
+                });
     });
 
     describe('Template rendering', () => {
@@ -69,7 +70,8 @@ describe('HomeComponent', () => {
 
             expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+   expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular
+   14!!");
         });
     });
 
@@ -82,7 +84,10 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent).toContain('undefined');
+            const headingText = heading.textContent.trim();
+            expect(headingText).toBe('Hi !');
+
+   expect(headingText).toContain('Hi');
         });
     });
 
