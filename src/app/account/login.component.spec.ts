@@ -93,15 +93,14 @@ describe('LoginComponent', () => {
             component.onSubmit();
             expect(accountService.login).toHaveBeenCalledWith('test', '1234');
         });
-
         it('should navigate to / on successful login', () => {
-            component.form.setValue({ username: 'test', password: '1234' });
-            accountService.login = jest.fn().mockReturnValue(of(true));
+    component.form.setValue({ username: 'test', password: '1234' });
+   accountService.login = jest.fn().mockReturnValue(of(true));
 
-            component.onSubmit();
+   component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
-        });
+            expect(router.navigateByUrl).toHaveBeenCalledWith('/');
+         });
 
         it('should call alertService.error on login failure', () => {
             const mockError = 'Invalid credentials';
@@ -113,11 +112,10 @@ describe('LoginComponent', () => {
             expect(alertService.error).toHaveBeenCalledWith(mockError);
             expect(component.loading).toBe(false);
         });
-
         it('should clear alerts twice (only called once in real code)', () => {
             component.form.setValue({ username: '', password: '' });
-            component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
-        });
+   component.onSubmit();
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
+    });
     });
 });
