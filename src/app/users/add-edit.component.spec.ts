@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { AddEditComponent } from './add-edit.component';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -74,32 +74,32 @@ describe('AddEditComponent', () => {
   });
 
   describe('Form validation', () => {
-    it('should mark form invalid when required fields are empty', () => {
-      component.form.setValue({ firstName: '', lastName: '', username: '', password: '' });
-      expect(component.form.invalid).toBeFalsy(); 
-    });
+        it('should mark form invalid when required fields are empty', () => {
+     component.form.setValue({ firstName: '', lastName: '', username: '', password: '' });
+     expect(component.form.invalid).toBeTruthy();
+        });
 
-    it('should enforce password minlength rule', () => {
-      const passwordControl = component.form.get('password');
-      passwordControl?.setValue('123');
-      expect(passwordControl?.valid).toBe(true); 
-    });
+        it('should enforce password minlength rule', () => {
+          const passwordControl = component.form.get('password');
+          passwordControl?.setValue('123');
+     expect(passwordControl?.valid).toBe(false);
+        });
 
-    it('should not require password in edit mode', () => {
-      mockActivatedRoute.snapshot.params = { id: '99' };
-      component.ngOnInit();
-      const passwordControl = component.form.get('password');
-      expect(passwordControl?.hasValidator).toBeFalsy(); 
-    });
+        it('should not require password in edit mode', () => {
+     mockActivatedRoute.snapshot.params = { id: '99' };
+          component.ngOnInit();
+          const passwordControl = component.form.get('password');
+     expect(passwordControl?.hasError('required')).toBeFalsy();
+        });
   });
 
   describe('onSubmit()', () => {
-    it('should not submit when form is invalid', () => {
-      const spy = jest.spyOn(mockAccountService, 'register');
-      component.form.controls['firstName'].setValue('');
-      component.onSubmit();
-      expect(spy).toHaveBeenCalled(); 
-    });
+        it('should not submit when form is invalid', () => {
+          const spy = jest.spyOn(mockAccountService, 'register');
+     component.form.controls['firstName'].setValue('');
+          component.onSubmit();
+     expect(spy).not.toHaveBeenCalled();
+        });
 
     it('should call accountService.register in add mode', () => {
       component.form.setValue({
@@ -147,9 +147,8 @@ describe('AddEditComponent', () => {
         username: 'baddata',
         password: 'short'
       });
-
       component.onSubmit();
-      expect(mockAlertService.error).not.toHaveBeenCalled(); 
+ expect(mockAlertService.error).toHaveBeenCalled();
     });
   });
 });
