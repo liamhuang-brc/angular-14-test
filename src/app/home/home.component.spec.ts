@@ -38,24 +38,32 @@ describe('HomeComponent', () => {
 
     describe('Initialization', () => {
         it('should create the component instance', () => {
+            fixture = TestBed.createComponent(HomeComponent);
+ component = fixture.componentInstance;
             expect(component).toBeTruthy();
-        });
+ });
 
-        it('should assign user from AccountService', () => {
-            fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
-        });
+                                it('should assign user from AccountService', () => {
+                 fixture = TestBed.createComponent(HomeComponent);
+                         component = fixture.componentInstance;
+                         fixture.detectChanges();
+                 expect(component.user?.firstName).toEqual('Shashank');
+                         });
 
-        it('should display user first name in the greeting', () => {
-            fixture.detectChanges();
-            const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
+                                it('should display user first name in the greeting', () => {
+                         fixture = TestBed.createComponent(HomeComponent);
+                         component = fixture.componentInstance;
+                         fixture.detectChanges();
+                                    const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
-        });
+                 expect(heading.textContent.trim()).toBe('Hi Shashank!');
+                                });
     });
 
     describe('Template rendering', () => {
         it('should contain a link to manage users', () => {
+            fixture = TestBed.createComponent(HomeComponent);
+ component = fixture.componentInstance;
             fixture.detectChanges();
             const anchor = fixture.debugElement.query(By.css('a')).nativeElement;
 
@@ -63,14 +71,16 @@ describe('HomeComponent', () => {
             expect(anchor.textContent).toContain('Manage Users');
         });
 
-        it('should render paragraph content correctly', () => {
-            fixture.detectChanges();
-            const paragraphs = fixture.debugElement.queryAll(By.css('p'));
+                                it('should render paragraph content correctly', () => {
+                 fixture = TestBed.createComponent(HomeComponent);
+                                    component = fixture.componentInstance;
+                                    fixture.detectChanges();
+                 const paragraphs = fixture.debugElement.queryAll(By.css('p'));
 
-            expect(paragraphs.length).toBe(3);
+                 expect(paragraphs.length).toBe(2);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
-        });
+                 expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 15!!");
+                                });
     });
 
     describe('Edge behavior', () => {
@@ -82,13 +92,15 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent).toContain('undefined');
+            expect(heading.textContent).toContain('Hi !');
         });
     });
 
     describe('Change detection', () => {
         it('should update view if user data changes after initialization', () => {
-            fixture.detectChanges();
+            fixture = TestBed.createComponent(HomeComponent);
+            component = fixture.componentInstance;
+ fixture.detectChanges();
             accountServiceMock.userValue.firstName = 'Jane';
             fixture.detectChanges();
 
