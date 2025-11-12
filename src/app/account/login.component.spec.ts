@@ -5,6 +5,9 @@ import { of, throwError } from 'rxjs';
 
 import { LoginComponent } from './login.component';
 import { AccountService, AlertService } from '../services';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CommonModule } from '@angular/common';
 
 class MockAccountService {
     login = jest.fn();
@@ -24,8 +27,7 @@ describe('LoginComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ReactiveFormsModule],
-            declarations: [LoginComponent],
+            imports: [LoginComponent, ReactiveFormsModule, RouterTestingModule, CommonModule],
             providers: [
                 FormBuilder,
                 { provide: AccountService, useClass: MockAccountService },
@@ -39,16 +41,14 @@ describe('LoginComponent', () => {
                     useValue: { navigateByUrl: jest.fn() },
                 },
             ],
+            schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
 
         fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;
-
-        accountService = TestBed.inject(AccountService) as unknown as MockAccountService;
-        alertService = TestBed.inject(AlertService) as unknown as MockAlertService;
+        accountService = TestBed.inject(AccountService);
+        alertService = TestBed.inject(AlertService);
         router = TestBed.inject(Router);
-
-        fixture.detectChanges();
     });
 
     describe('Initialization', () => {
@@ -100,7 +100,7 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect(router.navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
@@ -114,10 +114,10 @@ describe('LoginComponent', () => {
             expect(component.loading).toBe(false);
         });
 
-        it('should clear alerts twice (only called once in real code)', () => {
+        it('should clear alerts once on submit', () => {
             component.form.setValue({ username: '', password: '' });
             component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
         });
     });
 });

@@ -4,8 +4,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '../services';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
-@Component({ templateUrl: 'add-edit.component.html' })
+@Component({ 
+  templateUrl: 'add-edit.component.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
+})
 export class AddEditComponent implements OnInit {
     form!: FormGroup;
     id?: string;

@@ -4,6 +4,9 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { AccountService, AlertService } from '../services';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CommonModule } from '@angular/common';
 
 describe('AddEditComponent', () => {
   let component: AddEditComponent;
@@ -30,15 +33,15 @@ describe('AddEditComponent', () => {
     mockActivatedRoute = { snapshot: { params: {} } };
 
     await TestBed.configureTestingModule({
-      declarations: [AddEditComponent],
-      imports: [ReactiveFormsModule],
+      imports: [AddEditComponent, ReactiveFormsModule, RouterTestingModule, CommonModule],
       providers: [
         FormBuilder,
         { provide: AccountService, useValue: mockAccountService },
         { provide: AlertService, useValue: mockAlertService },
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddEditComponent);
@@ -76,20 +79,20 @@ describe('AddEditComponent', () => {
   describe('Form validation', () => {
     it('should mark form invalid when required fields are empty', () => {
       component.form.setValue({ firstName: '', lastName: '', username: '', password: '' });
-      expect(component.form.invalid).toBeFalsy(); 
+      expect(component.form.invalid).toBeTruthy(); 
     });
 
     it('should enforce password minlength rule', () => {
       const passwordControl = component.form.get('password');
       passwordControl?.setValue('123');
-      expect(passwordControl?.valid).toBe(true); 
+      expect(passwordControl?.valid).toBe(false); 
     });
 
     it('should not require password in edit mode', () => {
       mockActivatedRoute.snapshot.params = { id: '99' };
       component.ngOnInit();
       const passwordControl = component.form.get('password');
-      expect(passwordControl?.hasValidator).toBeFalsy(); 
+      expect(passwordControl?.hasError('required')).toBeFalsy(); 
     });
   });
 
@@ -98,7 +101,7 @@ describe('AddEditComponent', () => {
       const spy = jest.spyOn(mockAccountService, 'register');
       component.form.controls['firstName'].setValue('');
       component.onSubmit();
-      expect(spy).toHaveBeenCalled(); 
+      expect(spy).not.toHaveBeenCalled(); 
     });
 
     it('should call accountService.register in add mode', () => {
@@ -110,7 +113,7 @@ describe('AddEditComponent', () => {
       });
 
       component.onSubmit();
-      expect(mockAccountService.register).not.toHaveBeenCalled(); 
+      expect(mockAccountService.register).toHaveBeenCalled(); 
     });
 
     it('should call accountService.update in edit mode', () => {
@@ -149,7 +152,7 @@ describe('AddEditComponent', () => {
       });
 
       component.onSubmit();
-      expect(mockAlertService.error).not.toHaveBeenCalled(); 
+      expect(mockAlertService.error).toHaveBeenCalled(); 
     });
   });
 });
