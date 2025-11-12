@@ -1,12 +1,12 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./out-tsc/spec",
-    "types": ["jest"],
-    "module": "CommonJS",
-    "target": "ES2020",
-    "isolatedModules": true,
-    "esModuleInterop": true
-  },
+    "compilerOptions": {
+      "outDir": "./out-tsc/spec",
+     "types": ["jest", "jasmine"],
+      "module": "CommonJS",
+      "target": "ES2020",
+      "isolatedModules": true,
+      "esModuleInterop": true
+    },
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }
