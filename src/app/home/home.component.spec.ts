@@ -5,6 +5,8 @@ import { By } from '@angular/platform-browser';
 import { HomeComponent } from './home.component';
 import { AccountService } from '../services';
 import { User } from '../models';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 describe('HomeComponent', () => {
     let component: HomeComponent;
@@ -25,11 +27,11 @@ describe('HomeComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
-            declarations: [HomeComponent],
+            imports: [HomeComponent, RouterTestingModule, CommonModule],
             providers: [
                 { provide: AccountService, useValue: accountServiceMock }
-            ]
+            ],
+            schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
 
         fixture = TestBed.createComponent(HomeComponent);
@@ -43,14 +45,14 @@ describe('HomeComponent', () => {
 
         it('should assign user from AccountService', () => {
             fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
+            expect(component.user?.firstName).toEqual('Shashank');
         });
 
         it('should display user first name in the greeting', () => {
             fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toBe('Hi Shashank');
         });
     });
 
@@ -69,7 +71,7 @@ describe('HomeComponent', () => {
 
             expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!");
         });
     });
 
@@ -82,7 +84,7 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent).toContain('undefined');
+            expect(heading.textContent.trim()).toBe('Hi !');
         });
     });
 

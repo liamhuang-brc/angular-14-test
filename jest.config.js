@@ -6,7 +6,7 @@ module.exports = {
 
   transform: {
     '^.+\\.(ts|js|html)$': [
-      'ts-jest',
+      'jest-preset-angular',
       {
         tsconfig: 'tsconfig.spec.json',
         isolatedModules: true,
