@@ -15,9 +15,9 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['register']);
+    accountServiceSpy.register.and.returnValue(of({}));
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['clear', 'success', 'error']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [RegisterComponent],
@@ -26,7 +26,8 @@ describe('RegisterComponent', () => {
         { provide: AlertService, useValue: alertServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: { snapshot: { params: {} } } }
-      ]
+      ],
+
     }).compileComponents();
   });
 
@@ -50,9 +51,8 @@ describe('RegisterComponent', () => {
     component.onSubmit();
     expect(component.form.invalid).toBeTrue();
   });
-
   it('should call register service when form is valid', () => {
-    component.form.setValue({
+   component.form.setValue({
       firstName: 'John',
       lastName: 'Doe',
       username: 'jdoe',
@@ -62,13 +62,12 @@ describe('RegisterComponent', () => {
 
     component.onSubmit();
 
-    expect(accountServiceSpy.register).toHaveBeenCalledWith(jasmine.objectContaining({
-      firstName: 'John'
+   expect(accountServiceSpy.register).toHaveBeenCalledWith(jasmine.objectContaining({
+   firstName: 'John'
     }));
   });
-
   it('should handle registration error gracefully', () => {
-    component.form.setValue({
+   component.form.setValue({
       firstName: 'Jane',
       lastName: 'Doe',
       username: 'janedoe',
@@ -76,7 +75,7 @@ describe('RegisterComponent', () => {
     });
     accountServiceSpy.register.and.returnValue(throwError(() => 'Server error'));
 
-    component.onSubmit();
+   component.onSubmit();
 
     expect(alertServiceSpy.error).toHaveBeenCalled();
   });
