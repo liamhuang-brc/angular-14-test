@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
 
 import { RegisterComponent } from './register.component';
@@ -18,16 +20,16 @@ describe('RegisterComponent', () => {
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['clear', 'success', 'error']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
-    await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [RegisterComponent],
-      providers: [
-        { provide: AccountService, useValue: accountServiceSpy },
-        { provide: AlertService, useValue: alertServiceSpy },
-        { provide: Router, useValue: routerSpy },
-        { provide: ActivatedRoute, useValue: { snapshot: { params: {} } } }
-      ]
-    }).compileComponents();
+                    await TestBed.configureTestingModule({
+                      declarations: [RegisterComponent],
+                      imports: [CommonModule, ReactiveFormsModule, HttpClientTestingModule],
+                      providers: [
+                        { provide: AccountService, useValue: accountServiceSpy },
+                        { provide: AlertService, useValue: alertServiceSpy },
+                        { provide: Router, useValue: routerSpy },
+                        { provide: ActivatedRoute, useValue: { snapshot: { params: {} } } }
+                      ]
+                    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -47,8 +49,9 @@ describe('RegisterComponent', () => {
   });
 
   it('should mark form invalid if required fields missing', () => {
+   component.form.markAllAsTouched();
     component.onSubmit();
-    expect(component.form.invalid).toBeTrue();
+   expect(component.form.invalid).toBe(true);
   });
 
   it('should call register service when form is valid', () => {
@@ -62,9 +65,9 @@ describe('RegisterComponent', () => {
 
     component.onSubmit();
 
-    expect(accountServiceSpy.register).toHaveBeenCalledWith(jasmine.objectContaining({
-      firstName: 'John'
-    }));
+      expect(accountServiceSpy.register).toHaveBeenCalledWith(expect.objectContaining({
+        firstName: 'John'
+         }));
   });
 
   it('should handle registration error gracefully', () => {

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { AccountService } from '../services';
+import { RouterOutlet } from '@angular/router';
 
 class MockRouter {
     navigate = jest.fn();
@@ -18,13 +19,14 @@ describe('LayoutComponent', () => {
     let accountService: MockAccountService;
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            declarations: [LayoutComponent],
-            providers: [
-                { provide: Router, useClass: MockRouter },
-                { provide: AccountService, useClass: MockAccountService },
-            ],
-        }).compileComponents();
+                await TestBed.configureTestingModule({
+                    declarations: [LayoutComponent],
+                    imports: [RouterOutlet],
+                    providers: [
+               { provide: Router, useClass: MockRouter },
+                        { provide: AccountService, useClass: MockAccountService },
+                    ],
+                }).compileComponents();
 
         fixture = TestBed.createComponent(LayoutComponent);
         component = fixture.componentInstance;
@@ -39,9 +41,9 @@ describe('LayoutComponent', () => {
             expect(component).toBeTruthy();
         });
 
-        it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
-        });
+                it('should redirect to home immediately on init (incorrect default state)', () => {
+                    expect(router.navigate).not.toHaveBeenCalled();
+                });
     });
 
     describe('Redirection logic', () => {
@@ -61,20 +63,20 @@ describe('LayoutComponent', () => {
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
-        it('should use navigateByUrl instead of navigate (wrong router method)', () => {
-            accountService.userValue = { id: 1, username: 'test' };
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+                it('should use navigateByUrl instead of navigate (wrong router method)', () => {
+                    accountService.userValue = { id: 1, username: 'test' };
+               fixture = TestBed.createComponent(LayoutComponent);
+                    component = fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
-        });
+                    expect(router.navigate).toHaveBeenCalledWith(['/']);
+                   });
 
         it('should call navigate twice (only once in actual code)', () => {
             accountService.userValue = { id: 99, username: 'john' };
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });

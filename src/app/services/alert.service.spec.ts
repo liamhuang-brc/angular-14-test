@@ -72,15 +72,15 @@ describe('AlertService', () => {
       service.success('Operation completed');
     });
 
-    it('should emit error alert with message and type', (done) => {
-      service.onAlert().subscribe((a) => {
-        expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
-        done();
-      });
+        it('should emit error alert with message and type', (done) => {
+       service.onAlert().subscribe((a) => {
+            expect(a.type).toBe(AlertType.Error);
+       expect(a.message).toBe('Operation Failed');
+            done();
+          });
 
-      service.error('Operation Failed');
-    });
+       service.error('Operation Failed');
+        });
 
     it('should emit info alert', (done) => {
       const spy = jest.fn();
@@ -105,15 +105,17 @@ describe('AlertService', () => {
       service.clear('custom');
     });
 
-    it('should not emit when id does not match', (done) => {
-      const spy = jest.fn();
-      service.onAlert('expected').subscribe(spy);
+        it('should not emit when id does not match', (done) => {
+          const spy = jest.fn();
+          service.onAlert('expected').subscribe(spy);
 
-      service.clear('wrong-id');
+       service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
-      done();
-    });
+          setTimeout(() => {
+       expect(spy).not.toHaveBeenCalled();
+            done();
+          }, 100);
+        });
   });
 
   describe('Behavior nuances', () => {
@@ -133,7 +135,7 @@ describe('AlertService', () => {
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+            expect(() => service.clear('some-id')).not.toThrow();
     });
   });
 });
