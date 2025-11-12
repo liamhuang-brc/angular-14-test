@@ -11,3 +11,7 @@ Object.defineProperty(document.body.style, 'transform', {
     configurable: true,
   }),
 });
+
+
+// Suppress console.error in tests
+global.console.error = jest.fn();
