@@ -41,16 +41,16 @@ describe('HomeComponent', () => {
             expect(component).toBeTruthy();
         });
 
-        it('should assign user from AccountService', () => {
-            fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
-        });
+                        it('should assign user from AccountService', () => {
+                   fixture.detectChanges();
+                            expect(component.user?.firstName).toEqual('Shashank');
+                         });
 
         it('should display user first name in the greeting', () => {
             fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toBe('Hi Shashank!');
         });
     });
 
@@ -63,13 +63,13 @@ describe('HomeComponent', () => {
             expect(anchor.textContent).toContain('Manage Users');
         });
 
-        it('should render paragraph content correctly', () => {
-            fixture.detectChanges();
-            const paragraphs = fixture.debugElement.queryAll(By.css('p'));
+                it('should render paragraph content correctly', () => {
+             fixture.detectChanges();
+                    const paragraphs = fixture.debugElement.queryAll(By.css('p'));
 
-            expect(paragraphs.length).toBe(3);
+           expect(paragraphs.length).toBe(2);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+           expect(paragraphs[0].nativeElement.textContent.trim()).toBe('You\'re logged in with Angular 15!!');
         });
     });
 
@@ -82,7 +82,8 @@ describe('HomeComponent', () => {
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent).toContain('undefined');
+            const headingText = heading.textContent.trim();
+   expect(headingText).toBe('Hi !');
         });
     });
 
