@@ -33,7 +33,7 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
       done();
     });
   });
@@ -75,7 +75,7 @@ describe('AlertService', () => {
     it('should emit error alert with message and type', (done) => {
       service.onAlert().subscribe((a) => {
         expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
+        expect(a.message).toBe('Operation Failed');
         done();
       });
 
@@ -111,7 +111,7 @@ describe('AlertService', () => {
 
       service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
       done();
     });
   });
@@ -127,13 +127,15 @@ describe('AlertService', () => {
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
       service.alert(alert);
 
-      expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
+      queueMicrotask(() => {
+        expect(firstSpy).toHaveBeenCalled();
+        expect(secondSpy).toHaveBeenCalled();
+        done();
+      });
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+      expect(() => service.clear('some-id')).not.toThrow();
     });
   });
 });

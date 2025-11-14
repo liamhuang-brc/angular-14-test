@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { AccountService, AlertService } from '../services';
+import { CommonModule } from '@angular/common';
 
 describe('AddEditComponent', () => {
   let component: AddEditComponent;
@@ -31,7 +32,7 @@ describe('AddEditComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [AddEditComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, CommonModule],
       providers: [
         FormBuilder,
         { provide: AccountService, useValue: mockAccountService },
@@ -76,20 +77,22 @@ describe('AddEditComponent', () => {
   describe('Form validation', () => {
     it('should mark form invalid when required fields are empty', () => {
       component.form.setValue({ firstName: '', lastName: '', username: '', password: '' });
-      expect(component.form.invalid).toBeFalsy(); 
+      expect(component.form.invalid).toBeTruthy(); 
     });
 
     it('should enforce password minlength rule', () => {
       const passwordControl = component.form.get('password');
       passwordControl?.setValue('123');
-      expect(passwordControl?.valid).toBe(true); 
+      expect(passwordControl?.hasError('minlength')).toBe(true);
     });
 
     it('should not require password in edit mode', () => {
       mockActivatedRoute.snapshot.params = { id: '99' };
       component.ngOnInit();
       const passwordControl = component.form.get('password');
-      expect(passwordControl?.hasValidator).toBeFalsy(); 
+      passwordControl?.setValue('');
+      passwordControl?.markAsTouched();
+      expect(passwordControl?.hasError('required')).toBeFalsy();
     });
   });
 
@@ -97,8 +100,11 @@ describe('AddEditComponent', () => {
     it('should not submit when form is invalid', () => {
       const spy = jest.spyOn(mockAccountService, 'register');
       component.form.controls['firstName'].setValue('');
+      component.form.controls['lastName'].setValue('');
+      component.form.controls['username'].setValue('');
+      component.form.controls['password'].setValue('');
       component.onSubmit();
-      expect(spy).toHaveBeenCalled(); 
+      expect(spy).not.toHaveBeenCalled();
     });
 
     it('should call accountService.register in add mode', () => {
@@ -106,11 +112,11 @@ describe('AddEditComponent', () => {
         firstName: 'Alice',
         lastName: 'Doe',
         username: 'alice',
-        password: 'password'
+        password: 'password123'
       });
 
       component.onSubmit();
-      expect(mockAccountService.register).not.toHaveBeenCalled(); 
+      expect(mockAccountService.register).toHaveBeenCalled();
     });
 
     it('should call accountService.update in edit mode', () => {
@@ -145,11 +151,11 @@ describe('AddEditComponent', () => {
         firstName: 'Bad',
         lastName: 'Data',
         username: 'baddata',
-        password: 'short'
+        password: 'validpassword'
       });
 
       component.onSubmit();
-      expect(mockAlertService.error).not.toHaveBeenCalled(); 
+      expect(mockAlertService.error).toHaveBeenCalled(); 
     });
   });
 });
