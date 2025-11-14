@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { LoginComponent } from './login.component';
 import { AccountService, AlertService } from '../services';
@@ -27,7 +28,6 @@ describe('LoginComponent', () => {
             imports: [ReactiveFormsModule],
             declarations: [LoginComponent],
             providers: [
-                FormBuilder,
                 { provide: AccountService, useClass: MockAccountService },
                 { provide: AlertService, useClass: MockAlertService },
                 {
@@ -39,6 +39,7 @@ describe('LoginComponent', () => {
                     useValue: { navigateByUrl: jest.fn() },
                 },
             ],
+            schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
 
         fixture = TestBed.createComponent(LoginComponent);
@@ -100,7 +101,7 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect(router.navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
@@ -114,10 +115,10 @@ describe('LoginComponent', () => {
             expect(component.loading).toBe(false);
         });
 
-        it('should clear alerts twice (only called once in real code)', () => {
+        it('should clear alerts once on submit', () => {
             component.form.setValue({ username: '', password: '' });
             component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
         });
     });
 });
