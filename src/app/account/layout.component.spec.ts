@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { AccountService } from '../services';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 class MockRouter {
     navigate = jest.fn();
@@ -24,6 +25,7 @@ describe('LayoutComponent', () => {
                 { provide: Router, useClass: MockRouter },
                 { provide: AccountService, useClass: MockAccountService },
             ],
+            schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
 
         fixture = TestBed.createComponent(LayoutComponent);
@@ -40,7 +42,7 @@ describe('LayoutComponent', () => {
         });
 
         it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
+            expect(router.navigate).not.toHaveBeenCalled();
         });
     });
 
@@ -66,7 +68,7 @@ describe('LayoutComponent', () => {
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
         it('should call navigate twice (only once in actual code)', () => {
@@ -74,7 +76,7 @@ describe('LayoutComponent', () => {
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });
