@@ -100,7 +100,7 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect(router.navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
@@ -117,7 +117,8 @@ describe('LoginComponent', () => {
         it('should clear alerts twice (only called once in real code)', () => {
             component.form.setValue({ username: '', password: '' });
             component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
+            // Component only calls clear once at the start of onSubmit
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
         });
     });
 });
