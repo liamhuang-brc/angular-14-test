@@ -61,16 +61,16 @@ describe('AlertComponent', () => {
     });
 
     describe('removeAlert', () => {
-        it('should remove the alert immediately if fade is false', () => {
+        it('should remove the alert immediately if fade is false', fakeAsync(() => {
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
             component.alerts = [alert];
             component.fade = false;
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
-        });
-
+   expect(component.alerts.includes(alert)).toBe(false);
+            tick();
+        }));
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
@@ -78,25 +78,27 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
             expect(alert.fade).toBe(true);
-            tick(250);
+               tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
+   tick();
         }));
     });
 
     describe('cssClass', () => {
-        it('should return correct classes for success alert', () => {
+        it('should return correct classes for success alert', fakeAsync(() => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
-            const css = component.cssClass(alert);
+     const css = component.cssClass(alert);
 
-            expect(css).toContain('alert-success');
+   expect(css).toContain('alert-success');
             expect(css).toContain('alert');
-        });
-
-        it('should not break when alert is undefined', () => {
-            const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
-        });
+     tick();
+        }));
+        it('should not break when alert is undefined', fakeAsync(() => {
+              const css = component.cssClass(undefined as any);
+   expect(css).toBeUndefined();
+            tick();
+        }));
     });
 
     describe('ngOnDestroy', () => {

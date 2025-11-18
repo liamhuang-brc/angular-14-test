@@ -9,10 +9,10 @@ import { AlertService } from '../services';
 export class AlertComponent implements OnInit, OnDestroy {
     @Input() id = 'default-alert';
     @Input() fade = true;
-
     alerts: Alert[] = [];
     alertSubscription!: Subscription;
-    routeSubscription!: Subscription;
+   routeSubscription!: Subscription;
+    private timeoutIds: Set<any> = new Set();
 
     constructor(private router: Router, private alertService: AlertService) { }
 
@@ -32,11 +32,14 @@ export class AlertComponent implements OnInit, OnDestroy {
 
                 // add alert to array
                 this.alerts.push(alert);
-
                 // auto close alert if required
                 if (alert.autoClose) {
-                    setTimeout(() => this.removeAlert(alert), 3000);
-                }
+                    const timeoutId = setTimeout(() => {
+          this.removeAlert(alert);
+                        this.timeoutIds.delete(timeoutId);
+                    }, 3000);
+                    this.timeoutIds.add(timeoutId);
+    }
            });
 
         // clear alerts on location change
@@ -46,28 +49,32 @@ export class AlertComponent implements OnInit, OnDestroy {
             }
         });
     }
-
     ngOnDestroy() {
         // unsubscribe to avoid memory leaks
-        this.alertSubscription.unsubscribe();
+   this.alertSubscription.unsubscribe();
         this.routeSubscription.unsubscribe();
+        
+           // clear all pending timeouts
+        this.timeoutIds.forEach(id => clearTimeout(id));
+        this.timeoutIds.clear();
     }
 
     removeAlert(alert: Alert) {
         // check if already removed to prevent error on auto close
         if (!this.alerts.includes(alert)) return;
-
         if (this.fade) {
             // fade out alert
-            alert.fade = true;
+   alert.fade = true;
 
             // remove alert after faded out
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 this.alerts = this.alerts.filter(x => x !== alert);
+             this.timeoutIds.delete(timeoutId);
             }, 250);
+   this.timeoutIds.add(timeoutId);
         } else {
             // remove alert
-            this.alerts = this.alerts.filter(x => x !== alert);
+   this.alerts = this.alerts.filter(x => x !== alert);
         }
     }
 
