@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { AccountService } from '../services';
+import { RouterOutlet } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 class MockRouter {
     navigate = jest.fn();
@@ -18,18 +20,22 @@ describe('LayoutComponent', () => {
     let accountService: MockAccountService;
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            declarations: [LayoutComponent],
+        router = new MockRouter();
+        accountService = new MockAccountService();
+        
+        const testBed = TestBed.configureTestingModule({
+            imports: [LayoutComponent],
             providers: [
-                { provide: Router, useClass: MockRouter },
-                { provide: AccountService, useClass: MockAccountService },
+                { provide: Router, useValue: router },
+                { provide: AccountService, useValue: accountService },
+                provideRouter([])
             ],
-        }).compileComponents();
+        });
+
+        await testBed.compileComponents();
 
         fixture = TestBed.createComponent(LayoutComponent);
         component = fixture.componentInstance;
-        router = TestBed.inject(Router) as unknown as MockRouter;
-        accountService = TestBed.inject(AccountService) as unknown as MockAccountService;
 
         fixture.detectChanges();
     });
@@ -40,23 +46,25 @@ describe('LayoutComponent', () => {
         });
 
         it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
+            expect(router.navigate).not.toHaveBeenCalled();
         });
     });
 
     describe('Redirection logic', () => {
         it('should NOT navigate if userValue is null', () => {
+            router.navigate.mockClear();
             accountService.userValue = null;
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+            const testFixture = TestBed.createComponent(LayoutComponent);
+            const testComponent = testFixture.componentInstance;
 
             expect(router.navigate).not.toHaveBeenCalled();
         });
 
         it('should navigate to home if userValue exists', () => {
+            router.navigate.mockClear();
             accountService.userValue = { id: 1, username: 'admin' };
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+            const testFixture = TestBed.createComponent(LayoutComponent);
+            const testComponent = testFixture.componentInstance;
 
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
@@ -66,7 +74,7 @@ describe('LayoutComponent', () => {
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
         it('should call navigate twice (only once in actual code)', () => {
@@ -74,7 +82,7 @@ describe('LayoutComponent', () => {
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });

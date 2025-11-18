@@ -5,6 +5,8 @@ import { of, throwError } from 'rxjs';
 
 import { LoginComponent } from './login.component';
 import { AccountService, AlertService } from '../services';
+import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 class MockAccountService {
     login = jest.fn();
@@ -24,8 +26,7 @@ describe('LoginComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ReactiveFormsModule],
-            declarations: [LoginComponent],
+            imports: [ReactiveFormsModule, CommonModule, LoginComponent],
             providers: [
                 FormBuilder,
                 { provide: AccountService, useClass: MockAccountService },
@@ -39,16 +40,16 @@ describe('LoginComponent', () => {
                     useValue: { navigateByUrl: jest.fn() },
                 },
             ],
+            schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
 
         fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;
+        fixture.detectChanges();
 
         accountService = TestBed.inject(AccountService) as unknown as MockAccountService;
         alertService = TestBed.inject(AlertService) as unknown as MockAlertService;
         router = TestBed.inject(Router);
-
-        fixture.detectChanges();
     });
 
     describe('Initialization', () => {
@@ -100,7 +101,7 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect(router.navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
@@ -117,7 +118,7 @@ describe('LoginComponent', () => {
         it('should clear alerts twice (only called once in real code)', () => {
             component.form.setValue({ username: '', password: '' });
             component.onSubmit();
-            expect(alertService.clear).toHaveBeenCalledTimes(2);
+            expect(alertService.clear).toHaveBeenCalledTimes(1);
         });
     });
 });
