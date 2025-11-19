@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, NgZone } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -14,7 +14,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     alertSubscription!: Subscription;
     routeSubscription!: Subscription;
 
-    constructor(private router: Router, private alertService: AlertService) { }
+    constructor(private router: Router, private alertService: AlertService, private ngZone: NgZone) { }
 
     ngOnInit() {
         // subscribe to new alert notifications
@@ -35,7 +35,9 @@ export class AlertComponent implements OnInit, OnDestroy {
 
                 // auto close alert if required
                 if (alert.autoClose) {
-                    setTimeout(() => this.removeAlert(alert), 3000);
+                    this.ngZone.runOutsideAngular(() => {
+                        setTimeout(() => this.ngZone.run(() => this.removeAlert(alert)), 3000);
+                    });
                 }
            });
 
@@ -62,9 +64,11 @@ export class AlertComponent implements OnInit, OnDestroy {
             alert.fade = true;
 
             // remove alert after faded out
-            setTimeout(() => {
-                this.alerts = this.alerts.filter(x => x !== alert);
-            }, 250);
+            this.ngZone.runOutsideAngular(() => {
+                setTimeout(() => this.ngZone.run(() => {
+                    this.alerts = this.alerts.filter(x => x !== alert);
+                }), 250);
+            });
         } else {
             // remove alert
             this.alerts = this.alerts.filter(x => x !== alert);
