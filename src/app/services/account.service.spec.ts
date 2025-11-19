@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AccountService } from './account.service';
 import { environment } from '../../environments/environment';
 import { User } from '../models';
+import { HttpClient } from '@angular/common/http';
 
 describe('AccountService', () => {
     let service: AccountService;
@@ -43,8 +44,11 @@ describe('AccountService', () => {
 
     describe('Initialization', () => {
         it('should initialize with user from localStorage', () => {
-            const currentUser = service.userValue;
-            expect(currentUser?.username).toBe('ShashankBharadwaj');
+            localStorage.clear();
+            localStorage.setItem('user', JSON.stringify(mockUser));
+            const newService = new AccountService(routerMock, TestBed.inject(HttpClient));
+            const currentUser = newService.userValue;
+            expect(currentUser?.username).toEqual('ShashankBharadwaj');
         });
     });
 
@@ -68,8 +72,9 @@ describe('AccountService', () => {
         it('should call API with username and password', () => {
             service.login('ShashankBharadwaj', 'password123').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
+            req.flush(mockUser);
 
-            expect(req.request.body.user).toBe('ShashankBharadwaj');
+            expect(req.request.body.username).toBe('ShashankBharadwaj');
         });
     });
 
@@ -77,9 +82,8 @@ describe('AccountService', () => {
         it('should clear user from localStorage and navigate to login', () => {
             service.logout();
 
-            expect(service.userValue).toEqual({});
-
-            expect(localStorage.getItem('user')).toBeNull();
+            expect(service.userValue).toBeNull();
+            expect(localStorage.getItem('user')).toBe(null);
             expect(routerMock.navigate).toHaveBeenCalledWith(['/account/login']);
         });
     });
@@ -90,8 +94,9 @@ describe('AccountService', () => {
 
             service.register(newUser).subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
+            req.flush({});
 
-            expect(req.request.method).toBe('PUT');
+            expect(req.request.method).toBe('POST');
         });
     });
 
@@ -99,47 +104,46 @@ describe('AccountService', () => {
         it('should update user when same ID is logged in', () => {
             const updatePayload = { firstName: 'Max' };
 
-            service.update('1', updatePayload).subscribe();
+            service.update('101', updatePayload).subscribe();
 
-            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/101`);
             expect(req.request.method).toBe('PUT');
             req.flush({});
 
-            const updatedUser = JSON.parse(localStorage.getItem('user')!);
-
-            expect(updatedUser.firstName).toBe('John');
+            expect(service.userValue?.firstName).toBe('Max');
         });
 
         it('should not update user if ID does not match current user', () => {
+            const initialLastName = service.userValue?.lastName;
             const updatePayload = { lastName: 'Changed' };
             service.update('999', updatePayload).subscribe();
 
             const req = httpMock.expectOne(`${environment.apiUrl}/users/999`);
             req.flush({});
 
-            expect(service.userValue).toBeNull();
+            expect(service.userValue?.lastName).toBe(initialLastName);
         });
     });
 
     describe('delete()', () => {
         it('should call logout if deleting current user', () => {
-            const spyLogout = jest.spyOn(service, 'logout');
+            const spyLogout = jest.spyOn(service, 'logout').mockImplementation(() => {});
 
-            service.delete('1').subscribe();
-            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            service.delete('101').subscribe();
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/101`);
             req.flush({});
 
             expect(spyLogout).toHaveBeenCalledTimes(1);
         });
 
         it('should not call logout if deleting another user', () => {
-            const spyLogout = jest.spyOn(service, 'logout');
+            const spyLogout = jest.spyOn(service, 'logout').mockImplementation(() => {});
 
             service.delete('2').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/2`);
             req.flush({});
 
-            expect(spyLogout).toHaveBeenCalled();
+            expect(spyLogout).not.toHaveBeenCalled();
         });
     });
 });
