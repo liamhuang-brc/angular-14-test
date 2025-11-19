@@ -1,11 +1,13 @@
 import { AlertService } from './alert.service';
 import { Alert, AlertType } from '../models';
+import { TestBed } from '@angular/core/testing';
 
 describe('AlertService', () => {
   let service: AlertService;
 
   beforeEach(() => {
-    service = new AlertService();
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(AlertService);
   });
 
   describe('onAlert()', () => {
@@ -33,8 +35,10 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 100);
     });
   });
 
@@ -75,7 +79,7 @@ describe('AlertService', () => {
     it('should emit error alert with message and type', (done) => {
       service.onAlert().subscribe((a) => {
         expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
+        expect(a.message).toBe('Operation Failed');
         done();
       });
 
@@ -89,8 +93,10 @@ describe('AlertService', () => {
       service.info('Information!');
       service.warn('Warning!'); 
 
-      expect(spy).toHaveBeenCalledTimes(2);
-      done();
+      setTimeout(() => {
+        expect(spy).toHaveBeenCalledTimes(2);
+        done();
+      }, 100);
     });
   });
 
@@ -111,8 +117,10 @@ describe('AlertService', () => {
 
       service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 100);
     });
   });
 
@@ -127,13 +135,15 @@ describe('AlertService', () => {
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
       service.alert(alert);
 
-      expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        expect(firstSpy).toHaveBeenCalled();
+        expect(secondSpy).toHaveBeenCalled();
+        done();
+      }, 100);
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+      expect(() => service.clear('some-id')).not.toThrow();
     });
   });
 });
