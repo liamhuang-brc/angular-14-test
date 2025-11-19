@@ -33,8 +33,10 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 100);
     });
   });
 
@@ -75,7 +77,7 @@ describe('AlertService', () => {
     it('should emit error alert with message and type', (done) => {
       service.onAlert().subscribe((a) => {
         expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
+        expect(a.message).toBe('Operation Failed');
         done();
       });
 
@@ -111,8 +113,10 @@ describe('AlertService', () => {
 
       service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 100);
     });
   });
 
@@ -121,19 +125,29 @@ describe('AlertService', () => {
       const firstSpy = jest.fn();
       const secondSpy = jest.fn();
 
-      service.onAlert('multi').subscribe(firstSpy);
-      service.onAlert('multi').subscribe(secondSpy);
+      const sub1 = service.onAlert('multi').subscribe(firstSpy);
+      const sub2 = service.onAlert('multi').subscribe(secondSpy);
 
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
       service.alert(alert);
 
-      expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        try {
+          expect(firstSpy).toHaveBeenCalled();
+          expect(secondSpy).toHaveBeenCalled();
+          sub1.unsubscribe();
+          sub2.unsubscribe();
+          done();
+        } catch (error) {
+          sub1.unsubscribe();
+          sub2.unsubscribe();
+          done(error);
+        }
+      }, 100);
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+      expect(() => service.clear('some-id')).not.toThrow();
     });
   });
 });
