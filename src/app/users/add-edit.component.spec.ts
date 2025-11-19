@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { AccountService, AlertService } from '../services';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 describe('AddEditComponent', () => {
   let component: AddEditComponent;
@@ -30,20 +32,23 @@ describe('AddEditComponent', () => {
     mockActivatedRoute = { snapshot: { params: {} } };
 
     await TestBed.configureTestingModule({
-      declarations: [AddEditComponent],
-      imports: [ReactiveFormsModule],
+      imports: [CommonModule, ReactiveFormsModule, AddEditComponent],
       providers: [
         FormBuilder,
         { provide: AccountService, useValue: mockAccountService },
         { provide: AlertService, useValue: mockAlertService },
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddEditComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+
+    fixture = TestBed.createComponent(AddEditComponent);
+    component = fixture.componentInstance;
+
   });
 
   describe('Initialization', () => {

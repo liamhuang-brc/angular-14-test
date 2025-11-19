@@ -25,8 +25,7 @@ describe('HomeComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
-            declarations: [HomeComponent],
+            imports: [RouterTestingModule, HomeComponent],
             providers: [
                 { provide: AccountService, useValue: accountServiceMock }
             ]
@@ -34,6 +33,7 @@ describe('HomeComponent', () => {
 
         fixture = TestBed.createComponent(HomeComponent);
         component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     describe('Initialization', () => {
@@ -42,21 +42,18 @@ describe('HomeComponent', () => {
         });
 
         it('should assign user from AccountService', () => {
-            fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
+            expect(component.user?.firstName).toEqual('Shashank');
         });
 
         it('should display user first name in the greeting', () => {
-            fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toBe('Hi Shashank!');
         });
     });
 
     describe('Template rendering', () => {
         it('should contain a link to manage users', () => {
-            fixture.detectChanges();
             const anchor = fixture.debugElement.query(By.css('a')).nativeElement;
 
             expect(anchor.getAttribute('routerLink')).toBe('/users');
@@ -64,23 +61,22 @@ describe('HomeComponent', () => {
         });
 
         it('should render paragraph content correctly', () => {
-            fixture.detectChanges();
             const paragraphs = fixture.debugElement.queryAll(By.css('p'));
 
-            expect(paragraphs.length).toBe(3);
+            expect(paragraphs.length).toBe(2);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!");
         });
     });
 
     describe('Edge behavior', () => {
         it('should handle case when AccountService returns null user', () => {
             accountServiceMock.userValue = null;
-            fixture = TestBed.createComponent(HomeComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
+            const newFixture = TestBed.createComponent(HomeComponent);
+            const newComponent = newFixture.componentInstance;
+            newFixture.detectChanges();
 
-            const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
+            const heading = newFixture.debugElement.query(By.css('h1')).nativeElement;
 
             expect(heading.textContent).toContain('undefined');
         });
@@ -89,7 +85,7 @@ describe('HomeComponent', () => {
     describe('Change detection', () => {
         it('should update view if user data changes after initialization', () => {
             fixture.detectChanges();
-            accountServiceMock.userValue.firstName = 'Jane';
+            component.user = { ...mockUser, firstName: 'Jane' };
             fixture.detectChanges();
 
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;

@@ -4,8 +4,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '../services';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
-@Component({ templateUrl: 'register.component.html' })
+@Component({ 
+  templateUrl: 'register.component.html',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule]
+})
 export class RegisterComponent implements OnInit {
     form!: FormGroup;
     loading = false;
