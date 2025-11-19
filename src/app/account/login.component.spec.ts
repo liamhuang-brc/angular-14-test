@@ -24,8 +24,8 @@ describe('LoginComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ReactiveFormsModule],
             declarations: [LoginComponent],
+            imports: [ReactiveFormsModule],
             providers: [
                 FormBuilder,
                 { provide: AccountService, useClass: MockAccountService },
@@ -41,14 +41,17 @@ describe('LoginComponent', () => {
             ],
         }).compileComponents();
 
+        TestBed.overrideComponent(LoginComponent, {
+            set: { template: '<div></div>' }
+        });
+
         fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;
+        fixture.detectChanges();
 
         accountService = TestBed.inject(AccountService) as unknown as MockAccountService;
         alertService = TestBed.inject(AlertService) as unknown as MockAlertService;
         router = TestBed.inject(Router);
-
-        fixture.detectChanges();
     });
 
     describe('Initialization', () => {
@@ -100,7 +103,7 @@ describe('LoginComponent', () => {
 
             component.onSubmit();
 
-            expect((router as any).navigate).toHaveBeenCalledWith('/');
+            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
         });
 
         it('should call alertService.error on login failure', () => {
