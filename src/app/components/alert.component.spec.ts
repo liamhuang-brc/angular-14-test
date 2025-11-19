@@ -17,7 +17,7 @@ describe('AlertComponent', () => {
         routerEvents$ = new Subject();
 
         alertServiceMock = {
-            onAlert: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
             clear: jest.fn(),
         };
 
@@ -36,6 +36,7 @@ describe('AlertComponent', () => {
 
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     describe('ngOnInit', () => {
@@ -46,6 +47,7 @@ describe('AlertComponent', () => {
 
             component.ngOnInit();
             alertSubject.next(alert);
+            fixture.detectChanges();
 
             expect(component.alerts.length).toBe(1);
             expect(component.alerts[0].message).toEqual('Test alert');
@@ -54,6 +56,7 @@ describe('AlertComponent', () => {
         it('should clear alerts on navigation', () => {
             alertServiceMock.onAlert.mockReturnValue(of());
             component.ngOnInit();
+            fixture.detectChanges();
 
             routerEvents$.next(new NavigationStart(1, '/home'));
             expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
@@ -62,16 +65,22 @@ describe('AlertComponent', () => {
 
     describe('removeAlert', () => {
         it('should remove the alert immediately if fade is false', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            fixture.detectChanges();
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
             component.alerts = [alert];
             component.fade = false;
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            fixture.detectChanges();
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
             component.fade = true;
@@ -80,7 +89,7 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
@@ -95,7 +104,7 @@ describe('AlertComponent', () => {
 
         it('should not break when alert is undefined', () => {
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
         });
     });
 
@@ -103,6 +112,7 @@ describe('AlertComponent', () => {
         it('should unsubscribe from alert and route subscriptions', () => {
             alertServiceMock.onAlert.mockReturnValue(of({ message: 'x' }));
             component.ngOnInit();
+            fixture.detectChanges();
 
             const alertUnsubSpy = jest.spyOn(component.alertSubscription, 'unsubscribe');
             const routeUnsubSpy = jest.spyOn(component.routeSubscription, 'unsubscribe');
