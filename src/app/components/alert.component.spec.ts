@@ -1,6 +1,7 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { Router, NavigationStart } from '@angular/router';
 import { of, Subject } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 import { AlertComponent } from './alert.component';
 import { AlertService } from '../services';
@@ -27,6 +28,7 @@ describe('AlertComponent', () => {
         };
 
         await TestBed.configureTestingModule({
+            imports: [CommonModule],
             declarations: [AlertComponent],
             providers: [
                 { provide: AlertService, useValue: alertServiceMock },
@@ -68,7 +70,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +82,7 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 

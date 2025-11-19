@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 import { By } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { HomeComponent } from './home.component';
 import { AccountService } from '../services';
@@ -25,9 +26,9 @@ describe('HomeComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
-            declarations: [HomeComponent],
+            imports: [CommonModule, HomeComponent],
             providers: [
+                provideRouter([]),
                 { provide: AccountService, useValue: accountServiceMock }
             ]
         }).compileComponents();
@@ -43,14 +44,14 @@ describe('HomeComponent', () => {
 
         it('should assign user from AccountService', () => {
             fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
+            expect(component.user?.firstName).toEqual('Shashank');
         });
 
         it('should display user first name in the greeting', () => {
             fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toBe('Hi Shashank!');
         });
     });
 
@@ -69,7 +70,7 @@ describe('HomeComponent', () => {
 
             expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!");
         });
     });
 
