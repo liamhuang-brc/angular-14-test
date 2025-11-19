@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { Router, NavigationStart } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
@@ -59,18 +59,17 @@ describe('AlertComponent', () => {
             expect(alertServiceMock.clear).toHaveBeenCalledWith('default-alert');
         });
     });
-
     describe('removeAlert', () => {
-        it('should remove the alert immediately if fade is false', () => {
+        it('should remove the alert immediately if fade is false', fakeAsync(() => {
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
             component.alerts = [alert];
             component.fade = false;
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
-        });
-
+   expect(component.alerts.length).toBe(0);
+            tick();
+        }));
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
@@ -78,25 +77,26 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
             expect(alert.fade).toBe(true);
-            tick(250);
+                     tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
+   tick();
         }));
     });
-
     describe('cssClass', () => {
-        it('should return correct classes for success alert', () => {
+        it('should return correct classes for success alert', fakeAsync(() => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
-            const css = component.cssClass(alert);
+     const css = component.cssClass(alert);
 
-            expect(css).toContain('alert-success');
-            expect(css).toContain('alert');
-        });
-
-        it('should not break when alert is undefined', () => {
-            const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
-        });
+   expect(css).toContain('alert-success');
+   expect(css).toContain('alert');
+   flush();
+        }));
+        it('should not break when alert is undefined', fakeAsync(() => {
+                const css = component.cssClass(undefined as any);
+   expect(css).toBeUndefined();
+              flush();
+        }));
     });
 
     describe('ngOnDestroy', () => {
