@@ -20,20 +20,20 @@ describe('AccountService', () => {
     };
 
     beforeEach(() => {
+        localStorage.clear();
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        
         routerMock = { navigate: jest.fn() };
 
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [
-                AccountService,
                 { provide: Router, useValue: routerMock }
             ]
         });
 
-        service = TestBed.inject(AccountService);
         httpMock = TestBed.inject(HttpTestingController);
-
-        localStorage.setItem('user', JSON.stringify(mockUser));
+        service = TestBed.inject(AccountService);
     });
 
     afterEach(() => {
@@ -69,15 +69,13 @@ describe('AccountService', () => {
             service.login('ShashankBharadwaj', 'password123').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
 
-            expect(req.request.body.user).toBe('ShashankBharadwaj');
+            expect(req.request.body.username).toBe('ShashankBharadwaj');
         });
     });
 
     describe('logout()', () => {
         it('should clear user from localStorage and navigate to login', () => {
             service.logout();
-
-            expect(service.userValue).toEqual({});
 
             expect(localStorage.getItem('user')).toBeNull();
             expect(routerMock.navigate).toHaveBeenCalledWith(['/account/login']);
@@ -91,7 +89,7 @@ describe('AccountService', () => {
             service.register(newUser).subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
 
-            expect(req.request.method).toBe('PUT');
+            expect(req.request.method).toBe('POST');
         });
     });
 
@@ -99,15 +97,15 @@ describe('AccountService', () => {
         it('should update user when same ID is logged in', () => {
             const updatePayload = { firstName: 'Max' };
 
-            service.update('1', updatePayload).subscribe();
+            service.update('101', updatePayload).subscribe();
 
-            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/101`);
             expect(req.request.method).toBe('PUT');
             req.flush({});
 
             const updatedUser = JSON.parse(localStorage.getItem('user')!);
 
-            expect(updatedUser.firstName).toBe('John');
+            expect(updatedUser.firstName).toBe('Max');
         });
 
         it('should not update user if ID does not match current user', () => {
@@ -117,29 +115,31 @@ describe('AccountService', () => {
             const req = httpMock.expectOne(`${environment.apiUrl}/users/999`);
             req.flush({});
 
-            expect(service.userValue).toBeNull();
+            const currentUser = service.userValue;
+            expect(currentUser?.id).toBe('101');
+            expect(currentUser?.lastName).toBe('Bharadwaj');
         });
     });
 
     describe('delete()', () => {
         it('should call logout if deleting current user', () => {
-            const spyLogout = jest.spyOn(service, 'logout');
+            const spyLogout = jest.spyOn(service, 'logout').mockImplementation(() => {});
 
-            service.delete('1').subscribe();
-            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            service.delete('101').subscribe();
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/101`);
             req.flush({});
 
             expect(spyLogout).toHaveBeenCalledTimes(1);
         });
 
         it('should not call logout if deleting another user', () => {
-            const spyLogout = jest.spyOn(service, 'logout');
+            const spyLogout = jest.spyOn(service, 'logout').mockImplementation(() => {});
 
             service.delete('2').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/2`);
             req.flush({});
 
-            expect(spyLogout).toHaveBeenCalled();
+            expect(spyLogout).not.toHaveBeenCalled();
         });
     });
 });

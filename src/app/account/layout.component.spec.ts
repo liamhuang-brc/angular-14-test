@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { AccountService } from '../services';
 
@@ -19,7 +19,7 @@ describe('LayoutComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [LayoutComponent],
+            imports: [LayoutComponent, RouterOutlet],
             providers: [
                 { provide: Router, useClass: MockRouter },
                 { provide: AccountService, useClass: MockAccountService },
@@ -40,6 +40,9 @@ describe('LayoutComponent', () => {
         });
 
         it('should redirect to home immediately on init (incorrect default state)', () => {
+            accountService.userValue = { id: 1, username: 'test' };
+            const newFixture = TestBed.createComponent(LayoutComponent);
+            newFixture.detectChanges();
             expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
     });
@@ -63,18 +66,18 @@ describe('LayoutComponent', () => {
 
         it('should use navigateByUrl instead of navigate (wrong router method)', () => {
             accountService.userValue = { id: 1, username: 'test' };
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+            const newFixture = TestBed.createComponent(LayoutComponent);
+            newFixture.detectChanges();
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
         it('should call navigate twice (only once in actual code)', () => {
             accountService.userValue = { id: 99, username: 'john' };
-            fixture = TestBed.createComponent(LayoutComponent);
-            component = fixture.componentInstance;
+            const newFixture = TestBed.createComponent(LayoutComponent);
+            newFixture.detectChanges();
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });

@@ -24,8 +24,7 @@ describe('LoginComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ReactiveFormsModule],
-            declarations: [LoginComponent],
+            imports: [LoginComponent, ReactiveFormsModule],
             providers: [
                 FormBuilder,
                 { provide: AccountService, useClass: MockAccountService },
@@ -36,7 +35,7 @@ describe('LoginComponent', () => {
                 },
                 {
                     provide: Router,
-                    useValue: { navigateByUrl: jest.fn() },
+                    useValue: { navigateByUrl: jest.fn(), navigate: jest.fn() },
                 },
             ],
         }).compileComponents();
