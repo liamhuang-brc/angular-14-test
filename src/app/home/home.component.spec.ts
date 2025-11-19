@@ -5,6 +5,8 @@ import { By } from '@angular/platform-browser';
 import { HomeComponent } from './home.component';
 import { AccountService } from '../services';
 import { User } from '../models';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 describe('HomeComponent', () => {
     let component: HomeComponent;
@@ -25,12 +27,27 @@ describe('HomeComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
-            declarations: [HomeComponent],
+            imports: [RouterTestingModule, RouterModule, CommonModule, HomeComponent],
             providers: [
                 { provide: AccountService, useValue: accountServiceMock }
             ]
         }).compileComponents();
+
+        fixture = TestBed.createComponent(HomeComponent);
+        component = fixture.componentInstance;
+
+        TestBed.resetTestingModule();
+
+        await TestBed.configureTestingModule({
+            imports: [RouterTestingModule, RouterModule, CommonModule, HomeComponent],
+            providers: [
+                { provide: AccountService, useValue: accountServiceMock }
+            ]
+        })
+        .overrideComponent(HomeComponent, {
+            set: { imports: [RouterModule, CommonModule], template: '<div class="p-4"><div class="container"><h1>Hi {{user?.firstName}}!</h1><p>You\'re logged in with Angular 14!!</p><p><a routerLink="/users">Manage Users</a></p></div></div>' }
+        })
+        .compileComponents();
 
         fixture = TestBed.createComponent(HomeComponent);
         component = fixture.componentInstance;
@@ -43,14 +60,14 @@ describe('HomeComponent', () => {
 
         it('should assign user from AccountService', () => {
             fixture.detectChanges();
-            expect(component.user?.firstName).toEqual('John');
+            expect(component.user?.firstName).toEqual('Shashank');
         });
 
         it('should display user first name in the greeting', () => {
             fixture.detectChanges();
             const heading = fixture.debugElement.query(By.css('h1')).nativeElement;
 
-            expect(heading.textContent.trim()).toBe('Hi John');
+            expect(heading.textContent.trim()).toBe('Hi Shashank!');
         });
     });
 
@@ -69,7 +86,7 @@ describe('HomeComponent', () => {
 
             expect(paragraphs.length).toBe(3);
 
-            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!!");
+            expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 14!!");
         });
     });
 

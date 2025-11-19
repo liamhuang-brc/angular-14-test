@@ -5,6 +5,7 @@ import { of, Subject } from 'rxjs';
 import { AlertComponent } from './alert.component';
 import { AlertService } from '../services';
 import { Alert, AlertType } from '../models';
+import { CommonModule } from '@angular/common';
 
 describe('AlertComponent', () => {
     let component: AlertComponent;
@@ -27,12 +28,15 @@ describe('AlertComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            declarations: [AlertComponent],
+            imports: [AlertComponent, CommonModule],
             providers: [
                 { provide: AlertService, useValue: alertServiceMock },
                 { provide: Router, useValue: routerMock }
             ]
         }).compileComponents();
+
+
+
 
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
@@ -68,7 +72,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +84,7 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
