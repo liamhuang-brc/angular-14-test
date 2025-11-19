@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router, NavigationStart } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { of, Subject } from 'rxjs';
 
 import { AlertComponent } from './alert.component';
@@ -27,15 +28,18 @@ describe('AlertComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            declarations: [AlertComponent],
+            imports: [AlertComponent],
             providers: [
                 { provide: AlertService, useValue: alertServiceMock },
                 { provide: Router, useValue: routerMock }
             ]
         }).compileComponents();
+    });
 
+    beforeEach(() => {
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
+        alertServiceMock.onAlert.mockReturnValue(of());
     });
 
     describe('ngOnInit', () => {
@@ -63,16 +67,18 @@ describe('AlertComponent', () => {
     describe('removeAlert', () => {
         it('should remove the alert immediately if fade is false', () => {
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
+            component.ngOnInit();
             component.alerts = [alert];
             component.fade = false;
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
+            component.ngOnInit();
             component.alerts = [alert];
             component.fade = true;
 
@@ -80,13 +86,14 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
+            component.ngOnInit();
             const css = component.cssClass(alert);
 
             expect(css).toContain('alert-success');
