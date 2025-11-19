@@ -4,18 +4,8 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testEnvironment: 'jsdom',
 
-  transform: {
-    '^.+\\.(ts|js|html)$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig.spec.json',
-        isolatedModules: true,
-      },
-    ],
-  },
-
   transformIgnorePatterns: [
-    'node_modules/(?!(@angular|rxjs|jest-preset-angular)/)',
+    'node_modules/(?!(@angular|rxjs|jest-preset-angular)/)'
   ],
 
   moduleFileExtensions: ['ts', 'js', 'html'],
