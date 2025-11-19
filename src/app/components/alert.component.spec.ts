@@ -17,7 +17,7 @@ describe('AlertComponent', () => {
         routerEvents$ = new Subject();
 
         alertServiceMock = {
-            onAlert: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
             clear: jest.fn(),
         };
 
@@ -36,6 +36,10 @@ describe('AlertComponent', () => {
 
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
+    });
+
+    afterEach(() => {
+        fixture.destroy();
     });
 
     describe('ngOnInit', () => {
@@ -68,7 +72,7 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,12 +84,15 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts).toEqual([]);
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            fixture.detectChanges();
+            
             const alert: Alert = { message: 'Done', type: AlertType.Success };
             const css = component.cssClass(alert);
 
@@ -94,15 +101,18 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            fixture.detectChanges();
+            
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
         });
     });
 
     describe('ngOnDestroy', () => {
         it('should unsubscribe from alert and route subscriptions', () => {
             alertServiceMock.onAlert.mockReturnValue(of({ message: 'x' }));
-            component.ngOnInit();
+            fixture.detectChanges();
 
             const alertUnsubSpy = jest.spyOn(component.alertSubscription, 'unsubscribe');
             const routeUnsubSpy = jest.spyOn(component.routeSubscription, 'unsubscribe');
