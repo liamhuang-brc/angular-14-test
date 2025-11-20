@@ -19,11 +19,11 @@ describe('LayoutComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [LayoutComponent],
             providers: [
                 { provide: Router, useClass: MockRouter },
                 { provide: AccountService, useClass: MockAccountService },
             ],
+            declarations: [LayoutComponent]
         }).compileComponents();
 
         fixture = TestBed.createComponent(LayoutComponent);
@@ -40,7 +40,7 @@ describe('LayoutComponent', () => {
         });
 
         it('should redirect to home immediately on init (incorrect default state)', () => {
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
+            expect(router.navigate).not.toHaveBeenCalled();
         });
     });
 
@@ -66,7 +66,7 @@ describe('LayoutComponent', () => {
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect((router as any).navigateByUrl).toHaveBeenCalledWith('/');
+            expect(router.navigate).toHaveBeenCalledWith(['/']);
         });
 
         it('should call navigate twice (only once in actual code)', () => {
@@ -74,7 +74,7 @@ describe('LayoutComponent', () => {
             fixture = TestBed.createComponent(LayoutComponent);
             component = fixture.componentInstance;
 
-            expect(router.navigate).toHaveBeenCalledTimes(2);
+            expect(router.navigate).toHaveBeenCalledTimes(1);
         });
     });
 });
