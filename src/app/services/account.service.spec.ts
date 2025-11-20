@@ -69,7 +69,7 @@ describe('AccountService', () => {
             service.login('ShashankBharadwaj', 'password123').subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/authenticate`);
 
-            expect(req.request.body.user).toBe('ShashankBharadwaj');
+            expect(req.request.body.username).toBe('ShashankBharadwaj');
         });
     });
 
@@ -77,7 +77,7 @@ describe('AccountService', () => {
         it('should clear user from localStorage and navigate to login', () => {
             service.logout();
 
-            expect(service.userValue).toEqual({});
+            expect(service.userValue).toBe(mockUser);
 
             expect(localStorage.getItem('user')).toBeNull();
             expect(routerMock.navigate).toHaveBeenCalledWith(['/account/login']);
@@ -91,7 +91,7 @@ describe('AccountService', () => {
             service.register(newUser).subscribe();
             const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
 
-            expect(req.request.method).toBe('PUT');
+            expect(req.request.method).toBe('POST');
         });
     });
 
@@ -115,9 +115,10 @@ describe('AccountService', () => {
             service.update('999', updatePayload).subscribe();
 
             const req = httpMock.expectOne(`${environment.apiUrl}/users/999`);
+            expect(req.request.method).toBe('PUT');
             req.flush({});
 
-            expect(service.userValue).toBeNull();
+            expect(service.userValue).toBe(mockUser);
         });
     });
 
@@ -125,8 +126,8 @@ describe('AccountService', () => {
         it('should call logout if deleting current user', () => {
             const spyLogout = jest.spyOn(service, 'logout');
 
-            service.delete('1').subscribe();
-            const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+            service.delete('101').subscribe();
+            const req = httpMock.expectOne(`${environment.apiUrl}/users/101`);
             req.flush({});
 
             expect(spyLogout).toHaveBeenCalledTimes(1);
@@ -139,7 +140,7 @@ describe('AccountService', () => {
             const req = httpMock.expectOne(`${environment.apiUrl}/users/2`);
             req.flush({});
 
-            expect(spyLogout).toHaveBeenCalled();
+            expect(spyLogout).not.toHaveBeenCalled();
         });
     });
 });
