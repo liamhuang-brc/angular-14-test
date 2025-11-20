@@ -17,9 +17,13 @@ describe('AlertService', () => {
       });
 
       service.onAlert('custom-id').subscribe((result) => {
-        expect(result.message).toBe('Test Alert');
-        expect(result.type).toBe(AlertType.Success);
-        done();
+        try {
+          expect(result.message).toBe('Test Alert');
+          expect(result.type).toBe(AlertType.Success);
+          done();
+        } catch (error) {
+          done(error);
+        }
       });
 
       service['subject'].next(alert);
@@ -33,17 +37,27 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        try {
+          expect(spy).not.toHaveBeenCalled();
+          done();
+        } catch (error) {
+          done(error);
+        }
+      }, 100);
     });
   });
 
   describe('alert()', () => {
     it('should use default id when none provided', (done) => {
       service.onAlert().subscribe((a) => {
-        expect(a.id).toBe('default-alert');
-        expect(a.message).toBe('No ID Alert');
-        done();
+        try {
+          expect(a.id).toBe('default-alert');
+          expect(a.message).toBe('No ID Alert');
+          done();
+        } catch (error) {
+          done(error);
+        }
       });
 
       service.alert(new Alert({ message: 'No ID Alert' }));
@@ -53,8 +67,12 @@ describe('AlertService', () => {
       const alert = new Alert({ id: 'stream-test', message: 'Streamed Alert' });
 
       service.onAlert('stream-test').subscribe((a) => {
-        expect(a.id).toBe('stream-test');
-        done();
+        try {
+          expect(a.id).toBe('stream-test');
+          done();
+        } catch (error) {
+          done(error);
+        }
       });
 
       service.alert(alert);
@@ -64,9 +82,13 @@ describe('AlertService', () => {
   describe('convenience methods', () => {
     it('should emit success alert with type Success', (done) => {
       service.onAlert().subscribe((a) => {
-        expect(a.type).toBe(AlertType.Success);
-        expect(a.message).toBe('Operation completed');
-        done();
+        try {
+          expect(a.type).toBe(AlertType.Success);
+          expect(a.message).toBe('Operation completed');
+          done();
+        } catch (error) {
+          done(error);
+        }
       });
 
       service.success('Operation completed');
@@ -74,9 +96,13 @@ describe('AlertService', () => {
 
     it('should emit error alert with message and type', (done) => {
       service.onAlert().subscribe((a) => {
-        expect(a.type).toBe(AlertType.Error);
-        expect(a.message).toBe('operation failed');
-        done();
+        try {
+          expect(a.type).toBe(AlertType.Error);
+          expect(a.message).toBe('Operation Failed');
+          done();
+        } catch (error) {
+          done(error);
+        }
       });
 
       service.error('Operation Failed');
@@ -97,9 +123,13 @@ describe('AlertService', () => {
   describe('clear()', () => {
     it('should emit empty alert with given id', (done) => {
       service.onAlert('custom').subscribe((a) => {
-        expect(a.message).toBeUndefined();
-        expect(a.id).toBe('custom');
-        done();
+        try {
+          expect(a.message).toBeUndefined();
+          expect(a.id).toBe('custom');
+          done();
+        } catch (error) {
+          done(error);
+        }
       });
 
       service.clear('custom');
@@ -111,8 +141,14 @@ describe('AlertService', () => {
 
       service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        try {
+          expect(spy).not.toHaveBeenCalled();
+          done();
+        } catch (error) {
+          done(error);
+        }
+      }, 100);
     });
   });
 
@@ -127,13 +163,19 @@ describe('AlertService', () => {
       const alert = new Alert({ id: 'multi', message: 'Broadcast' });
       service.alert(alert);
 
-      expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
-      done();
+      setTimeout(() => {
+        try {
+          expect(firstSpy).toHaveBeenCalled();
+          expect(secondSpy).toHaveBeenCalled();
+          done();
+        } catch (error) {
+          done(error);
+        }
+      }, 100);
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+      expect(() => service.clear('some-id')).not.toThrow();
     });
   });
 });
