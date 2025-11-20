@@ -30,8 +30,7 @@ describe('AddEditComponent', () => {
     mockActivatedRoute = { snapshot: { params: {} } };
 
     await TestBed.configureTestingModule({
-      declarations: [AddEditComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, AddEditComponent],
       providers: [
         FormBuilder,
         { provide: AccountService, useValue: mockAccountService },

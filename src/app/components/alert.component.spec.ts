@@ -27,7 +27,7 @@ describe('AlertComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            declarations: [AlertComponent],
+            imports: [AlertComponent],
             providers: [
                 { provide: AlertService, useValue: alertServiceMock },
                 { provide: Router, useValue: routerMock }

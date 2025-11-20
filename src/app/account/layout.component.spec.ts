@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { AccountService } from '../services';
-import { RouterOutlet } from '@angular/router';
 
 class MockRouter {
     navigate = jest.fn();
@@ -20,8 +19,7 @@ describe('LayoutComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [LayoutComponent],
-            imports: [RouterOutlet],
+            imports: [LayoutComponent, RouterOutlet],
             providers: [
                 { provide: Router, useClass: MockRouter },
                 { provide: AccountService, useClass: MockAccountService },
