@@ -1,4 +1,4 @@
-import 'jest-preset-angular/setup-jest';
+import 'jest-preset-angular/setup-jest.mjs';
 
 // Optional: silence Angular test env warnings
 Object.defineProperty(window, 'CSS', { value: null });

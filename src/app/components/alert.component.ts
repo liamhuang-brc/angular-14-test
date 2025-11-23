@@ -49,8 +49,8 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // unsubscribe to avoid memory leaks
-        this.alertSubscription.unsubscribe();
-        this.routeSubscription.unsubscribe();
+        this.alertSubscription?.unsubscribe();
+        this.routeSubscription?.unsubscribe();
     }
 
     removeAlert(alert: Alert) {
@@ -63,7 +63,9 @@ export class AlertComponent implements OnInit, OnDestroy {
 
             // remove alert after faded out
             setTimeout(() => {
-                this.alerts = this.alerts.filter(x => x !== alert);
+                if (this.alerts.includes(alert)) {
+                    this.alerts = this.alerts.filter(x => x !== alert);
+                }
             }, 250);
         } else {
             // remove alert
@@ -72,7 +74,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     }
 
     cssClass(alert: Alert) {
-        if (!alert) return;
+        if (!alert) return '';
 
         const classes = ['alert', 'alert-dismissible', 'mt-4', 'container'];
                 
