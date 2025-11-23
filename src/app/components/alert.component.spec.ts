@@ -34,6 +34,8 @@ describe('AlertComponent', () => {
             ]
         }).compileComponents();
 
+        alertServiceMock.onAlert.mockReturnValue(of());
+
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
     });
@@ -68,7 +70,8 @@ describe('AlertComponent', () => {
 
             component.removeAlert(alert);
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
+            fixture.detectChanges();
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,7 +83,8 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts).toEqual([]);
+            fixture.destroy();
         }));
     });
 
@@ -91,11 +95,13 @@ describe('AlertComponent', () => {
 
             expect(css).toContain('alert-success');
             expect(css).toContain('alert');
+            fixture.detectChanges();
         });
 
         it('should not break when alert is undefined', () => {
             const css = component.cssClass(undefined as any);
             expect(css).toEqual('');
+            fixture.destroy();
         });
     });
 
