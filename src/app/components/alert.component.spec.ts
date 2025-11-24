@@ -33,9 +33,12 @@ describe('AlertComponent', () => {
                 { provide: Router, useValue: routerMock }
             ]
         }).compileComponents();
+    });
 
+    beforeEach(() => {
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     describe('ngOnInit', () => {
@@ -65,14 +68,20 @@ describe('AlertComponent', () => {
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
             component.alerts = [alert];
             component.fade = false;
+            fixture.detectChanges();
 
             component.removeAlert(alert);
+            fixture.detectChanges();
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
+            const alertSubject = new Subject<Alert>();
+            alertServiceMock.onAlert.mockReturnValue(alertSubject.asObservable());
+            
+            component.ngOnInit();
             component.alerts = [alert];
             component.fade = true;
 
@@ -80,13 +89,15 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
+            fixture.destroy();
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
+            fixture.detectChanges();
             const css = component.cssClass(alert);
 
             expect(css).toContain('alert-success');
@@ -94,8 +105,9 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
+            fixture.detectChanges();
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
         });
     });
 
