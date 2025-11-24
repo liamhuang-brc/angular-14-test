@@ -25,8 +25,7 @@ describe('HomeComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
-            declarations: [HomeComponent],
+            imports: [RouterTestingModule, HomeComponent],
             providers: [
                 { provide: AccountService, useValue: accountServiceMock }
             ]

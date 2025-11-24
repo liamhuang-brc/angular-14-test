@@ -24,6 +24,7 @@ describe('AccountService', () => {
 
         localStorage.setItem('user', JSON.stringify(mockUser));
 
+        TestBed.resetTestingModule();
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [
@@ -43,7 +44,6 @@ describe('AccountService', () => {
 
     describe('Initialization', () => {
         it('should initialize with user from localStorage', () => {
-            service = TestBed.inject(AccountService);
             const currentUser = service.userValue;
             expect(currentUser?.username).toBe('ShashankBharadwaj');
         });
