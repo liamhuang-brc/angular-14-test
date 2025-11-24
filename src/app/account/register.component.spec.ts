@@ -6,25 +6,39 @@ import { of, throwError } from 'rxjs';
 import { RegisterComponent } from './register.component';
 import { AccountService, AlertService } from '../services';
 
+class MockAccountService {
+  register = jest.fn();
+}
+
+class MockAlertService {
+  clear = jest.fn();
+  success = jest.fn();
+  error = jest.fn();
+}
+
+class MockRouter {
+  navigate = jest.fn();
+}
+
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  let accountServiceSpy: jasmine.SpyObj<AccountService>;
-  let alertServiceSpy: jasmine.SpyObj<AlertService>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let accountService: MockAccountService;
+  let alertService: MockAlertService;
+  let router: MockRouter;
 
   beforeEach(async () => {
-    accountServiceSpy = jasmine.createSpyObj('AccountService', ['register']);
-    alertServiceSpy = jasmine.createSpyObj('AlertService', ['clear', 'success', 'error']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    accountService = new MockAccountService();
+    alertService = new MockAlertService();
+    router = new MockRouter();
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [RegisterComponent],
       providers: [
-        { provide: AccountService, useValue: accountServiceSpy },
-        { provide: AlertService, useValue: alertServiceSpy },
-        { provide: Router, useValue: routerSpy },
+        { provide: AccountService, useValue: accountService },
+        { provide: AlertService, useValue: alertService },
+        { provide: Router, useValue: router },
         { provide: ActivatedRoute, useValue: { snapshot: { params: {} } } }
       ]
     }).compileComponents();
@@ -48,7 +62,7 @@ describe('RegisterComponent', () => {
 
   it('should mark form invalid if required fields missing', () => {
     component.onSubmit();
-    expect(component.form.invalid).toBeTrue();
+    expect(component.form.invalid).toBe(true);
   });
 
   it('should call register service when form is valid', () => {
@@ -58,11 +72,11 @@ describe('RegisterComponent', () => {
       username: 'jdoe',
       password: 'password123'
     });
-    accountServiceSpy.register.and.returnValue(of({}));
+    accountService.register.mockReturnValue(of({}));
 
     component.onSubmit();
 
-    expect(accountServiceSpy.register).toHaveBeenCalledWith(jasmine.objectContaining({
+    expect(accountService.register).toHaveBeenCalledWith(expect.objectContaining({
       firstName: 'John'
     }));
   });
@@ -74,16 +88,16 @@ describe('RegisterComponent', () => {
       username: 'janedoe',
       password: '123456'
     });
-    accountServiceSpy.register.and.returnValue(throwError(() => 'Server error'));
+    accountService.register.mockReturnValue(throwError(() => 'Server error'));
 
     component.onSubmit();
 
-    expect(alertServiceSpy.error).toHaveBeenCalled();
+    expect(alertService.error).toHaveBeenCalled();
   });
 
   it('should not call register if form is invalid', () => {
     component.form.controls['firstName'].setValue('');
     component.onSubmit();
-    expect(accountServiceSpy.register).not.toHaveBeenCalled();
+    expect(accountService.register).not.toHaveBeenCalled();
   });
 });
