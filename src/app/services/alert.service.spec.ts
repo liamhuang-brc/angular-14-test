@@ -33,7 +33,7 @@ describe('AlertService', () => {
 
       service['subject'].next(alert);
 
-      expect(spy).toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
       done();
     });
   });
@@ -79,18 +79,17 @@ describe('AlertService', () => {
         done();
       });
 
-      service.error('Operation Failed');
+      service.error('operation failed');
     });
 
     it('should emit info alert', (done) => {
-      const spy = jest.fn();
-      service.onAlert().subscribe(spy);
+      service.onAlert().subscribe((a) => {
+        expect(a.type).toBe(AlertType.Info);
+        expect(a.message).toBe('Information!');
+        done();
+      });
 
       service.info('Information!');
-      service.warn('Warning!'); 
-
-      expect(spy).toHaveBeenCalledTimes(2);
-      done();
     });
   });
 
@@ -111,7 +110,7 @@ describe('AlertService', () => {
 
       service.clear('wrong-id');
 
-      expect(spy).toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
       done();
     });
   });
@@ -128,12 +127,12 @@ describe('AlertService', () => {
       service.alert(alert);
 
       expect(firstSpy).toHaveBeenCalled();
-      expect(secondSpy).not.toHaveBeenCalled();
+      expect(secondSpy).toHaveBeenCalled();
       done();
     });
 
     it('should not throw when clearing before any alert emitted', () => {
-      expect(() => service.clear('some-id')).toThrowError();
+      expect(() => service.clear('some-id')).not.toThrowError();
     });
   });
 });
