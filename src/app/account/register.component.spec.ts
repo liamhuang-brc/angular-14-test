@@ -29,8 +29,7 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [RegisterComponent],
+      imports: [ReactiveFormsModule, RegisterComponent],
       providers: [
         { provide: AccountService, useClass: MockAccountService },
         { provide: AlertService, useClass: MockAlertService },

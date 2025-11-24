@@ -19,7 +19,7 @@ describe('LayoutComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [LayoutComponent],
+            imports: [LayoutComponent],
             providers: [
                 { provide: Router, useClass: MockRouter },
                 { provide: AccountService, useClass: MockAccountService },

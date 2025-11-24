@@ -24,8 +24,7 @@ describe('LoginComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ReactiveFormsModule],
-            declarations: [LoginComponent],
+            imports: [ReactiveFormsModule, LoginComponent],
             providers: [
                 FormBuilder,
                 { provide: AccountService, useClass: MockAccountService },
