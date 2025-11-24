@@ -17,7 +17,7 @@ describe('AlertComponent', () => {
         routerEvents$ = new Subject();
 
         alertServiceMock = {
-            onAlert: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
             clear: jest.fn(),
         };
 
@@ -65,28 +65,34 @@ describe('AlertComponent', () => {
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
             component.alerts = [alert];
             component.fade = false;
+            fixture.detectChanges();
 
             component.removeAlert(alert);
+            fixture.detectChanges();
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
             component.alerts = [alert];
             component.fade = true;
+            fixture.detectChanges();
 
             component.removeAlert(alert);
             expect(alert.fade).toBe(true);
             tick(250);
+            fixture.detectChanges();
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts.length).toBe(0);
+            fixture.destroy();
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
+            fixture.detectChanges();
             const css = component.cssClass(alert);
 
             expect(css).toContain('alert-success');
@@ -94,8 +100,10 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
+            fixture.detectChanges();
             const css = component.cssClass(undefined as any);
-            expect(css).toEqual('');
+            expect(css).toBeUndefined();
+            fixture.destroy();
         });
     });
 

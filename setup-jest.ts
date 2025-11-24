@@ -1,4 +1,6 @@
 import 'jest-preset-angular/setup-jest';
+import 'zone.js';
+import 'zone.js/testing';
 
 // Optional: silence Angular test env warnings
 Object.defineProperty(window, 'CSS', { value: null });
