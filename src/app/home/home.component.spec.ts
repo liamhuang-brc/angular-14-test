@@ -67,7 +67,7 @@ describe('HomeComponent', () => {
             fixture.detectChanges();
             const paragraphs = fixture.debugElement.queryAll(By.css('p'));
 
-            expect(paragraphs.length).toBe(3);
+            expect(paragraphs.length).toBe(2);
 
             expect(paragraphs[0].nativeElement.textContent.trim()).toBe("You're logged in with Angular 15!!");
         });

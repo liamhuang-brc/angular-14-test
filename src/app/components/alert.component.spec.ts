@@ -36,9 +36,9 @@ describe('AlertComponent', () => {
     });
 
     beforeEach(() => {
+        alertServiceMock.onAlert.mockReturnValue(of());
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
-        fixture.detectChanges();
     });
 
     describe('ngOnInit', () => {
@@ -105,6 +105,7 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
             fixture.detectChanges();
             const css = component.cssClass(undefined as any);
             expect(css).toBeUndefined();
@@ -114,7 +115,7 @@ describe('AlertComponent', () => {
     describe('ngOnDestroy', () => {
         it('should unsubscribe from alert and route subscriptions', () => {
             alertServiceMock.onAlert.mockReturnValue(of({ message: 'x' }));
-            component.ngOnInit();
+            fixture.detectChanges();
 
             const alertUnsubSpy = jest.spyOn(component.alertSubscription, 'unsubscribe');
             const routeUnsubSpy = jest.spyOn(component.routeSubscription, 'unsubscribe');
