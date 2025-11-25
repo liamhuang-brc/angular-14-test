@@ -17,7 +17,7 @@ describe('AlertComponent', () => {
         routerEvents$ = new Subject();
 
         alertServiceMock = {
-            onAlert: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
             clear: jest.fn(),
         };
 
@@ -67,8 +67,9 @@ describe('AlertComponent', () => {
             component.fade = false;
 
             component.removeAlert(alert);
+            fixture.detectChanges();
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
@@ -80,13 +81,16 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts).toEqual([]);
+            fixture.destroy();
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
+            component.alerts = [alert];
+            fixture.detectChanges();
             const css = component.cssClass(alert);
 
             expect(css).toContain('alert-success');
@@ -96,6 +100,7 @@ describe('AlertComponent', () => {
         it('should not break when alert is undefined', () => {
             const css = component.cssClass(undefined as any);
             expect(css).toEqual('');
+            fixture.destroy();
         });
     });
 
