@@ -13,6 +13,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     alerts: Alert[] = [];
     alertSubscription!: Subscription;
     routeSubscription!: Subscription;
+    private timeoutIds: number[] = [];
 
     constructor(private router: Router, private alertService: AlertService) { }
 
@@ -35,7 +36,8 @@ export class AlertComponent implements OnInit, OnDestroy {
 
                 // auto close alert if required
                 if (alert.autoClose) {
-                    setTimeout(() => this.removeAlert(alert), 3000);
+                    const timeoutId = setTimeout(() => this.removeAlert(alert), 3000) as any;
+                    this.timeoutIds.push(timeoutId);
                 }
            });
 
@@ -49,8 +51,16 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // unsubscribe to avoid memory leaks
-        this.alertSubscription.unsubscribe();
-        this.routeSubscription.unsubscribe();
+        if (this.alertSubscription) {
+            this.alertSubscription.unsubscribe();
+        }
+        if (this.routeSubscription) {
+            this.routeSubscription.unsubscribe();
+        }
+        
+        // clear all pending timeouts
+        this.timeoutIds.forEach(id => clearTimeout(id));
+        this.timeoutIds = [];
     }
 
     removeAlert(alert: Alert) {
@@ -62,9 +72,10 @@ export class AlertComponent implements OnInit, OnDestroy {
             alert.fade = true;
 
             // remove alert after faded out
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 this.alerts = this.alerts.filter(x => x !== alert);
-            }, 250);
+            }, 250) as any;
+            this.timeoutIds.push(timeoutId);
         } else {
             // remove alert
             this.alerts = this.alerts.filter(x => x !== alert);
@@ -72,7 +83,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     }
 
     cssClass(alert: Alert) {
-        if (!alert) return;
+        if (!alert) return '';
 
         const classes = ['alert', 'alert-dismissible', 'mt-4', 'container'];
                 
