@@ -4,8 +4,14 @@ import { Subscription } from 'rxjs';
 
 import { Alert, AlertType } from '../models';
 import { AlertService } from '../services';
+import { CommonModule } from '@angular/common';
 
-@Component({ selector: 'alert', templateUrl: 'alert.component.html' })
+@Component({ 
+    selector: 'alert', 
+    templateUrl: 'alert.component.html',
+    standalone: true,
+    imports: [CommonModule]
+})
 export class AlertComponent implements OnInit, OnDestroy {
     @Input() id = 'default-alert';
     @Input() fade = true;
@@ -49,8 +55,8 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // unsubscribe to avoid memory leaks
-        this.alertSubscription.unsubscribe();
-        this.routeSubscription.unsubscribe();
+        this.alertSubscription?.unsubscribe();
+        this.routeSubscription?.unsubscribe();
     }
 
     removeAlert(alert: Alert) {
@@ -72,7 +78,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     }
 
     cssClass(alert: Alert) {
-        if (!alert) return;
+        if (!alert) return '';
 
         const classes = ['alert', 'alert-dismissible', 'mt-4', 'container'];
                 
