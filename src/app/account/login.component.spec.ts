@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { LoginComponent } from './login.component';
@@ -34,10 +34,7 @@ describe('LoginComponent', () => {
                     provide: ActivatedRoute,
                     useValue: { snapshot: { queryParams: {} } },
                 },
-                {
-                    provide: Router,
-                    useValue: { navigateByUrl: jest.fn() },
-                },
+                provideRouter([])
             ],
         }).compileComponents();
 
@@ -47,6 +44,7 @@ describe('LoginComponent', () => {
         accountService = TestBed.inject(AccountService) as unknown as MockAccountService;
         alertService = TestBed.inject(AlertService) as unknown as MockAlertService;
         router = TestBed.inject(Router);
+        router.navigateByUrl = jest.fn();
 
         fixture.detectChanges();
     });

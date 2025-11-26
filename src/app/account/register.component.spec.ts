@@ -5,6 +5,7 @@ import { of, throwError } from 'rxjs';
 
 import { RegisterComponent } from './register.component';
 import { AccountService, AlertService } from '../services';
+import { RouterOutlet } from '@angular/router';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -19,7 +20,7 @@ describe('RegisterComponent', () => {
     routerSpy = { navigate: jest.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, RouterOutlet],
       declarations: [RegisterComponent],
       providers: [
         { provide: AccountService, useValue: accountServiceSpy },

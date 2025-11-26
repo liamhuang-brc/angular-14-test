@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { Router, NavigationStart } from '@angular/router';
+import { Router, NavigationStart, provideRouter } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
 import { AlertComponent } from './alert.component';
@@ -27,15 +27,17 @@ describe('AlertComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            declarations: [AlertComponent],
+            imports: [AlertComponent],
             providers: [
                 { provide: AlertService, useValue: alertServiceMock },
-                { provide: Router, useValue: routerMock }
+                provideRouter([])
             ]
         }).compileComponents();
 
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;
+        routerMock = TestBed.inject(Router) as any;
+        routerMock.events = routerEvents$.asObservable();
     });
 
     afterEach(() => {

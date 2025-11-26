@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { AccountService } from './account.service';
@@ -24,10 +25,11 @@ describe('AccountService', () => {
         localStorage.setItem('user', JSON.stringify(mockUser));
 
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
             providers: [
                 AccountService,
-                { provide: Router, useValue: routerMock }
+                { provide: Router, useValue: routerMock },
+                provideHttpClient(),
+                provideHttpClientTesting()
             ]
         });
 

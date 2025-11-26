@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { AccountService, AlertService } from '../services';
+import { CommonModule } from '@angular/common';
 
 describe('AddEditComponent', () => {
   let component: AddEditComponent;
@@ -31,7 +32,7 @@ describe('AddEditComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [AddEditComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, CommonModule],
       providers: [
         FormBuilder,
         { provide: AccountService, useValue: mockAccountService },
