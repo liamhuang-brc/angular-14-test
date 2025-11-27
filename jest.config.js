@@ -6,10 +6,10 @@ module.exports = {
 
   transform: {
     '^.+\\.(ts|js|html)$': [
-      'ts-jest',
+      'jest-preset-angular',
       {
-        tsconfig: 'tsconfig.spec.json',
-        isolatedModules: true,
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
       },
     ],
   },
@@ -20,4 +20,10 @@ module.exports = {
 
   moduleFileExtensions: ['ts', 'js', 'html'],
   testMatch: ['**/?(*.)+(spec).[jt]s?(x)'],
+  
+  moduleNameMapper: {
+    '^@app/(.*)$': '<rootDir>/src/app/$1',
+    '^@environments/(.*)$': '<rootDir>/src/environments/$1',
+  },
+
 };
