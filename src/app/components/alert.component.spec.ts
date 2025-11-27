@@ -63,16 +63,22 @@ describe('AlertComponent', () => {
     describe('removeAlert', () => {
         it('should remove the alert immediately if fade is false', () => {
             const alert: Alert = { message: 'Remove me', type: AlertType.Warning };
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
             component.alerts = [alert];
             component.fade = false;
+            fixture.detectChanges();
 
             component.removeAlert(alert);
+            fixture.detectChanges();
 
-            expect(component.alerts.length).toBeNull();
+            expect(component.alerts.length).toBe(0);
         });
 
         it('should fade out and remove alert after timeout if fade is true', fakeAsync(() => {
             const alert: Alert = { message: 'Fade out', type: AlertType.Info };
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
             component.alerts = [alert];
             component.fade = true;
 
@@ -80,13 +86,16 @@ describe('AlertComponent', () => {
             expect(alert.fade).toBe(true);
             tick(250);
 
-            expect(component.alerts).toEqual(alert);
+            expect(component.alerts).toEqual([]);
         }));
     });
 
     describe('cssClass', () => {
         it('should return correct classes for success alert', () => {
             const alert: Alert = { message: 'Done', type: AlertType.Success };
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
+            fixture.detectChanges();
             const css = component.cssClass(alert);
 
             expect(css).toContain('alert-success');
@@ -94,6 +103,8 @@ describe('AlertComponent', () => {
         });
 
         it('should not break when alert is undefined', () => {
+            alertServiceMock.onAlert.mockReturnValue(of());
+            component.ngOnInit();
             const css = component.cssClass(undefined as any);
             expect(css).toEqual('');
         });
