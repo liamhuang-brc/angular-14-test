@@ -17,7 +17,7 @@ describe('AlertComponent', () => {
         routerEvents$ = new Subject();
 
         alertServiceMock = {
-            onAlert: jest.fn(),
+            onAlert: jest.fn().mockReturnValue(of()),
             clear: jest.fn(),
         };
 
@@ -67,6 +67,7 @@ describe('AlertComponent', () => {
             component.fade = false;
 
             component.removeAlert(alert);
+            fixture.detectChanges();
 
             expect(component.alerts.length).toBe(0);
         });
@@ -79,6 +80,7 @@ describe('AlertComponent', () => {
             component.removeAlert(alert);
             expect(alert.fade).toBe(true);
             tick(250);
+            fixture.detectChanges();
 
             expect(component.alerts).toEqual([]);
         }));
@@ -91,11 +93,13 @@ describe('AlertComponent', () => {
 
             expect(css).toContain('alert-success');
             expect(css).toContain('alert');
+            fixture.detectChanges();
         });
 
         it('should not break when alert is undefined', () => {
             const css = component.cssClass(undefined as any);
             expect(css).toEqual('');
+            fixture.detectChanges();
         });
     });
 

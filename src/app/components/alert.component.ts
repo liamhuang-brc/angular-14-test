@@ -13,6 +13,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     alerts: Alert[] = [];
     alertSubscription!: Subscription;
     routeSubscription!: Subscription;
+    timeoutHandles: any[] = [];
 
     constructor(private router: Router, private alertService: AlertService) { }
 
@@ -35,7 +36,8 @@ export class AlertComponent implements OnInit, OnDestroy {
 
                 // auto close alert if required
                 if (alert.autoClose) {
-                    setTimeout(() => this.removeAlert(alert), 3000);
+                    const handle = setTimeout(() => this.removeAlert(alert), 3000);
+                    this.timeoutHandles.push(handle);
                 }
            });
 
@@ -48,6 +50,10 @@ export class AlertComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        // clear all pending timeouts
+        this.timeoutHandles.forEach(handle => clearTimeout(handle));
+        this.timeoutHandles = [];
+        
         // unsubscribe to avoid memory leaks
         this.alertSubscription.unsubscribe();
         this.routeSubscription.unsubscribe();
@@ -62,9 +68,10 @@ export class AlertComponent implements OnInit, OnDestroy {
             alert.fade = true;
 
             // remove alert after faded out
-            setTimeout(() => {
+            const handle = setTimeout(() => {
                 this.alerts = this.alerts.filter(x => x !== alert);
             }, 250);
+            this.timeoutHandles.push(handle);
         } else {
             // remove alert
             this.alerts = this.alerts.filter(x => x !== alert);
