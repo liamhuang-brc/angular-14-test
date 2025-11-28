@@ -1,0 +1,755 @@
+{
+  "version": "16.0.0",
+  "source_version": "15.0.0",
+  "upgrade_log": [
+    {
+      "timestamp": 1764345409.5550277,
+      "action": "transition_to_next_version",
+      "version": "16.0.0",
+      "from_version": "15.0.0",
+      "to_version": "16.0.0",
+      "version_index": 1,
+      "status": "success"
+    },
+    {
+      "timestamp": 1764345454.7935889,
+      "action": "run_dependency_analysis",
+      "version": "16.0.0",
+      "packages_analyzed": 17,
+      "skipped_packages": 0,
+      "status": "success"
+    },
+    {
+      "timestamp": 1764345478.9939857,
+      "action": "generate_current_version_playbook",
+      "version": "16.0.0",
+      "source_version": "15.0.0",
+      "package_upgrade_step_count": 17,
+      "command_count": 1,
+      "deprecation_count": 0,
+      "packages_count": 17,
+      "status": "success"
+    },
+    {
+      "timestamp": 1764345479.4699662,
+      "action": "prepare_package_upgrades",
+      "version": "16.0.0",
+      "node_modules_removed": true,
+      "lock_file_removed": true,
+      "status": "success"
+    },
+    {
+      "timestamp": 1764345488.4576812,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular-devkit/build-angular",
+      "command": "npm install @angular-devkit/build-angular@16.2.16 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345488.5865424,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular-devkit/build-angular",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1764345488.5870597,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular-devkit/build-angular",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345489.8672748,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/animations",
+      "command": "npm install @angular/animations@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345489.867633,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/animations",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345489.867709,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/animations",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345491.4941444,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/cli",
+      "command": "npm install @angular/cli@16.2.16 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345491.494477,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/cli",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345491.494641,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/cli",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345492.7341068,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/common",
+      "command": "npm install @angular/common@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345492.7343037,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/common",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345492.7345464,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/common",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345493.7574108,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/compiler",
+      "command": "npm install @angular/compiler@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345493.7864504,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/compiler",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1764345493.7866697,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/compiler",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345494.850188,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/compiler-cli",
+      "command": "npm install @angular/compiler-cli@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345495.0264547,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/compiler-cli",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1764345495.0267692,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/compiler-cli",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345496.0102942,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/core",
+      "command": "npm install @angular/core@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345496.0755684,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/core",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1764345496.075771,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/core",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345497.1467507,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/forms",
+      "command": "npm install @angular/forms@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345497.1470153,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/forms",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345497.1471534,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/forms",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345498.149606,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/platform-browser",
+      "command": "npm install @angular/platform-browser@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345498.1716473,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/platform-browser",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1764345498.1719797,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/platform-browser",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345499.2204578,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "command": "npm install @angular/platform-browser-dynamic@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345499.2207766,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345499.2209218,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345500.218777,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@angular/router",
+      "command": "npm install @angular/router@16.2.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345500.2699244,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/router",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1764345500.270092,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@angular/router",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345501.1991627,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "@types/jasmine",
+      "command": "npm install @types/jasmine@5.1.13 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345501.1994967,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "@types/jasmine",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345501.1995518,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "@types/jasmine",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345502.234316,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "jasmine-core",
+      "command": "npm install jasmine-core@5.12.1 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345502.2345455,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "jasmine-core",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345502.2347126,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "jasmine-core",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345503.245776,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "jest-environment-jsdom",
+      "command": "npm install jest-environment-jsdom@30.2.0 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345503.2462556,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "jest-environment-jsdom",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345503.246378,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "jest-environment-jsdom",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345505.0158827,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "jest-preset-angular",
+      "command": "npm install jest-preset-angular@14.6.2 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345505.016262,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "jest-preset-angular",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345505.0164545,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "jest-preset-angular",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345505.9725204,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "rxjs",
+      "command": "npm install rxjs@7.8.2 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345505.9728832,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "rxjs",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345505.9729898,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "rxjs",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345506.917034,
+      "action": "execute_package_npm_install",
+      "version": "16.0.0",
+      "package": "tslib",
+      "command": "npm install tslib@2.8.1 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345506.9171882,
+      "action": "generate_package_fixes",
+      "version": "16.0.0",
+      "package": "tslib",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1764345506.9172726,
+      "action": "apply_package_fixes",
+      "version": "16.0.0",
+      "package": "tslib",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1764345507.830456,
+      "action": "finalize_package_installs",
+      "version": "16.0.0",
+      "command": "npm install --force",
+      "success": true
+    },
+    {
+      "timestamp": 1764345514.01565,
+      "action": "check_build_after_packages",
+      "version": "16.0.0",
+      "status": "success",
+      "error_count": 0
+    },
+    {
+      "timestamp": 1764345514.038872,
+      "action": "git_commit_before_ng_update",
+      "version": "16.0.0",
+      "command": "ng update @angular/cli@16 @angular/core@16"
+    },
+    {
+      "timestamp": 1764345514.7158632,
+      "action": "execute_command",
+      "version": "16.0.0",
+      "command": "ng update @angular/cli@16 @angular/core@16",
+      "success": true,
+      "output": "Using package manager: npm\nCollecting installed dependencies...\nFound 27 dependencies.\nFetching dependency metadata from registry...\nPackage '@angular/cli' is already up to date.\nPackage '@angular/core' is already up to date.\n",
+      "error": null
+    },
+    {
+      "timestamp": 1764345520.8467236,
+      "action": "check_build_after_command",
+      "version": "16.0.0",
+      "status": "success",
+      "error_count": 0,
+      "command_index": 0,
+      "command": "ng update @angular/cli@16 @angular/core@16",
+      "output": null
+    },
+    {
+      "timestamp": 1764345520.8487797,
+      "action": "check_version_completion",
+      "version": "16.0.0",
+      "commands_completed": true,
+      "deprecations_completed": true,
+      "build_status": "success"
+    }
+  ],
+  "applied_fixes": [],
+  "dependency_warnings": [],
+  "analyzed_packages": [
+    {
+      "version": "16.0.0",
+      "source_version": "15.0.0",
+      "packages": [
+        {
+          "name": "@angular-devkit/build-angular",
+          "currentVersion": "15.2.11",
+          "targetVersion": "16.2.16",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/animations",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root",
+            "@angular/platform-browser"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/cli",
+          "currentVersion": "15.2.11",
+          "targetVersion": "16.2.16",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/common",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root",
+            "@angular/forms",
+            "@angular/platform-browser",
+            "@angular/platform-browser-dynamic",
+            "@angular/router"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/compiler",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root",
+            "@angular/platform-browser-dynamic",
+            "@angular/compiler-cli"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/compiler-cli",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root",
+            "@angular-devkit/build-angular"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/core",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root",
+            "@angular/animations",
+            "@angular/common",
+            "@angular/compiler",
+            "@angular/forms",
+            "@angular/platform-browser",
+            "@angular/platform-browser-dynamic",
+            "@angular/router"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/forms",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/platform-browser",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root",
+            "@angular/forms",
+            "@angular/platform-browser-dynamic",
+            "@angular/router"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/platform-browser-dynamic",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/router",
+          "currentVersion": "15.2.10",
+          "targetVersion": "16.2.12",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@types/jasmine",
+          "currentVersion": "4.6.5",
+          "targetVersion": "5.1.13",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": true,
+          "angularDependent": false
+        },
+        {
+          "name": "jasmine-core",
+          "currentVersion": "4.6.1",
+          "targetVersion": "5.12.1",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": true,
+          "angularDependent": false
+        },
+        {
+          "name": "jest-environment-jsdom",
+          "currentVersion": "30.2.0",
+          "targetVersion": "30.2.0",
+          "requiredBy": [
+            "@angular-devkit/build-angular"
+          ],
+          "dependencyType": [
+            "peerDependency"
+          ],
+          "optional": true
+        },
+        {
+          "name": "jest-preset-angular",
+          "currentVersion": "13.1.6",
+          "targetVersion": "14.6.2",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "rxjs",
+          "currentVersion": "7.8.2",
+          "targetVersion": "7.8.2",
+          "requiredBy": [
+            "@angular-devkit/build-angular"
+          ],
+          "dependencyType": [
+            "dependency"
+          ],
+          "optional": false
+        },
+        {
+          "name": "tslib",
+          "currentVersion": "2.8.1",
+          "targetVersion": "2.8.1",
+          "requiredBy": [
+            "@angular-devkit/build-angular"
+          ],
+          "dependencyType": [
+            "dependency"
+          ],
+          "optional": false
+        }
+      ],
+      "total_count": 17
+    }
+  ]
+}
