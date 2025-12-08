@@ -11,12 +11,12 @@ import { AddEditComponent } from './add-edit.component';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        UsersRoutingModule
-    ],
-    declarations: [
+        UsersRoutingModule,
         LayoutComponent,
         ListComponent,
         AddEditComponent
+    ],
+    declarations: [
     ]
 })
 export class UsersModule { }
