@@ -19,7 +19,7 @@
     <div class="row">
         <div class="mb-3 col">
             <label class="form-label">Username</label>
-            <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+            <input type="text" formControlName="username" [class]="'form-control' + (submitted && f.username.errors ? ' is-invalid' : '')" />
             <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
                 <div *ngIf="f.username.errors.required">Username is required</div>
             </div>
