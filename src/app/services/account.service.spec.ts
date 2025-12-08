@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 
 import { AccountService } from './account.service';
 import { environment } from '../../environments/environment';
 import { User } from '../models';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AccountService', () => {
     let service: AccountService;
@@ -23,12 +24,14 @@ describe('AccountService', () => {
         routerMock = { navigate: jest.fn() };
 
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
-            providers: [
-                AccountService,
-                { provide: Router, useValue: routerMock }
-            ]
-        });
+    imports: [],
+    providers: [
+        AccountService,
+        { provide: Router, useValue: routerMock },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
 
         service = TestBed.inject(AccountService);
         httpMock = TestBed.inject(HttpTestingController);
