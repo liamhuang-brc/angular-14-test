@@ -1,0 +1,830 @@
+{
+  "version": "17.0.0",
+  "source_version": "16.0.0",
+  "upgrade_log": [
+    {
+      "timestamp": 1765225600.544451,
+      "action": "transition_to_next_version",
+      "version": "17.0.0",
+      "from_version": "16.0.0",
+      "to_version": "17.0.0",
+      "version_index": 2,
+      "status": "success"
+    },
+    {
+      "timestamp": 1765225674.746995,
+      "action": "run_dependency_analysis",
+      "version": "17.0.0",
+      "packages_analyzed": 14,
+      "skipped_packages": 1,
+      "status": "success"
+    },
+    {
+      "timestamp": 1765225746.6120393,
+      "action": "generate_current_version_playbook",
+      "version": "17.0.0",
+      "source_version": "16.0.0",
+      "package_upgrade_step_count": 14,
+      "command_count": 2,
+      "deprecation_count": 2,
+      "packages_count": 14,
+      "status": "success"
+    },
+    {
+      "timestamp": 1765225748.9863682,
+      "action": "prepare_package_upgrades",
+      "version": "17.0.0",
+      "node_modules_removed": true,
+      "lock_file_removed": true,
+      "status": "success"
+    },
+    {
+      "timestamp": 1765225782.4824777,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular-devkit/build-angular",
+      "command": "npm install @angular-devkit/build-angular@17.3.17 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225783.3205526,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular-devkit/build-angular",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225783.321333,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular-devkit/build-angular",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225785.5729702,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/animations",
+      "command": "npm install @angular/animations@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225785.5735621,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/animations",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1765225785.5738266,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/animations",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225790.0001078,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/cli",
+      "command": "npm install @angular/cli@17.3.17 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225790.0015776,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/cli",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1765225790.0021248,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/cli",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225792.3498256,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/common",
+      "command": "npm install @angular/common@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225792.5145335,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/common",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225792.5153317,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/common",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225794.0453174,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/compiler",
+      "command": "npm install @angular/compiler@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225794.2025294,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/compiler",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225794.2028754,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/compiler",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225796.0814893,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/compiler-cli",
+      "command": "npm install @angular/compiler-cli@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225796.3786302,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/compiler-cli",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225796.3793297,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/compiler-cli",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225798.4861553,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/core",
+      "command": "npm install @angular/core@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225798.7601779,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/core",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225798.7606862,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/core",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225800.9839966,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/forms",
+      "command": "npm install @angular/forms@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225801.1034038,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/forms",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225801.1036499,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/forms",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225802.7494426,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/platform-browser",
+      "command": "npm install @angular/platform-browser@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225802.8075898,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/platform-browser",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225802.8080928,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/platform-browser",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225804.4057484,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "command": "npm install @angular/platform-browser-dynamic@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225804.4062245,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1765225804.406507,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225806.2694058,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "@angular/router",
+      "command": "npm install @angular/router@17.3.12 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225806.4781985,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/router",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225806.4784615,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "@angular/router",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225808.1864707,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "tslib",
+      "command": "npm install tslib@2.8.1 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225808.1874628,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "tslib",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1765225808.1879044,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "tslib",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225809.852606,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "typescript",
+      "command": "npm install typescript@5.4.5 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225810.0405395,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "typescript",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1765225810.0410578,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "typescript",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225811.2039223,
+      "action": "execute_package_npm_install",
+      "version": "17.0.0",
+      "package": "zone.js",
+      "command": "npm install zone.js@0.14.10 --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225811.2042832,
+      "action": "generate_package_fixes",
+      "version": "17.0.0",
+      "package": "zone.js",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1765225811.204422,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "package": "zone.js",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1765225812.339339,
+      "action": "finalize_package_installs",
+      "version": "17.0.0",
+      "command": "npm install --force",
+      "success": true
+    },
+    {
+      "timestamp": 1765225825.8260262,
+      "action": "check_build_after_packages",
+      "version": "17.0.0",
+      "status": "failed",
+      "error_count": 1
+    },
+    {
+      "timestamp": 1765225835.549598,
+      "action": "analyze_package_errors",
+      "version": "17.0.0",
+      "error_count": 1,
+      "fix_count": 3,
+      "retry_count": 1
+    },
+    {
+      "timestamp": 1765225849.3443928,
+      "action": "analyze_dependency_impact_package",
+      "version": "17.0.0",
+      "llm_warnings_count": 3,
+      "kb_warnings_count": 0,
+      "new_warnings_count": 3,
+      "phase": "package"
+    },
+    {
+      "timestamp": 1765225849.3446643,
+      "action": "apply_package_fixes",
+      "version": "17.0.0",
+      "applied_count": 1,
+      "failed_count": 2,
+      "retry_count": 1
+    },
+    {
+      "timestamp": 1765225861.8854787,
+      "action": "check_build_after_packages",
+      "version": "17.0.0",
+      "status": "success",
+      "error_count": 0
+    },
+    {
+      "timestamp": 1765225862.011744,
+      "action": "git_commit_before_ng_update",
+      "version": "17.0.0",
+      "command": "ng update @angular/cli --from=16 --to=17 --migrate-only"
+    },
+    {
+      "timestamp": 1765225872.250702,
+      "action": "execute_command",
+      "version": "17.0.0",
+      "command": "ng update @angular/cli --from=16 --to=17 --migrate-only",
+      "success": true,
+      "output": "Using package manager: npm\nCollecting installed dependencies...\nFound 27 dependencies.\n",
+      "error": null
+    },
+    {
+      "timestamp": 1765225885.5051334,
+      "action": "check_build_after_command",
+      "version": "17.0.0",
+      "status": "success",
+      "error_count": 0,
+      "command_index": 0,
+      "command": "ng update @angular/cli --from=16 --to=17 --migrate-only",
+      "output": null
+    },
+    {
+      "timestamp": 1765225893.5081477,
+      "action": "execute_command",
+      "version": "17.0.0",
+      "command": "ng update @angular/core --from=16 --to=17 --migrate-only",
+      "success": true,
+      "output": "Using package manager: npm\nCollecting installed dependencies...\nFound 27 dependencies.\n** Executing migrations of package '@angular/core' **\n\n\u276f Angular v17 introduces a new control flow syntax that uses the @ and } characters.\n  This migration replaces the existing usages with their corresponding HTML entities.\n  Migration completed (No changes made).\n\n\u276f Updates `TransferState`, `makeStateKey`, `StateKey` imports from `@angular/platform-browser` to `@angular/core`.\n  Migration completed (No chan",
+      "error": null
+    },
+    {
+      "timestamp": 1765225905.1477988,
+      "action": "check_build_after_command",
+      "version": "17.0.0",
+      "status": "success",
+      "error_count": 0,
+      "command_index": 1,
+      "command": "ng update @angular/core --from=16 --to=17 --migrate-only",
+      "output": null
+    },
+    {
+      "timestamp": 1765225905.158184,
+      "action": "process_deprecation",
+      "version": "17.0.0",
+      "deprecation_index": 0,
+      "deprecated_item": "AnimationDriver.NOOP",
+      "replacement_item": "NoopAnimationDriver"
+    },
+    {
+      "timestamp": 1765225905.6537042,
+      "action": "query_ckg",
+      "version": "17.0.0",
+      "deprecation_index": 0,
+      "deprecated_item": "AnimationDriver.NOOP",
+      "match_count": 0
+    },
+    {
+      "timestamp": 1765225905.6546085,
+      "action": "apply_deprecation_fix",
+      "version": "17.0.0",
+      "deprecation_index": 0,
+      "deprecated_item": "AnimationDriver.NOOP",
+      "fix_count": 0,
+      "total_matches": 0,
+      "note": "No code matches found - deprecation may not be present in codebase"
+    },
+    {
+      "timestamp": 1765225915.7966263,
+      "action": "check_build_after_deprecation",
+      "version": "17.0.0",
+      "status": "success",
+      "error_count": 0,
+      "deprecation_index": 0,
+      "deprecation": "AnimationDriver.NOOP"
+    },
+    {
+      "timestamp": 1765225915.8573985,
+      "action": "process_deprecation",
+      "version": "17.0.0",
+      "deprecation_index": 1,
+      "deprecated_item": "Signal.mutate",
+      "replacement_item": "Signal.update"
+    },
+    {
+      "timestamp": 1765225916.1613002,
+      "action": "query_ckg",
+      "version": "17.0.0",
+      "deprecation_index": 1,
+      "deprecated_item": "Signal.mutate",
+      "match_count": 0
+    },
+    {
+      "timestamp": 1765225916.1615975,
+      "action": "apply_deprecation_fix",
+      "version": "17.0.0",
+      "deprecation_index": 1,
+      "deprecated_item": "Signal.mutate",
+      "fix_count": 0,
+      "total_matches": 0,
+      "note": "No code matches found - deprecation may not be present in codebase"
+    },
+    {
+      "timestamp": 1765225926.0360057,
+      "action": "check_build_after_deprecation",
+      "version": "17.0.0",
+      "status": "success",
+      "error_count": 0,
+      "deprecation_index": 1,
+      "deprecation": "Signal.mutate"
+    },
+    {
+      "timestamp": 1765225926.0974486,
+      "action": "detect_test_frameworks",
+      "version": "17.0.0",
+      "unit_framework": "jest",
+      "e2e_framework": null,
+      "frameworks_to_test": []
+    },
+    {
+      "timestamp": 1765225926.1038656,
+      "action": "check_version_completion",
+      "version": "17.0.0",
+      "commands_completed": true,
+      "deprecations_completed": true,
+      "build_status": "success"
+    }
+  ],
+  "applied_fixes": [
+    {
+      "file_path": "src/polyfills.ts",
+      "original_code": "import 'zone.js/dist/zone';",
+      "fixed_code": "import 'zone.js';",
+      "description": "[Pattern-matched] Updated zone.js import path from 'zone.js/dist/zone' to 'zone.js' to fix module resolution error with zone.js 0.14.10",
+      "confidence": 0.5505882352941177,
+      "operation": "replace",
+      "line_number": 0,
+      "insert_after": "",
+      "insert_before": "",
+      "error_file": null,
+      "error_line": null,
+      "version": "17.0.0"
+    }
+  ],
+  "dependency_warnings": [
+    {
+      "dependency_name": "zone.js",
+      "affected_files": [
+        "src/polyfills.ts"
+      ],
+      "issue_description": "The import path change from 'zone.js/dist/zone' to 'zone.js' indicates zone.js has been updated to version 0.14.x. Angular 18 requires zone.js ^0.14.0, but older versions (0.11.x-0.13.x) used the /dist/ path structure. This change may cause runtime errors if zone.js version is not properly aligned with Angular 18 requirements.",
+      "resolution_steps": [
+        "Step 1: Verify zone.js is updated to version ^0.14.0 by running 'npm list zone.js'",
+        "Step 2: If zone.js is below 0.14.0, update it with 'npm install zone.js@^0.14.0'",
+        "Step 3: Ensure all zone.js imports throughout the application use the new path format without '/dist/'",
+        "Step 4: Test application startup and change detection to verify zone.js is working correctly"
+      ],
+      "severity": "high",
+      "source": "llm",
+      "version": "17.0.0"
+    },
+    {
+      "dependency_name": "core-js",
+      "affected_files": [
+        "src/polyfills.ts"
+      ],
+      "issue_description": "Angular 18 has updated polyfill requirements and some core-js polyfills may no longer be necessary or may conflict with modern browser APIs. Older core-js versions (below 3.30.0) may have compatibility issues with Angular 18's updated build system.",
+      "resolution_steps": [
+        "Step 1: Check current core-js version with 'npm list core-js'",
+        "Step 2: Update core-js to latest version 3.x with 'npm install core-js@^3.30.0'",
+        "Step 3: Review polyfills.ts imports and remove unnecessary core-js polyfills for modern browsers",
+        "Step 4: Test application in target browsers to ensure required functionality works"
+      ],
+      "severity": "medium",
+      "source": "llm",
+      "version": "17.0.0"
+    },
+    {
+      "dependency_name": "web-animations-js",
+      "affected_files": [
+        "src/polyfills.ts"
+      ],
+      "issue_description": "The web-animations-js polyfill may be unnecessary for Angular 18 applications targeting modern browsers, as Web Animations API is now widely supported. Including outdated versions may cause conflicts with native implementations.",
+      "resolution_steps": [
+        "Step 1: Evaluate if web-animations-js is still needed based on browser support requirements",
+        "Step 2: If still needed, update to latest version with 'npm install web-animations-js@^2.3.2'",
+        "Step 3: Consider removing the polyfill entirely if targeting modern browsers only",
+        "Step 4: Test Angular animations functionality in target browsers after changes"
+      ],
+      "severity": "low",
+      "source": "llm",
+      "version": "17.0.0"
+    }
+  ],
+  "analyzed_packages": [
+    {
+      "version": "17.0.0",
+      "source_version": "16.0.0",
+      "packages": [
+        {
+          "name": "@angular-devkit/build-angular",
+          "currentVersion": "16.2.16",
+          "targetVersion": "17.3.17",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/animations",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root",
+            "@angular/platform-browser"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/cli",
+          "currentVersion": "16.2.16",
+          "targetVersion": "17.3.17",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/common",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root",
+            "@angular/forms",
+            "@angular/platform-browser",
+            "@angular/platform-browser-dynamic",
+            "@angular/router"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/compiler",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root",
+            "@angular/platform-browser-dynamic",
+            "@angular/compiler-cli"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/compiler-cli",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root",
+            "@angular-devkit/build-angular"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/core",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root",
+            "@angular/animations",
+            "@angular/common",
+            "@angular/compiler",
+            "@angular/forms",
+            "@angular/platform-browser",
+            "@angular/platform-browser-dynamic",
+            "@angular/router"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/forms",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/platform-browser",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root",
+            "@angular/forms",
+            "@angular/platform-browser-dynamic",
+            "@angular/router"
+          ],
+          "dependencyType": [
+            "root",
+            "peerDependency"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/platform-browser-dynamic",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "@angular/router",
+          "currentVersion": "16.2.12",
+          "targetVersion": "17.3.12",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": false,
+          "angularDependent": true
+        },
+        {
+          "name": "tslib",
+          "currentVersion": "2.8.1",
+          "targetVersion": "2.8.1",
+          "requiredBy": [
+            "@angular-devkit/build-angular"
+          ],
+          "dependencyType": [
+            "dependency"
+          ],
+          "optional": false
+        },
+        {
+          "name": "typescript",
+          "currentVersion": "4.9.5",
+          "targetVersion": "5.4.5",
+          "requiredBy": [
+            "@angular-devkit/build-angular",
+            "@angular/compiler-cli"
+          ],
+          "dependencyType": [
+            "peerDependency"
+          ],
+          "optional": false
+        },
+        {
+          "name": "zone.js",
+          "currentVersion": "0.13.3",
+          "targetVersion": "0.14.10",
+          "requiredBy": [
+            "root"
+          ],
+          "dependencyType": [
+            "root"
+          ],
+          "optional": true,
+          "angularDependent": false
+        }
+      ],
+      "total_count": 14
+    }
+  ]
+}
