@@ -24,14 +24,14 @@ describe('AccountService', () => {
         routerMock = { navigate: jest.fn() };
 
         TestBed.configureTestingModule({
-    imports: [],
-    providers: [
-        AccountService,
-        { provide: Router, useValue: routerMock },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting()
-    ]
-});
+            imports: [],
+            providers: [
+                AccountService,
+                { provide: Router, useValue: routerMock },
+                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClientTesting()
+            ]
+        });
 
         service = TestBed.inject(AccountService);
         httpMock = TestBed.inject(HttpTestingController);
