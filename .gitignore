@@ -102,3 +102,6 @@ logs
 # Temporary folders
 tmp/
 temp/
+
+# Neuron upgrade agent internal state (auto-added)
+.neuron-upgrade/.archives/
