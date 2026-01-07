@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { AccountService } from '../services';
+import { RouterLink } from '@angular/router';
 
-@Component({ templateUrl: 'list.component.html', standalone: false })
+
+@Component({
+    templateUrl: 'list.component.html',
+    imports: [RouterLink]
+})
 export class ListComponent implements OnInit {
     users?: any[];
 
-    constructor(private accountService: AccountService) {}
+    private accountService = inject(AccountService);
 
     ngOnInit() {
         this.accountService.getAll()

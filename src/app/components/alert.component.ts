@@ -1,24 +1,29 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, input, inject } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Alert, AlertType } from '../models';
 import { AlertService } from '../services';
 
-@Component({ selector: 'alert', templateUrl: 'alert.component.html', standalone: false })
+
+@Component({
+    selector: 'alert', templateUrl: 'alert.component.html',
+    imports: []
+})
 export class AlertComponent implements OnInit, OnDestroy {
-    @Input() id = 'default-alert';
-    @Input() fade = true;
+    id = input('default-alert');
+    fade = input(true);
 
     alerts: Alert[] = [];
     alertSubscription!: Subscription;
     routeSubscription!: Subscription;
 
-    constructor(private router: Router, private alertService: AlertService) { }
+    private router = inject(Router);
+    private alertService = inject(AlertService);
 
     ngOnInit() {
         // subscribe to new alert notifications
-        this.alertSubscription = this.alertService.onAlert(this.id)
+        this.alertSubscription = this.alertService.onAlert(this.id())
             .subscribe(alert => {
                 // clear alerts when an empty alert is received
                 if (!alert.message) {
@@ -42,7 +47,7 @@ export class AlertComponent implements OnInit, OnDestroy {
         // clear alerts on location change
         this.routeSubscription = this.router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
-                this.alertService.clear(this.id);
+                this.alertService.clear(this.id());
             }
         });
     }
@@ -57,7 +62,7 @@ export class AlertComponent implements OnInit, OnDestroy {
         // check if already removed to prevent error on auto close
         if (!this.alerts.includes(alert)) return;
 
-        if (this.fade) {
+        if (this.fade()) {
             // fade out alert
             alert.fade = true;
 

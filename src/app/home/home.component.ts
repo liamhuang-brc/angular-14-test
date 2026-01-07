@@ -1,13 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { User } from '../models';
 import { AccountService } from '../services';
+import { RouterLink } from '@angular/router';
 
-@Component({ templateUrl: 'home.component.html', standalone: false })
+@Component({
+    templateUrl: 'home.component.html',
+    imports: [RouterLink]
+})
 export class HomeComponent {
     user: User | null;
 
-    constructor(private accountService: AccountService) {
+    private accountService = inject(AccountService);
+
+    constructor() {
         this.user = this.accountService.userValue;
     }
 }

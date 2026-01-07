@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { AccountService } from './services';
 import { User } from './models';
@@ -7,7 +7,9 @@ import { User } from './models';
 export class AppComponent {
     user?: User | null;
 
-    constructor(private accountService: AccountService) {
+    private accountService = inject(AccountService);
+
+    constructor() {
         this.accountService.user.subscribe(x => this.user = x);
     }
 

@@ -24,22 +24,21 @@ describe('LoginComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ReactiveFormsModule],
-            declarations: [LoginComponent],
-            providers: [
-                FormBuilder,
-                { provide: AccountService, useClass: MockAccountService },
-                { provide: AlertService, useClass: MockAlertService },
-                {
-                    provide: ActivatedRoute,
-                    useValue: { snapshot: { queryParams: {} } },
-                },
-                {
-                    provide: Router,
-                    useValue: { navigateByUrl: jest.fn() },
-                },
-            ],
-        }).compileComponents();
+    imports: [ReactiveFormsModule, LoginComponent],
+    providers: [
+        FormBuilder,
+        { provide: AccountService, useClass: MockAccountService },
+        { provide: AlertService, useClass: MockAlertService },
+        {
+            provide: ActivatedRoute,
+            useValue: { snapshot: { queryParams: {} } },
+        },
+        {
+            provide: Router,
+            useValue: { navigateByUrl: jest.fn() },
+        },
+    ],
+}).compileComponents();
 
         fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;

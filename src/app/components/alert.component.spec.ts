@@ -27,12 +27,12 @@ describe('AlertComponent', () => {
         };
 
         await TestBed.configureTestingModule({
-            declarations: [AlertComponent],
-            providers: [
-                { provide: AlertService, useValue: alertServiceMock },
-                { provide: Router, useValue: routerMock }
-            ]
-        }).compileComponents();
+    imports: [AlertComponent],
+    providers: [
+        { provide: AlertService, useValue: alertServiceMock },
+        { provide: Router, useValue: routerMock }
+    ]
+}).compileComponents();
 
         fixture = TestBed.createComponent(AlertComponent);
         component = fixture.componentInstance;

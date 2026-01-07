@@ -19,12 +19,12 @@ describe('LayoutComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [LayoutComponent],
-            providers: [
-                { provide: Router, useClass: MockRouter },
-                { provide: AccountService, useClass: MockAccountService },
-            ],
-        }).compileComponents();
+    imports: [LayoutComponent],
+    providers: [
+        { provide: Router, useClass: MockRouter },
+        { provide: AccountService, useClass: MockAccountService },
+    ],
+}).compileComponents();
 
         fixture = TestBed.createComponent(LayoutComponent);
         component = fixture.componentInstance;

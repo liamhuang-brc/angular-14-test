@@ -1,23 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '../services';
 
-@Component({ templateUrl: 'login.component.html', standalone: false })
+
+@Component({
+    templateUrl: 'login.component.html',
+    imports: [ReactiveFormsModule, RouterLink]
+})
 export class LoginComponent implements OnInit {
     form!: FormGroup;
     loading = false;
     submitted = false;
 
-    constructor(
-        private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private accountService: AccountService,
-        private alertService: AlertService
-    ) { }
+    private formBuilder = inject(FormBuilder);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private accountService = inject(AccountService);
+    private alertService = inject(AlertService);
 
     ngOnInit() {
         this.form = this.formBuilder.group({

@@ -17,17 +17,14 @@ import { HomeComponent } from './home';
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
-        AppRoutingModule
-    ],
-    declarations: [
-        AppComponent,
+        AppRoutingModule,
         AlertComponent,
         HomeComponent
     ],
+    declarations: [AppComponent],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
         // provider used to create fake backend
         fakeBackendProvider
     ],

@@ -30,16 +30,15 @@ describe('AddEditComponent', () => {
     mockActivatedRoute = { snapshot: { params: {} } };
 
     await TestBed.configureTestingModule({
-      declarations: [AddEditComponent],
-      imports: [ReactiveFormsModule],
-      providers: [
+    imports: [ReactiveFormsModule, AddEditComponent],
+    providers: [
         FormBuilder,
         { provide: AccountService, useValue: mockAccountService },
         { provide: AlertService, useValue: mockAlertService },
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
-      ]
-    }).compileComponents();
+    ]
+}).compileComponents();
 
     fixture = TestBed.createComponent(AddEditComponent);
     component = fixture.componentInstance;
