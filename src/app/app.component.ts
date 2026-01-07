@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AccountService } from './services';
 import { User } from './models';
 
-@Component({ selector: 'app-root', templateUrl: 'app.component.html' })
+@Component({ selector: 'app-root', templateUrl: 'app.component.html', standalone: false })
 export class AppComponent {
     user?: User | null;
 
