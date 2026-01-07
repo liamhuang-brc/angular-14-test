@@ -1,0 +1,549 @@
+{
+  "version": "15.0.0",
+  "source_version": "14.0.0",
+  "upgrade_log": [
+    {
+      "timestamp": 1767815823.1201153,
+      "action": "create_upgrade_branch",
+      "version": "15.0.0",
+      "branch_name": "angular-upgrade-14-0-0-to-16-0-0-20260107195702",
+      "base_branch": "main",
+      "base_branch_ref": "main",
+      "status": "success"
+    },
+    {
+      "timestamp": 1767815823.120128,
+      "action": "initialize",
+      "version": "15.0.0",
+      "message": "Agent initialized for Angular 14.0.0 -> 16.0.0",
+      "intermediate_versions": [
+        "15.0.0",
+        "16.0.0"
+      ],
+      "branch_name": "angular-upgrade-14-0-0-to-16-0-0-20260107195702",
+      "status": "success"
+    },
+    {
+      "timestamp": 1767815863.7061627,
+      "action": "run_dependency_analysis",
+      "version": "15.0.0",
+      "packages_analyzed": 14,
+      "skipped_packages": 15,
+      "status": "success"
+    },
+    {
+      "timestamp": 1767815901.5420432,
+      "action": "generate_current_version_playbook",
+      "version": "15.0.0",
+      "source_version": "14.0.0",
+      "package_upgrade_step_count": 14,
+      "command_count": 2,
+      "deprecation_count": 2,
+      "packages_count": 14,
+      "status": "success"
+    },
+    {
+      "timestamp": 1767815901.5455983,
+      "action": "prepare_package_upgrades",
+      "version": "15.0.0",
+      "node_modules_removed": true,
+      "lock_file_removed": true,
+      "status": "success"
+    },
+    {
+      "timestamp": 1767815919.5635886,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular-devkit/build-angular",
+      "command": "npm install @angular-devkit/build-angular@15.2.11 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815919.894824,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular-devkit/build-angular",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1767815919.8948946,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular-devkit/build-angular",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815921.4908652,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/animations",
+      "command": "npm install @angular/animations@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815921.4911404,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/animations",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1767815921.491144,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/animations",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815923.5787172,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/cli",
+      "command": "npm install @angular/cli@15.2.11 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815923.7221942,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/cli",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1767815923.7222464,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/cli",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815925.4284084,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/common",
+      "command": "npm install @angular/common@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815925.4285998,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/common",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1767815925.428606,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/common",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815926.6920683,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/compiler",
+      "command": "npm install @angular/compiler@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815926.692206,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/compiler",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1767815926.692209,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/compiler",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815927.9641142,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/compiler-cli",
+      "command": "npm install @angular/compiler-cli@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815928.0185847,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/compiler-cli",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1767815928.0186536,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/compiler-cli",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815929.1897101,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/core",
+      "command": "npm install @angular/core@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815929.2901554,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/core",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1767815929.2901816,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/core",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815930.602253,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/forms",
+      "command": "npm install @angular/forms@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815930.6540678,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/forms",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1767815930.6541057,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/forms",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815932.124351,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/platform-browser",
+      "command": "npm install @angular/platform-browser@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815932.1807806,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/platform-browser",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1767815932.180837,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/platform-browser",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815933.5515246,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "command": "npm install @angular/platform-browser-dynamic@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815933.5516908,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1767815933.5516932,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/platform-browser-dynamic",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815934.8217933,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "@angular/router",
+      "command": "npm install @angular/router@15.2.10 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815934.873086,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/router",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1767815934.873132,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "@angular/router",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815936.4874218,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "jest-preset-angular",
+      "command": "npm install jest-preset-angular@13.1.6 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815936.4877,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "jest-preset-angular",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1767815936.487707,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "jest-preset-angular",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815937.5803332,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "tslib",
+      "command": "npm install tslib@2.5.0 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815937.580496,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "tslib",
+      "fixes_generated": 0,
+      "success": true,
+      "skipped": true,
+      "reason": "no breaking changes"
+    },
+    {
+      "timestamp": 1767815937.5804994,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "tslib",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815938.782592,
+      "action": "execute_package_npm_install",
+      "version": "15.0.0",
+      "package": "typescript",
+      "command": "npm install typescript@4.9.5 --force",
+      "success": true,
+      "optional": false
+    },
+    {
+      "timestamp": 1767815938.8440852,
+      "action": "generate_package_fixes",
+      "version": "15.0.0",
+      "package": "typescript",
+      "fixes_generated": 0,
+      "success": true
+    },
+    {
+      "timestamp": 1767815938.844126,
+      "action": "apply_package_fixes",
+      "version": "15.0.0",
+      "package": "typescript",
+      "status": "completed"
+    },
+    {
+      "timestamp": 1767815939.8138933,
+      "action": "finalize_package_installs",
+      "version": "15.0.0",
+      "command": "npm install --force",
+      "success": true
+    },
+    {
+      "timestamp": 1767815947.7284067,
+      "action": "check_build_after_packages",
+      "version": "15.0.0",
+      "status": "success",
+      "error_count": 0
+    },
+    {
+      "timestamp": 1767815947.7671976,
+      "action": "git_commit_before_ng_update",
+      "version": "15.0.0",
+      "command": "ng update @angular/cli@15.0.0 --migrate-only"
+    },
+    {
+      "timestamp": 1767815948.4811177,
+      "action": "execute_command",
+      "version": "15.0.0",
+      "command": "ng update @angular/cli@15.0.0 --migrate-only",
+      "success": false,
+      "output": "Using package manager: npm\nCollecting installed dependencies...\nFound 27 dependencies.\n",
+      "error": "Package specifier has no effect when using \"migrate-only\" option.\nPackage is not installed.\n"
+    },
+    {
+      "timestamp": 1767815955.110146,
+      "action": "check_build_after_command",
+      "version": "15.0.0",
+      "status": "success",
+      "error_count": 0,
+      "command_index": 0,
+      "command": "ng update @angular/cli@15.0.0 --migrate-only",
+      "output": null
+    },
+    {
+      "timestamp": 1767815960.7423003,
+      "action": "execute_command",
+      "version": "15.0.0",
+      "command": "ng update @angular/core --from=14 --to=15 --migrate-only",
+      "success": true,
+      "output": "Using package manager: npm\nCollecting installed dependencies...\nFound 27 dependencies.\n** Executing migrations of package '@angular/core' **\n\n\u276f In Angular version 15, the deprecated `relativeLinkResolution` config parameter of the Router is removed.\n  This migration removes all `relativeLinkResolution` fields from the Router config objects.\n  Migration completed (No changes made).\n\n\u276f Since Angular v15, the `RouterLink` contains the logic of the `RouterLinkWithHref` directive.\n  This migration re",
+      "error": null
+    },
+    {
+      "timestamp": 1767815968.012074,
+      "action": "check_build_after_command",
+      "version": "15.0.0",
+      "status": "success",
+      "error_count": 0,
+      "command_index": 1,
+      "command": "ng update @angular/core --from=14 --to=15 --migrate-only",
+      "output": null
+    },
+    {
+      "timestamp": 1767815968.0203693,
+      "action": "check_version_completion",
+      "version": "15.0.0",
+      "commands_completed": true,
+      "deprecations_completed": true,
+      "build_status": "success"
+    }
+  ],
+  "applied_fixes": [],
+  "dependency_warnings": [],
+  "analyzed_packages": [
+    {
+      "version": "15.0.0",
+      "source_version": "14.0.0",
+      "packages": [
+        {
+          "name": "@angular-devkit/build-angular",
+          "currentVersion": "14.0.0",
+          "targetVersion": "15.2.11"
+        },
+        {
+          "name": "@angular/animations",
+          "currentVersion": "14.2.11",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "@angular/cli",
+          "currentVersion": "14.0.0",
+          "targetVersion": "15.2.11"
+        },
+        {
+          "name": "@angular/common",
+          "currentVersion": "14.2.11",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "@angular/compiler",
+          "currentVersion": "14.2.11",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "@angular/compiler-cli",
+          "currentVersion": "14.0.0",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "@angular/core",
+          "currentVersion": "14.2.11",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "@angular/forms",
+          "currentVersion": "14.2.11",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "@angular/platform-browser",
+          "currentVersion": "14.2.11",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "@angular/platform-browser-dynamic",
+          "currentVersion": "14.2.11",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "@angular/router",
+          "currentVersion": "14.2.11",
+          "targetVersion": "15.2.10"
+        },
+        {
+          "name": "jest-preset-angular",
+          "currentVersion": "12.2.4",
+          "targetVersion": "13.1.6"
+        },
+        {
+          "name": "tslib",
+          "currentVersion": "2.4.1",
+          "targetVersion": "2.5.0"
+        },
+        {
+          "name": "typescript",
+          "currentVersion": "4.7.2",
+          "targetVersion": "4.9.5"
+        }
+      ],
+      "total_count": 14
+    }
+  ]
+}
